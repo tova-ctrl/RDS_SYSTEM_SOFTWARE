@@ -1,0 +1,17 @@
+<?xml version='1.0' encoding='utf-8'?>
+<Protocol>
+	<Message Key="5500" Name="Camera Lens Control Command" NumberOfBytes="16" Protocol="Generic">
+		<Field LogicalId="0" StartByte="0" NumberOfBytes="1" StartBit="0" NumberOfBits="4" Type="UINT" Name="Camera" ConvertType="Camera" DefaultValue="0" Description="" />
+		<Field LogicalId="1" StartByte="0" NumberOfBytes="1" StartBit="6" NumberOfBits="2" Type="UINT" Name="Heater Control" ConvertType="HeaterControl" DefaultValue="0" Description="" />
+		<Field LogicalId="2" StartByte="1" NumberOfBytes="1" StartBit="0" NumberOfBits="4" Type="UINT" Name="FOV Control Type" ConvertType="FOVControlType" DefaultValue="0" Description="" />
+		<Field LogicalId="3" StartByte="1" NumberOfBytes="1" StartBit="4" NumberOfBits="2" Type="UINT" Name="E.Zoom Operation" ConvertType="EZoomOperation" DefaultValue="0" Description="" />	
+		<Field LogicalId="4" StartByte="2" NumberOfBytes="1" StartBit="0" NumberOfBits="2" Type="TIncDecButton" Name="Zoom Change" Description="" />
+		<Field LogicalId="5" StartByte="2" NumberOfBytes="1" StartBit="2" NumberOfBits="2" Type="UINT" Name="Discrete FOV" ConvertType="DiscreteFOV" DefaultValue="0" Description="" />
+		<Field LogicalId="6" StartByte="4" NumberOfBytes="2" StartBit="0" NumberOfBits="16" Type="USHORT" Name="FOV (Absolute HFOV Value)" PermittedValue="[ 0 ÷ 65535 ]" DefaultValue="65535" Description="" />
+		<Field LogicalId="7" StartByte="8" NumberOfBytes="1" StartBit="0" NumberOfBits="4" Type="UINT" Name="Focus Control Type" ConvertType="FocusControlType" DefaultValue="0" Description="" />
+		<Field LogicalId="8" StartByte="8" NumberOfBytes="1" StartBit="4" NumberOfBits="2" Type="TIncDecButton" Name="Focus Change" Description="" />
+		<Field LogicalId="9" StartByte="12" NumberOfBytes="1" StartBit="0" NumberOfBits="4" Type="UINT" Name="Iris Control Type" ConvertType="IrisMode" DefaultValue="0" Description="" />
+		<Field LogicalId="10" StartByte="12" NumberOfBytes="1" StartBit="4" NumberOfBits="2" Type="TIncDecButton" Name="Iris Change" DefaultValue="0" Description="" />
+		<Field LogicalId="11" StartByte="13" NumberOfBytes="1" StartBit="4" NumberOfBits="4" Type="UINT" Name="Optical Filter" ConvertType="OpticalFilter" DefaultValue="0" Description="" />
+	</Message>
+</Protocol>

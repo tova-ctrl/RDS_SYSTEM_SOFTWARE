@@ -1,0 +1,13 @@
+<?xml version='1.0' encoding='utf-8'?>
+<Protocol>
+	<Message Key="6550" Name="VMD Parameters" NumberOfBytes="16" Protocol="Generic">
+		<Field LogicalId="0" StartByte="0" NumberOfBytes="1" StartBit="0" NumberOfBits="8" Type="UINT" Name="Mode" ConvertType="AlgoMode" DefaultValue="2" Description="" />
+		<Field LogicalId="1" StartByte="1" NumberOfBytes="1" StartBit="0" NumberOfBits="4" Type="UINT" Name="Sensitivity" DefaultValue="4" PermittedValue="[ 0 ÷ 9 ]" Description="" />
+		<Field LogicalId="2" StartByte="3" NumberOfBytes="1" StartBit="0" NumberOfBits="8" Type="CHAR" Name="Detection Limit" DefaultValue="5" Description="" />
+		<Field LogicalId="3" StartByte="4" NumberOfBytes="2" StartBit="0" NumberOfBits="16" Type="USHORT" Name="Area Size X" DefaultValue="2500" PermittedValue="[ 0 ÷ 10000 ]" Description="" />
+		<Field LogicalId="4" StartByte="6" NumberOfBytes="2" StartBit="0" NumberOfBits="16" Type="USHORT" Name="Area Size Y" DefaultValue="2500" PermittedValue="[ 0 ÷ 10000 ]" Description="" />
+		<Field LogicalId="5" StartByte="8" NumberOfBytes="2" StartBit="0" NumberOfBits="16" Type="USHORT" Name="Area Center X" PermittedValue="[ -5000 ÷ +5000 ]" Description="" />
+		<Field LogicalId="6" StartByte="10" NumberOfBytes="2" StartBit="0" NumberOfBits="16" Type="USHORT" Name="Area Center Y" PermittedValue="[ -5000 ÷ +5000 ]" Description="" />
+		
+	</Message>
+</Protocol>

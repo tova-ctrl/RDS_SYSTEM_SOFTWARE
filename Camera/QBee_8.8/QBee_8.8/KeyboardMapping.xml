@@ -1,0 +1,399 @@
+<KeyboardMapping>
+  <Mapping>
+    <Name>LOS Up</Name>
+    <Function>sendRate</Function>
+    <MessageID>1210</MessageID>
+    <Field>-1</Field>
+    <Data>-1</Data>
+    <SettingsType>Basic</SettingsType>
+    <ButtonKey>Up</ButtonKey>
+    <DefaultButtonKey>Up</DefaultButtonKey>
+  </Mapping>
+  <Mapping>
+    <Name>LOS Down</Name>
+    <Function>sendRate</Function>
+    <MessageID>1210</MessageID>
+    <Field>-1</Field>
+    <Data>-1</Data>
+    <SettingsType>Basic</SettingsType>
+    <ButtonKey>Down</ButtonKey>
+    <DefaultButtonKey>Down</DefaultButtonKey>
+  </Mapping>
+  <Mapping>
+    <Name>LOS Left</Name>
+    <Function>sendRate</Function>
+    <MessageID>1210</MessageID>
+    <Field>-1</Field>
+    <Data>-1</Data>
+    <SettingsType>Basic</SettingsType>
+    <ButtonKey>Left</ButtonKey>
+    <DefaultButtonKey>Left</DefaultButtonKey>
+  </Mapping>
+  <Mapping>
+    <Name>LOS Right</Name>
+    <Function>sendRate</Function>
+    <MessageID>1210</MessageID>
+    <Field>-1</Field>
+    <Data>-1</Data>
+    <SettingsType>Basic</SettingsType>
+    <ButtonKey>Right</ButtonKey>
+    <DefaultButtonKey>Right</DefaultButtonKey>
+  </Mapping>
+  <Mapping>
+    <Name>Change Speed</Name>
+    <Function>sendRate</Function>
+    <MessageID>1210</MessageID>
+    <Field>-1</Field>
+    <Data>-1</Data>
+    <SettingsType>Basic</SettingsType>
+    <ButtonKey>C</ButtonKey>
+    <DefaultButtonKey>C</DefaultButtonKey>
+  </Mapping>
+  <Mapping>
+    <Name>Pilot Steering Mode</Name>
+    <Function>pilotMode</Function>
+    <MessageID>-1</MessageID>
+    <Field>-1</Field>
+    <Data>-1</Data>
+    <SettingsType>Basic</SettingsType>
+    <ButtonKey>P</ButtonKey>
+    <DefaultButtonKey>P</DefaultButtonKey>
+  </Mapping>
+  <Mapping>
+    <Name>Zoom In</Name>
+    <Function>sendMessage</Function>
+    <MessageID>5600</MessageID>
+    <Field>0</Field>
+    <Data>2</Data>
+    <SettingsType>Micro</SettingsType>
+    <ButtonKey>W</ButtonKey>
+    <DefaultButtonKey>W</DefaultButtonKey>
+  </Mapping>
+  <Mapping>
+    <Name>Zoom Out</Name>
+    <Function>sendMessage</Function>
+    <MessageID>5600</MessageID>
+    <Field>0</Field>
+    <Data>1</Data>
+    <SettingsType>Micro</SettingsType>
+    <ButtonKey>S</ButtonKey>
+    <DefaultButtonKey>S</DefaultButtonKey>
+  </Mapping>
+  <Mapping>
+    <Name>PIP Zoom In</Name>
+    <Function>sendMessage</Function>
+    <MessageID>5700</MessageID>
+    <Field>0</Field>
+    <Data>2</Data>
+    <SettingsType>Micro</SettingsType>
+    <ButtonKey>O</ButtonKey>
+    <DefaultButtonKey>O</DefaultButtonKey>
+  </Mapping>
+  <Mapping>
+    <Name>PIP Zoom Out</Name>
+    <Function>sendMessage</Function>
+    <MessageID>5700</MessageID>
+    <Field>0</Field>
+    <Data>1</Data>
+    <SettingsType>Micro</SettingsType>
+    <ButtonKey>L</ButtonKey>
+    <DefaultButtonKey>L</DefaultButtonKey>
+  </Mapping>
+  <Mapping>
+    <Name>Zoom In</Name>
+    <Function>sendMessage</Function>
+    <MessageID>5500</MessageID>
+    <Field>4</Field>
+    <Data>2</Data>
+    <SettingsType>Generic</SettingsType>
+    <ButtonKey>W</ButtonKey>
+    <DefaultButtonKey>W</DefaultButtonKey>
+  </Mapping>
+  <Mapping>
+    <Name>Zoom Out</Name>
+    <Function>sendMessage</Function>
+    <MessageID>5500</MessageID>
+    <Field>4</Field>
+    <Data>1</Data>
+    <SettingsType>Generic</SettingsType>
+    <ButtonKey>S</ButtonKey>
+    <DefaultButtonKey>S</DefaultButtonKey>
+  </Mapping>
+  <Mapping>
+    <Name>Focuse Near</Name>
+    <Function>sendMessage</Function>
+    <MessageID>5500</MessageID>
+    <Field>8</Field>
+    <Data>2</Data>
+    <SettingsType>Basic</SettingsType>
+    <ButtonKey>D</ButtonKey>
+    <DefaultButtonKey>D</DefaultButtonKey>
+  </Mapping>
+  <Mapping>
+    <Name>Focuse Far</Name>
+    <Function>sendMessage</Function>
+    <MessageID>5500</MessageID>
+    <Field>8</Field>
+    <Data>1</Data>
+    <SettingsType>Basic</SettingsType>
+    <ButtonKey>A</ButtonKey>
+    <DefaultButtonKey>A</DefaultButtonKey>
+  </Mapping>
+  <Mapping>
+    <Name>TI Auto Focuse</Name>
+    <Function>sendMessage</Function>
+    <MessageID>5500</MessageID>
+    <Field>7</Field>
+    <Data>2</Data>
+    <SettingsType>Basic</SettingsType>
+    <ButtonKey>F</ButtonKey>
+    <DefaultButtonKey>F</DefaultButtonKey>
+  </Mapping>
+  <Mapping>
+    <Name>TI Focuse Infinity</Name>
+    <Function>sendMessage</Function>
+    <MessageID>5500</MessageID>
+    <Field>7</Field>
+    <Data>1</Data>
+    <SettingsType>Basic</SettingsType>
+    <ButtonKey>G</ButtonKey>
+    <DefaultButtonKey>G</DefaultButtonKey>
+  </Mapping>
+  <Mapping>
+    <Name>TI Gain Up</Name>
+    <Function>sendMessage</Function>
+    <MessageID>5015</MessageID>
+    <Field>7</Field>
+    <Data>2</Data>
+    <SettingsType>Basic</SettingsType>
+    <ButtonKey>Add</ButtonKey>
+    <DefaultButtonKey>Add</DefaultButtonKey>
+  </Mapping>
+  <Mapping>
+    <Name>TI Gain Down</Name>
+    <Function>sendMessage</Function>
+    <MessageID>5015</MessageID>
+    <Field>7</Field>
+    <Data>1</Data>
+    <SettingsType>Basic</SettingsType>
+    <ButtonKey>Subtract</ButtonKey>
+    <DefaultButtonKey>Subtract</DefaultButtonKey>
+  </Mapping>
+  <Mapping>
+    <Name>TI Level Up</Name>
+    <Function>sendMessage</Function>
+    <MessageID>5015</MessageID>
+    <Field>8</Field>
+    <Data>2</Data>
+    <SettingsType>Basic</SettingsType>
+    <ButtonKey>Ctrl + Add</ButtonKey>
+    <DefaultButtonKey>Ctrl + Add</DefaultButtonKey>
+  </Mapping>
+  <Mapping>
+    <Name>TI Level Down</Name>
+    <Function>sendMessage</Function>
+    <MessageID>5015</MessageID>
+    <Field>8</Field>
+    <Data>1</Data>
+    <SettingsType>Basic</SettingsType>
+    <ButtonKey>Ctrl + Subtract</ButtonKey>
+    <DefaultButtonKey>Ctrl + Subtract</DefaultButtonKey>
+  </Mapping>
+  <Mapping>
+    <Name>TI Change Polarity</Name>
+    <Function>sendMessage</Function>
+    <MessageID>5015</MessageID>
+    <Field>9</Field>
+    <Data>-1</Data>
+    <SettingsType>Basic</SettingsType>
+    <ButtonKey>PageUp</ButtonKey>
+    <DefaultButtonKey>P</DefaultButtonKey>
+  </Mapping>
+  <Mapping>
+    <Name>TI 1 Point NUC</Name>
+    <Function>sendMessage</Function>
+    <MessageID>5015</MessageID>
+    <Field>2</Field>
+    <Data>1</Data>
+    <SettingsType>Basic</SettingsType>
+    <ButtonKey>Home</ButtonKey>
+    <DefaultButtonKey>N</DefaultButtonKey>
+  </Mapping>
+  <Mapping>
+    <Name>TI Cooler Inhibit</Name>
+    <Function>sendMessage</Function>
+    <MessageID>5015</MessageID>
+    <Field>1</Field>
+    <Data>-1</Data>
+    <SettingsType>Basic</SettingsType>
+    <ButtonKey>End</ButtonKey>
+    <DefaultButtonKey>End</DefaultButtonKey>
+  </Mapping>
+  <Mapping>
+    <Name>DTV Brightness Up</Name>
+    <Function>sendMessage</Function>
+    <MessageID>
+    </MessageID>
+    <Field>
+    </Field>
+    <Data>
+    </Data>
+    <SettingsType>Basic</SettingsType>
+    <ButtonKey>Add</ButtonKey>
+    <DefaultButtonKey>Add</DefaultButtonKey>
+  </Mapping>
+  <Mapping>
+    <Name>DTV Brightness Down</Name>
+    <Function>sendMessage</Function>
+    <MessageID>
+    </MessageID>
+    <Field>
+    </Field>
+    <Data>
+    </Data>
+    <SettingsType>Basic</SettingsType>
+    <ButtonKey>Subtract</ButtonKey>
+    <DefaultButtonKey>Subtract</DefaultButtonKey>
+  </Mapping>
+  <Mapping>
+    <Name>Sensors Sync FOV</Name>
+    <Function>sendMessage</Function>
+    <MessageID>22851</MessageID>
+    <Field>1</Field>
+    <Data>-1</Data>
+    <SettingsType>Basic</SettingsType>
+    <ButtonKey>Next</ButtonKey>
+    <DefaultButtonKey>Next</DefaultButtonKey>
+  </Mapping>
+  <Mapping>
+    <Name>Sensors Change Chanel</Name>
+    <Function>sendMessage</Function>
+    <MessageID>22851</MessageID>
+    <Field>0</Field>
+    <Data>-1</Data>
+    <SettingsType>Basic</SettingsType>
+    <ButtonKey>E</ButtonKey>
+    <DefaultButtonKey>E</DefaultButtonKey>
+  </Mapping>
+  <Mapping>
+    <Name>Wide FOV</Name>
+    <Function>sendFov</Function>
+    <MessageID>5500</MessageID>
+    <Field>5</Field>
+    <Data>40650</Data>
+    <SettingsType>Basic</SettingsType>
+    <ButtonKey>R</ButtonKey>
+    <DefaultButtonKey>R</DefaultButtonKey>
+  </Mapping>
+  <Mapping>
+    <Name>Mid FOV</Name>
+    <Function>sendFov</Function>
+    <MessageID>5500</MessageID>
+    <Field>5</Field>
+    <Data>20000</Data>
+    <SettingsType>Basic</SettingsType>
+    <ButtonKey>T</ButtonKey>
+    <DefaultButtonKey>T</DefaultButtonKey>
+  </Mapping>
+  <Mapping>
+    <Name>Near FOV</Name>
+    <Function>sendFov</Function>
+    <MessageID>5500</MessageID>
+    <Field>5</Field>
+    <Data>5300</Data>
+    <SettingsType>Basic</SettingsType>
+    <ButtonKey>Y</ButtonKey>
+    <DefaultButtonKey>Y</DefaultButtonKey>
+  </Mapping>
+  <Mapping>
+    <Name>Track</Name>
+    <Function>sendTrack</Function>
+    <MessageID>6500</MessageID>
+    <Field>-1</Field>
+    <Data>-1</Data>
+    <SettingsType>Basic</SettingsType>
+    <ButtonKey>Q</ButtonKey>
+    <DefaultButtonKey>Q</DefaultButtonKey>
+  </Mapping>
+  <Mapping>
+    <Name>Pilot Window</Name>
+    <Function>sendMode</Function>
+    <MessageID>1222</MessageID>
+    <Field>-1</Field>
+    <Data>-1</Data>
+    <SettingsType>Basic</SettingsType>
+    <ButtonKey>D1</ButtonKey>
+    <DefaultButtonKey>D1</DefaultButtonKey>
+  </Mapping>
+  <Mapping>
+    <Name>STOW</Name>
+    <Function>sendMode</Function>
+    <MessageID>1223</MessageID>
+    <Field>-1</Field>
+    <Data>-1</Data>
+    <SettingsType>Basic</SettingsType>
+    <ButtonKey>D2</ButtonKey>
+    <DefaultButtonKey>D2</DefaultButtonKey>
+  </Mapping>
+  <Mapping>
+    <Name>CAGE</Name>
+    <Function>sendMode</Function>
+    <MessageID>1234</MessageID>
+    <Field>-1</Field>
+    <Data>-1</Data>
+    <SettingsType>Basic</SettingsType>
+    <ButtonKey>D3</ButtonKey>
+    <DefaultButtonKey>D3</DefaultButtonKey>
+  </Mapping>
+  <Mapping>
+    <Name>Ready</Name>
+    <Function>sendMode</Function>
+    <MessageID>1016</MessageID>
+    <Field>-1</Field>
+    <Data>-1</Data>
+    <SettingsType>Basic</SettingsType>
+    <ButtonKey>D4</ButtonKey>
+    <DefaultButtonKey>D4</DefaultButtonKey>
+  </Mapping>
+  <Mapping>
+    <Name>INIT</Name>
+    <Function>sendMode</Function>
+    <MessageID>1000</MessageID>
+    <Field>-1</Field>
+    <Data>-1</Data>
+    <SettingsType>Basic</SettingsType>
+    <ButtonKey>Shift + D1</ButtonKey>
+    <DefaultButtonKey>Shift + D1</DefaultButtonKey>
+  </Mapping>
+  <Mapping>
+    <Name>Drift Calib</Name>
+    <Function>sendMode</Function>
+    <MessageID>1006</MessageID>
+    <Field>-1</Field>
+    <Data>-1</Data>
+    <SettingsType>Basic</SettingsType>
+    <ButtonKey>Shift + D2</ButtonKey>
+    <DefaultButtonKey>Shift + D2</DefaultButtonKey>
+  </Mapping>
+  <Mapping>
+    <Name>System Versions</Name>
+    <Function>sendVersions</Function>
+    <MessageID>
+    </MessageID>
+    <Field>-1</Field>
+    <Data>-1</Data>
+    <SettingsType>Basic</SettingsType>
+    <ButtonKey>Shift + D3</ButtonKey>
+    <DefaultButtonKey>Shift + D3</DefaultButtonKey>
+  </Mapping>
+  <Mapping>
+    <Name>OSD change</Name>
+    <Function>sendMessage</Function>
+    <MessageID>22851</MessageID>
+    <Field>2</Field>
+    <Data>-1</Data>
+    <SettingsType>Basic</SettingsType>
+    <ButtonKey>B</ButtonKey>
+    <DefaultButtonKey>B</DefaultButtonKey>
+  </Mapping>
+</KeyboardMapping>

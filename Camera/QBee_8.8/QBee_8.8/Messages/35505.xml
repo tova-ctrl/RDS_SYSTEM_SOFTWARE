@@ -1,0 +1,13 @@
+<?xml version='1.0' encoding='utf-8'?>
+<Protocol>
+	<Message Key="35505" Name="Channel Frame Report" NumberOfBytes="16" Protocol="Generic">
+		<Field LogicalId="0" StartByte="0" NumberOfBytes="1" StartBit="0" NumberOfBits="8" Type="UCHAR" Name="Channel (Sensor)" ConvertType="Camera" Description="" />
+		<Field LogicalId="1" StartByte="2" NumberOfBytes="2" StartBit="0" NumberOfBits="16" Type="USHORT" Name="FOV" ConvertType="@Fov" Description="" />
+		<Field LogicalId="2" StartByte="4" NumberOfBytes="2" StartBit="0" NumberOfBits="16" Type="USHORT" Name="Frame Width" Description="" />
+		<Field LogicalId="3" StartByte="6" NumberOfBytes="2" StartBit="0" NumberOfBits="16" Type="USHORT" Name="Frame Height" Description="" />
+		<Field LogicalId="4" StartByte="8" NumberOfBytes="2" StartBit="0" NumberOfBits="16" Type="SHORT" Name="Image in Frame X postion" Description="" />
+		<Field LogicalId="5" StartByte="10" NumberOfBytes="2" StartBit="0" NumberOfBits="16" Type="SHORT" Name="Image in Frame Y postion" Description="" />
+		<Field LogicalId="6" StartByte="12" NumberOfBytes="2" StartBit="0" NumberOfBits="16" Type="USHORT" Name="Active Image Area in Frame X" Description="" />
+		<Field LogicalId="7" StartByte="14" NumberOfBytes="2" StartBit="0" NumberOfBits="16" Type="USHORT" Name="Active Image Area in Frame Y" Description="" />
+	</Message>
+</Protocol>

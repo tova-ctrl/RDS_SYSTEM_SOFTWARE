@@ -1,0 +1,23 @@
+<?xml version='1.0' encoding='utf-8'?>
+<Protocol>
+	<Message Key="51000" Name="Record Video Report" NumberOfBytes="16" Protocol="Generic">
+		<Field LogicalId="0" StartByte="0" NumberOfBytes="1" StartBit="0" NumberOfBits="8" Type="UINT" Name="Record Video Status" ConvertType="RecordVideoStatus" Description="Get Record Video Status" />
+		<Field LogicalId="1" StartByte="1" NumberOfBytes="1" StartBit="0" NumberOfBits="8" Type="UINT" Name="Record Buffer Load" Description="Get Record Buffer Load" />
+		<Field LogicalId="2" StartByte="2" NumberOfBytes="1" StartBit="0" NumberOfBits="8" Type="UINT" Name="Skipped Frame" Description="Get Skipped Frame Status" />
+		<Field LogicalId="3" StartByte="3" NumberOfBytes="1" StartBit="0" NumberOfBits="8" Type="UINT" Name="Time Left Recrod [min]" Description="Get Time Left On Record [minutes]" />
+	</Message>
+	<Message Key="51000" Name="Record Video Report" NumberOfBytes="64" Protocol="Microcom">
+		<Field LogicalId="0" StartByte="0" NumberOfBytes="8" StartBit="0" NumberOfBits="64" Type="LONGLONG" Name="Record Video Timestamp [nSec]" Description="Gets Record Video Timestamp [nSec]" />
+		<Field LogicalId="1" StartByte="8" NumberOfBytes="8" StartBit="0" NumberOfBits="64" Type="LONGLONG" Name="Record Raw Video Timestamp [nSec]" Description="Gets Record Raw Video Timestamp [nSec]" />
+		<Field LogicalId="2" StartByte="16" NumberOfBytes="4" StartBit="0" NumberOfBits="32" Type="FLOAT" Name="Disk Free Space [GB]" Description="Disk Free Space [GB]" />
+		<Field LogicalId="3" StartByte="20" NumberOfBytes="4" StartBit="0" NumberOfBits="32" Type="FLOAT" Name="Disk Free Space [%]" Description="Disk Free Space [%]" />
+		<Field LogicalId="4" StartByte="24" NumberOfBytes="4" StartBit="0" NumberOfBits="32" Type="FLOAT" Name="Total Disk Size [GB]" Description="Total Disk Size [GB]" />
+		<Field LogicalId="5" StartByte="28" NumberOfBytes="4" StartBit="0" NumberOfBits="32" Type="LONG" Name="Record Video Enable" Description="Record Video Enable" />
+		<Field LogicalId="6" StartByte="32" NumberOfBytes="4" StartBit="0" NumberOfBits="32" Type="LONG" Name="Record Raw Video Enable" Description="Record Raw Video Enable" />
+		<Field LogicalId="7" StartByte="36" NumberOfBytes="4" StartBit="0" NumberOfBits="32" Type="LONG" Name="Video Delete" Description="ALL Recorded video is in deletion process" />
+		<Field LogicalId="8" StartByte="40" NumberOfBytes="4" StartBit="0" NumberOfBits="32" Type="LONG" Name="Disk Status" Description="Disk Status" />
+		<Field LogicalId="9" StartByte="44" NumberOfBytes="20" StartBit="0" NumberOfBits="160" Type="FREETEXT" Name="Folder Name" Description="Sets Record Video Folder Name" />
+	</Message>	
+</Protocol>
+
+<!--<Field LogicalId="2" StartByte="2" NumberOfBytes="20" StartBit="0" NumberOfBits="160" Type="ASCII" Name="Folder Name" Description="Gets the video record folder name [up to 20 bytes]" />-->

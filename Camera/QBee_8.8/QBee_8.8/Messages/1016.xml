@@ -1,0 +1,8 @@
+<?xml version='1.0' encoding='utf-8'?>
+<Protocol>
+	<Message Key="1016" Name="IDLE" NumberOfBytes="0" Description="Enter to Idle Mode. Shutdown gimbals' motors and releases gimbal's current loop." Protocol="Microcom">
+	</Message>
+
+	<Message Key="1016" Name="IDLE" NumberOfBytes="0" Description="Enter Idle Mode" Protocol="Generic">
+	</Message>
+</Protocol>

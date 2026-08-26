@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<Message Key="5990" Name="Video Channel Control Cmd" NumberOfBytes="16">
+	<Field LogicalId="0" StartByte="0" NumberOfBytes="1" StartBit="0" NumberOfBits="4" Type="UCHAR" Name="Pri. Video Channel Sensor" ConvertType="Camera" Description="" />
+	<Field LogicalId="1" StartByte="1" NumberOfBytes="1" StartBit="0" NumberOfBits="4" Type="UCHAR" Name="Pip Video Channel" ConvertType="PipCamera" Description="" />
+	<Field LogicalId="2" StartByte="11" NumberOfBytes="1" StartBit="0" NumberOfBits="1" Type="BIT" Name="FOV Sync" Description="" />
+	<Field LogicalId="3" StartByte="12" NumberOfBytes="1" StartBit="0" NumberOfBits="2" Type="UINT" Name="Video Format" ConvertType="VideoFormat" Description="" />
+</Message>

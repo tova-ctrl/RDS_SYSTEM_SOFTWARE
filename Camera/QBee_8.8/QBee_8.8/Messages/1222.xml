@@ -1,0 +1,8 @@
+<?xml version='1.0' encoding='utf-8'?>
+<Protocol>
+	<Message Key="1222" Name="Center Mode" NumberOfBytes="0" Description="Set system as Center Mode. Sets predefined gimbal angles and sensors FOV" Protocol="Microcom">
+	</Message>
+	
+	<Message Key="1222" Name="Pilot Window" NumberOfBytes="0" Description="Display Pilot Window Mode" Protocol="Generic">
+	</Message>
+</Protocol>

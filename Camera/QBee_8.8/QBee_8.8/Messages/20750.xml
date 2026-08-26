@@ -1,0 +1,30 @@
+<?xml version='1.0' encoding='utf-8'?>
+<Protocol>
+	<Message Key="20750" Name="General Command" NumberOfBytes="16" Protocol="Generic">
+		<Field LogicalId="0" StartByte="0" NumberOfBytes="1" StartBit="0" NumberOfBits="1" Type="BIT" Name="Rate Type" Description="Set Active Rate Type" />
+		<Field LogicalId="1" StartByte="0" NumberOfBytes="1" StartBit="1" NumberOfBits="1" Type="BIT" Name="GRR Usage" Description="Set Active GRR" />	
+		<Field LogicalId="2" StartByte="1" NumberOfBytes="1" StartBit="0" NumberOfBits="1" Type="BIT" Name="Hybrid Mode" Description="Set Active Hybrid Mode" />
+		<Field LogicalId="3" StartByte="1" NumberOfBytes="1" StartBit="1" NumberOfBits="1" Type="BIT" Name="End Game" ConvertType="EndGame" Description="Set End Game Mode" />	
+		<Field LogicalId="4" StartByte="1" NumberOfBytes="1" StartBit="2" NumberOfBits="1" Type="BIT" Name="LOS Deviation" Description="Set Los Deviation" />	
+		<Field LogicalId="5" StartByte="1" NumberOfBytes="1" StartBit="3" NumberOfBits="1" Type="BIT" Name="Gimbal Calibration" Description="Set Gimbal Calibrated" />
+		<Field LogicalId="6" StartByte="15" NumberOfBytes="1" StartBit="4" NumberOfBits="1" Type="BIT" Name="Tech OSD" Description="Set Active Tech OSD" />	
+		<Field LogicalId="7" StartByte="15" NumberOfBytes="1" StartBit="5" NumberOfBits="1" Type="BIT" Name="Active Log" Description="Active Log Mode" />	
+		<Field LogicalId="8" StartByte="15" NumberOfBytes="1" StartBit="6" NumberOfBits="1" Type="BIT" Name="Rate -&gt; Rate Pos" Description="Set Rate Position" />	
+		<Field LogicalId="9" StartByte="15" NumberOfBytes="1" StartBit="7" NumberOfBits="1" Type="BIT" Name="Internal Use" Description="Internal Use DNU" />
+	</Message>
+	<Message Key="20750" Name="General Command" NumberOfBytes="16" Protocol="Microcom">
+		<Field LogicalId="0" StartByte="0" NumberOfBytes="1" StartBit="0" NumberOfBits="1" Type="BIT" Name="Rate Type" Description="Sets Active Rate Type" />
+		<Field LogicalId="1" StartByte="0" NumberOfBytes="1" StartBit="1" NumberOfBits="1" Type="BIT" Name="GRR Usage" Description="Sets Active GRR" />	
+		<Field LogicalId="2" StartByte="0" NumberOfBytes="1" StartBit="2" NumberOfBits="1" Type="BIT" Name="Force Base IMU for Rate Usage" Description="Force Base IMU for Rate Usage" />	
+		<Field LogicalId="3" StartByte="0" NumberOfBytes="1" StartBit="5" NumberOfBits="1" Type="BIT" Name="Calib Quick Fix" Description="Calib Quick Fix" />
+		<Field LogicalId="4" StartByte="0" NumberOfBytes="1" StartBit="6" NumberOfBits="1" Type="BIT" Name="Disable Gimbal Safe Mode" Description="Disable Gimbal Safe Mode" />
+		<Field LogicalId="5" StartByte="1" NumberOfBytes="1" StartBit="0" NumberOfBits="1" Type="BIT" Name="Hybrid Mode" Description="Sets Active Hybrid Mode" />
+		<Field LogicalId="6" StartByte="1" NumberOfBytes="1" StartBit="1" NumberOfBits="1" Type="BIT" Name="End Game" ConvertType="EndGame" Description="Sets End Game Mode" />	
+		<Field LogicalId="7" StartByte="1" NumberOfBytes="1" StartBit="2" NumberOfBits="1" Type="BIT" Name="LOS Deviation" Description="Sets Los Deviation" />	
+		<Field LogicalId="8" StartByte="1" NumberOfBytes="1" StartBit="3" NumberOfBits="1" Type="BIT" Name="Gimbal Calibration" Description="Sets Gimbal Calibrated" />
+		<Field LogicalId="9" StartByte="15" NumberOfBytes="1" StartBit="4" NumberOfBits="1" Type="BIT" Name="Tech OSD" Description="Sets Active Tech OSD" />	
+		<Field LogicalId="10" StartByte="15" NumberOfBytes="1" StartBit="5" NumberOfBits="1" Type="BIT" Name="Active Log" Description="Active Log Mode" />	
+		<Field LogicalId="11" StartByte="15" NumberOfBytes="1" StartBit="6" NumberOfBits="1" Type="BIT" Name="Rate -&gt; Rate Pos" Description="Sets Rate Position" />	
+		<Field LogicalId="12" StartByte="15" NumberOfBytes="1" StartBit="7" NumberOfBits="1" Type="BIT" Name="Internal Use" Description="Internal Use DNU" />
+	</Message>
+</Protocol>

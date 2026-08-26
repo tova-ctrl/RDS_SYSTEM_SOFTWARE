@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<SerialConfigData xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <PortName>COM2</PortName>
+  <BaudRate>5555</BaudRate>
+  <Parity>None</Parity>
+  <DataBits>8</DataBits>
+  <StopBits>One</StopBits>
+  <Interval>12</Interval>
+  <address>192.168.1.7</address>
+  <destPort>0</destPort>
+  <localPort>0</localPort>
+  <protocol>1</protocol>
+  <WhoAmI>HOST</WhoAmI>
+</SerialConfigData>

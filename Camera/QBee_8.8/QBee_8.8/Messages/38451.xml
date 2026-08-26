@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<Protocol>
+	<Message Key="38451" Name="Designator" NumberOfBytes="4" Protocol="Microcom">
+		<Field LogicalId="0" StartByte="0" NumberOfBytes="1" StartBit="4" NumberOfBits="1" Type="BIT" Name="Fire" Description="Gets Designator Fire. 0 - Fire Off. 1 - Fire On" />
+		<Field LogicalId="1" StartByte="0" NumberOfBytes="1" StartBit="7" NumberOfBits="1" Type="BIT" Name="Fire Blocked" Description="Gets Fire Blocked. 0 - Fire not blocked. 1 - Fire blocked" />
+	</Message>
+</Protocol>

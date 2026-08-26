@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<Protocol>
+	<Message Key="100" Name="Reset System" NumberOfBytes="2" Protocol="Microcom">
+		<Field LogicalId="0" StartByte="0" NumberOfBytes="1" StartBit="0" NumberOfBits="1" Type="BIT" Name="Soft Reset" Description="Resets BeeKeeper SW" />
+		<Field LogicalId="1" StartByte="1" NumberOfBytes="1" StartBit="0" NumberOfBits="1" Type="BIT" Name="Hard Reset" Description="Resets entire Hive" />
+	</Message>
+</Protocol>

@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<Message Key="5502" Name="?" NumberOfBytes="24">
+	<Field LogicalId="0" StartByte="0" NumberOfBytes="1" StartBit="0" NumberOfBits="8" Type="UCHAR" Name="Channel (Sensor)" ConvertType="SensorChannel" Description="" />
+	<Field LogicalId="1" StartByte="1" NumberOfBytes="1" StartBit="0" NumberOfBits="8" Type="UCHAR" Name="Calibration Type" ConvertType="BoresightCalibrationType" Description="" />
+	<Field LogicalId="2" StartByte="6" NumberOfBytes="2" StartBit="0" NumberOfBits="16" Type="SHORT" Name="Boresight X axis" Description="" />
+	<Field LogicalId="3" StartByte="8" NumberOfBytes="2" StartBit="0" NumberOfBits="16" Type="SHORT" Name="Boresight X axis" Description="" />
+</Message>

@@ -1,0 +1,15 @@
+<?xml version='1.0' encoding='utf-8'?>
+<Protocol>
+	<Message Key="21000" Name="Record Video" NumberOfBytes="16" Protocol="Generic">
+		<Field LogicalId="0" StartByte="0" NumberOfBytes="1" StartBit="0" NumberOfBits="1" Type="BIT" Name="Record Video" Description="Start Recording Video" />
+		<Field LogicalId="1" StartByte="0" NumberOfBytes="1" StartBit="1" NumberOfBits="1" Type="BIT" Name="Delete ALL Records" Description="Delete All Records" />
+		<Field LogicalId="2" StartByte="0" NumberOfBytes="1" StartBit="2" NumberOfBits="1" Type="BIT" Name="Cancel Delete" Description="Cancel Recent Delete" />
+		<Field LogicalId="3" StartByte="12" NumberOfBytes="4" StartBit="0" NumberOfBits="4" Type="LONG" Name="Folder Name" Description="Assign Folder Name" />
+	</Message>
+	<Message Key="21000" Name="Record Video Command" NumberOfBytes="21" Protocol="Microcom">
+		<Field LogicalId="0" StartByte="0" NumberOfBytes="1" StartBit="0" NumberOfBits="1" Type="BIT" Name="Enable" Description="Starts/Stops Recording Video" />
+		<Field LogicalId="1" StartByte="0" NumberOfBytes="1" StartBit="1" NumberOfBits="1" Type="BIT" Name="Enable Raw" Description="Starts/Stops Recording Raw Video" />
+		<Field LogicalId="2" StartByte="0" NumberOfBytes="1" StartBit="2" NumberOfBits="1" Type="BIT" Name="Delete ALL Records" Description="Deletes All Records" />
+		<Field LogicalId="3" StartByte="1" NumberOfBytes="20" StartBit="0" NumberOfBits="160" Type="FREETEXT" Name="Folder Name" Description="Sets Record Video Folder Name" />
+	</Message>	
+</Protocol>

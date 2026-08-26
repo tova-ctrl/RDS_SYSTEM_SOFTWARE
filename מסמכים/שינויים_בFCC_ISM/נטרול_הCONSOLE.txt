@@ -1,0 +1,22 @@
+// ניטרול הCONSOLE
+sudo systemctl stop serial-getty@ttyS0.service
+sudo systemctl disable serial-getty@ttyS0.service
+sudo systemctl mask serial-getty@ttyS0.service
+
+sudo systemctl stop serial-getty@ttyTHS1.service
+sudo systemctl disable serial-getty@ttyTHS1.service
+sudo systemctl mask serial-getty@ttyTHS1.service
+
+//==החזרת הCONSOLE
+# 1. הסרת החסימה המוחלטת (Unmask)
+sudo systemctl unmask serial-getty@ttyS0.service
+sudo systemctl unmask serial-getty@ttyTHS1.service
+
+# 2. הגדרה שהשירותים יעלו מחדש באופן אוטומטי בהדלקת המערכת (Enable)
+sudo systemctl enable serial-getty@ttyS0.service
+sudo systemctl enable serial-getty@ttyTHS1.service
+
+# 3. הפעלת השירותים באופן מיידי (Start)
+sudo systemctl start serial-getty@ttyS0.service
+sudo systemctl start serial-getty@ttyTHS1.service
+

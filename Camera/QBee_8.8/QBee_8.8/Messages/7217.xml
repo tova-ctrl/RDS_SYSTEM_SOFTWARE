@@ -1,0 +1,11 @@
+<?xml version='1.0' encoding='utf-8'?>
+<Protocol>
+	<Message Key="7217" Name="GRR" NumberOfBytes="8" Protocol="Generic">
+		<Field LogicalId="0" StartByte="0" NumberOfBytes="4" StartBit="0" NumberOfBits="32" Type="TLowRes2DAngularVelocity" Name="Angular Velocities" Description="" />
+		<Field LogicalId="1" StartByte="4" NumberOfBytes="2" StartBit="0" NumberOfBits="16" Type="USHORT" Name="Slant Range" PermittedValue="[ 0 ÷ 65535 ]" Description="" />
+	</Message>
+	<Message Key="7217" Name="Ground Reference Command" NumberOfBytes="8" Protocol="Microcom">
+		<Field LogicalId="0" StartByte="0" NumberOfBytes="4" StartBit="0" NumberOfBits="32" Type="TLowRes2DAngularVelocity" Name="Angular Velocities" Description="Sets GRR (Ground Reference Rate) Angular Velocities, in units [°/Sec]" />
+		<Field LogicalId="1" StartByte="4" NumberOfBytes="2" StartBit="0" NumberOfBits="16" Type="USHORT" Name="Slant Range" PermittedValue="[ 0 ÷ 65535 ]" Description="Sets Slant Range, in units [meters]" />
+	</Message>	
+</Protocol>

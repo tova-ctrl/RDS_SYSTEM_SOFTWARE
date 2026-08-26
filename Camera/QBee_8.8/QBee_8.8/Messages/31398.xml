@@ -1,0 +1,99 @@
+<?xml version='1.0' encoding='utf-8'?>
+<Protocol>
+	<Message Key="31398" Name="Control Cyclic Data" NumberOfBytes="16"  Protocol="Generic">
+		<SubMessage SubMsg="3" Name="Modes and Temperatures">
+			<Field LogicalId="0" StartByte="0" NumberOfBytes="4" StartBit="0" NumberOfBits="32" Type="FLOAT" Name="GCU Operation Mode" Description="" />
+			<Field LogicalId="1" StartByte="4" NumberOfBytes="4" StartBit="0" NumberOfBits="32" Type="FLOAT" Name="GCU Control Logic" Description="" />
+			<Field LogicalId="2" StartByte="8" NumberOfBytes="4" StartBit="0" NumberOfBits="32" Type="FLOAT" Name="AZ Motor Temperature" Description="" />
+			<Field LogicalId="3" StartByte="12" NumberOfBytes="4" StartBit="0" NumberOfBits="32" Type="FLOAT" Name="EL Motor Temperature" Description="" />
+		</SubMessage>
+		<SubMessage SubMsg="4" Name="GCU Calib 1 – Gimbal Limits">
+			<Field LogicalId="4" StartByte="0" NumberOfBytes="4" StartBit="0" NumberOfBits="32" Type="FLOAT" Name="EL Down Barrier" Description="" />
+			<Field LogicalId="5" StartByte="4" NumberOfBytes="4" StartBit="0" NumberOfBits="32" Type="FLOAT" Name="EL Up Barrier" Description="" />
+			<Field LogicalId="6" StartByte="8" NumberOfBytes="4" StartBit="0" NumberOfBits="32" Type="FLOAT" Name="AZ Left Barrier" Description="" />
+			<Field LogicalId="7" StartByte="12" NumberOfBytes="4" StartBit="0" NumberOfBits="32" Type="FLOAT" Name="AZ Right Barrier" Description="" />
+		</SubMessage>
+		<SubMessage SubMsg="5" Name="GCU Calib 2 – Payload IMU Biases">
+			<Field LogicalId="8" StartByte="0" NumberOfBytes="4" StartBit="0" NumberOfBits="32" Type="FLOAT" Name="Wx Bias" Description="" />
+			<Field LogicalId="9" StartByte="4" NumberOfBytes="4" StartBit="0" NumberOfBits="32" Type="FLOAT" Name="Wy Bias" Description="" />
+			<Field LogicalId="10" StartByte="8" NumberOfBytes="4" StartBit="0" NumberOfBits="32" Type="FLOAT" Name="Wz Bias" Description="" />
+		</SubMessage>
+		<SubMessage SubMsg="6" Name="GCU Calib 3 – Payload IMU Scale Factors">
+			<Field LogicalId="11" StartByte="0" NumberOfBytes="4" StartBit="0" NumberOfBits="32" Type="FLOAT" Name="SFx" Description="" />
+			<Field LogicalId="12" StartByte="4" NumberOfBytes="4" StartBit="0" NumberOfBits="32" Type="FLOAT" Name="SFy" Description="" />
+			<Field LogicalId="13" StartByte="8" NumberOfBytes="4" StartBit="0" NumberOfBits="32" Type="FLOAT" Name="SFz" Description="" />
+		</SubMessage>
+		<SubMessage SubMsg="7" Name="GCU Calib 4 – Payload IMU Cross Couplings 1">
+			<Field LogicalId="14" StartByte="0" NumberOfBytes="4" StartBit="0" NumberOfBits="32" Type="FLOAT" Name="CCx2y" Description="" />
+			<Field LogicalId="15" StartByte="4" NumberOfBytes="4" StartBit="0" NumberOfBits="32" Type="FLOAT" Name="CCx2z" Description="" />
+			<Field LogicalId="16" StartByte="8" NumberOfBytes="4" StartBit="0" NumberOfBits="32" Type="FLOAT" Name="CCy2y" Description="" />
+			<Field LogicalId="17" StartByte="12" NumberOfBytes="4" StartBit="0" NumberOfBits="32" Type="FLOAT" Name="CCy2z" Description="" />
+		</SubMessage>
+		<SubMessage SubMsg="8" Name="GCU Calib 5 – Payload IMU Cross Couplings 2, Gyro Orientation">
+			<Field LogicalId="18" StartByte="0" NumberOfBytes="4" StartBit="0" NumberOfBits="32" Type="FLOAT" Name="CCz2x" Description="" />
+			<Field LogicalId="19" StartByte="4" NumberOfBytes="4" StartBit="0" NumberOfBits="32" Type="FLOAT" Name="CCz2y" Description="" />
+			<Field LogicalId="20" StartByte="8" NumberOfBytes="4" StartBit="0" NumberOfBits="32" Type="FLOAT" Name="Gyro Orientation" Description="" />
+		</SubMessage>
+		<SubMessage SubMsg="9" Name="GCU Calib 6 – Azimuth Torque Disturbances">
+			<Field LogicalId="21" StartByte="0" NumberOfBytes="4" StartBit="0" NumberOfBits="32" Type="FLOAT" Name="AZ Friction" Description="" />
+			<Field LogicalId="22" StartByte="4" NumberOfBytes="4" StartBit="0" NumberOfBits="32" Type="FLOAT" Name="AZ Max Torque Recorded" Description="" />
+			<Field LogicalId="23" StartByte="8" NumberOfBytes="4" StartBit="0" NumberOfBits="32" Type="FLOAT" Name="AZ Angle of Max Torque" Description="" />
+		</SubMessage>
+		<SubMessage SubMsg="10" Name="GCU Calib 7 – Elevation Torque Disturbances">
+			<Field LogicalId="24" StartByte="0" NumberOfBytes="4" StartBit="0" NumberOfBits="32" Type="FLOAT" Name="EL Friction" Description="" />
+			<Field LogicalId="25" StartByte="4" NumberOfBytes="4" StartBit="0" NumberOfBits="32" Type="FLOAT" Name="EL Max Torque Recorded" Description="" />
+			<Field LogicalId="26" StartByte="8" NumberOfBytes="4" StartBit="0" NumberOfBits="32" Type="FLOAT" Name="EL Angle of Max Torque" Description="" />
+		</SubMessage>
+		<SubMessage SubMsg="11" Name="GCU Calib 8 – Encoder Eccentricity">
+			<Field LogicalId="27" StartByte="0" NumberOfBytes="4" StartBit="0" NumberOfBits="32" Type="FLOAT" Name="AZ Encoder error" Description="" />
+			<Field LogicalId="28" StartByte="4" NumberOfBytes="4" StartBit="0" NumberOfBits="32" Type="FLOAT" Name="EL Encoder error" Description="" />
+		</SubMessage>
+		<SubMessage SubMsg="12" Name="GCU ATP 1 - Azimuth Bode">
+			<Field LogicalId="29" StartByte="0" NumberOfBytes="4" StartBit="0" NumberOfBits="32" Type="FLOAT" Name="AZ Frequency" PermittedValue="[Hz]" Description="" />
+			<Field LogicalId="30" StartByte="4" NumberOfBytes="4" StartBit="0" NumberOfBits="32" Type="FLOAT" Name="AZ Magnitude" PermittedValue="[dB]" Description="" />
+			<Field LogicalId="31" StartByte="8" NumberOfBytes="4" StartBit="0" NumberOfBits="32" Type="FLOAT" Name="AZ Phase" PermittedValue="[deg]" Description="" />
+		</SubMessage>	
+		<SubMessage SubMsg="13" Name="GCU ATP 2 - Elevation Bode">
+			<Field LogicalId="32" StartByte="0" NumberOfBytes="4" StartBit="0" NumberOfBits="32" Type="FLOAT" Name="EL Frequency" PermittedValue="[Hz]" Description="" />
+			<Field LogicalId="33" StartByte="4" NumberOfBytes="4" StartBit="0" NumberOfBits="32" Type="FLOAT" Name="EL Magnitude" PermittedValue="[dB]" Description="" />
+			<Field LogicalId="34" StartByte="8" NumberOfBytes="4" StartBit="0" NumberOfBits="32" Type="FLOAT" Name="EL Phase" PermittedValue="[deg]" Description="" />
+		</SubMessage>
+		<SubMessage SubMsg="14" Name="GCU ATP 3 - Spectral KPI ">
+			<Field LogicalId="35" StartByte="0" NumberOfBytes="1" StartBit="0" NumberOfBits="8" Type="INT" Name="AZ DC Gain" Description="" />
+			<Field LogicalId="36" StartByte="1" NumberOfBytes="1" StartBit="0" NumberOfBits="8" Type="INT" Name="AZ OL BW" Description="" />
+			<Field LogicalId="37" StartByte="2" NumberOfBytes="1" StartBit="0" NumberOfBits="8" Type="INT" Name="AZ Gain Margain" Description="" />
+			<Field LogicalId="38" StartByte="3" NumberOfBytes="1" StartBit="0" NumberOfBits="8" Type="INT" Name="AZ Phase Margain" Description="" />
+			<Field LogicalId="39" StartByte="4" NumberOfBytes="1" StartBit="0" NumberOfBits="8" Type="INT" Name="AZ High Freq Envelope" Description="" />
+			<Field LogicalId="40" StartByte="5" NumberOfBytes="1" StartBit="0" NumberOfBits="8" Type="INT" Name="AZ Anomaly Detected" Description="" />
+			<Field LogicalId="41" StartByte="6" NumberOfBytes="1" StartBit="0" NumberOfBits="8" Type="INT" Name="EL DC Gain" Description="" />
+			<Field LogicalId="42" StartByte="7" NumberOfBytes="1" StartBit="0" NumberOfBits="8" Type="INT" Name="EL OL BW" Description="" />
+			<Field LogicalId="43" StartByte="8" NumberOfBytes="1" StartBit="0" NumberOfBits="8" Type="INT" Name="EL Gain Margain" Description="" />
+			<Field LogicalId="44" StartByte="9" NumberOfBytes="1" StartBit="0" NumberOfBits="8" Type="INT" Name="EL Phase Margain" Description="" />
+			<Field LogicalId="45" StartByte="10" NumberOfBytes="1" StartBit="0" NumberOfBits="8" Type="INT" Name="EL High Freq Envelope" Description="" />
+			<Field LogicalId="46" StartByte="11" NumberOfBytes="1" StartBit="0" NumberOfBits="8" Type="INT" Name="EL Anomaly Detected" Description="" />
+
+			<Field LogicalId="47" StartByte="12" NumberOfBytes="1" StartBit="0" NumberOfBits="1" Type="BIT" Name="AZ DC Gain P/F" Description="" />
+			<Field LogicalId="48" StartByte="12" NumberOfBytes="1" StartBit="1" NumberOfBits="1" Type="BIT" Name="AZ OL BW P/F" Description="" />		
+			<Field LogicalId="49" StartByte="12" NumberOfBytes="1" StartBit="2" NumberOfBits="1" Type="BIT" Name="AZ Gain Margain P/F" Description="" />
+			<Field LogicalId="50" StartByte="12" NumberOfBytes="1" StartBit="3" NumberOfBits="1" Type="BIT" Name="AZ Phase Margain P/F" Description="" />	
+			<Field LogicalId="51" StartByte="12" NumberOfBytes="1" StartBit="4" NumberOfBits="1" Type="BIT" Name="AZ High Freq Envelope P/F" Description="" />
+			<Field LogicalId="52" StartByte="12" NumberOfBytes="1" StartBit="5" NumberOfBits="1" Type="BIT" Name="EL DC Gain P/F" Description="" />
+			<Field LogicalId="53" StartByte="12" NumberOfBytes="1" StartBit="6" NumberOfBits="1" Type="BIT" Name="EL OL BW P/F" Description="" />		
+			<Field LogicalId="54" StartByte="12" NumberOfBytes="1" StartBit="7" NumberOfBits="1" Type="BIT" Name="EL Gain Margain P/F" Description="" />
+
+			<Field LogicalId="55" StartByte="13" NumberOfBytes="1" StartBit="0" NumberOfBits="1" Type="BIT" Name="EL Phase Margain P/F" Description="" />	
+			<Field LogicalId="56" StartByte="13" NumberOfBytes="1" StartBit="1" NumberOfBits="1" Type="BIT" Name="EL High Freq Envelope P/F" Description="" />		
+			<Field LogicalId="57" StartByte="13" NumberOfBytes="1" StartBit="2" NumberOfBits="1" Type="BIT" Name="AZ Spectral Test P/F" Description="" />
+			<Field LogicalId="58" StartByte="13" NumberOfBytes="1" StartBit="3" NumberOfBits="1" Type="BIT" Name="EL Spectral Test P/F" Description="" />		
+			<Field LogicalId="59" StartByte="13" NumberOfBytes="1" StartBit="4" NumberOfBits="1" Type="BIT" Name="AZ Stab Test P/F" Description="" />
+			<Field LogicalId="60" StartByte="13" NumberOfBytes="1" StartBit="5" NumberOfBits="1" Type="BIT" Name="EL Stab Test P/F" Description="" />	
+			<Field LogicalId="61" StartByte="13" NumberOfBytes="1" StartBit="6" NumberOfBits="1" Type="BIT" Name="ATP Has Not Finished" Description="" />
+
+		</SubMessage>	
+		<SubMessage SubMsg="15" Name="GCU ATP 4 - STAB STD Values">
+			<Field LogicalId="62" StartByte="0" NumberOfBytes="4" StartBit="0" NumberOfBits="32" Type="FLOAT" Name="Azimuth Stab" PermittedValue="[uRad]" Description="" />
+			<Field LogicalId="63" StartByte="4" NumberOfBytes="4" StartBit="0" NumberOfBits="32" Type="FLOAT" Name="Elevation Stab" PermittedValue="[uRad]" Description="" />
+		</SubMessage>	
+	</Message>
+
+</Protocol>

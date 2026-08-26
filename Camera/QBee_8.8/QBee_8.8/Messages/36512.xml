@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<Protocol>
+	<Message Key="36512" Name="Tracker Target (Gate) Size Report" NumberOfBytes="16" Protocol="Generic">
+		<Field LogicalId="0" StartByte="0" NumberOfBytes="2" StartBit="0" NumberOfBits="16" Type="SHORT" Name="X Size" PermittedValue="[ -4500 ÷ + 4500 ]" Description="" />
+		<Field LogicalId="1" StartByte="2" NumberOfBytes="2" StartBit="0" NumberOfBits="16" Type="SHORT" Name="Y Size" PermittedValue="[ -4500 ÷ + 4500 ]" Description="" />
+	</Message>
+</Protocol>

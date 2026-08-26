@@ -1,0 +1,59 @@
+NUCLEO-H753ZI
+Good choice — Nucleo-H753ZI has LAN8742A PHY and full Ethernet support. Let me first check what ISM.cpp actually uses so I know what needs changing for STM32.
+
+Read C:\Projects\RDS_SYSTEM_SOFTWARE\ISM_Firmware\include\ISM.h
+Read C:\Projects\RDS_SYSTEM_SOFTWARE\ISM_Firmware\src\ISM.cpp
+Read C:\Projects\RDS_SYSTEM_SOFTWARE\ISM_Firmware\include\Watchdog.h
+Read C:\Projects\RDS_SYSTEM_SOFTWARE\ISM_Firmware\src\IsmEmgLink.cpp
+Good. Now I know exactly what needs changing. Let me give you a complete picture before touching anything.
+
+What's already portable (no changes):
+
+ISM.h, FaultCode.h, FccMessage.h, SystemState.h, FireInterlock.h
+What needs small fixes:
+
+File	Problem	Fix
+Watchdog.h	std::chrono::steady_clock — no RTOS	Replace with tick counter
+ISM.cpp	localtime_r() (POSIX) + std::cout	Platform-time abstraction + UART redirect
+IsmEmgLink.cpp	POSIX sockets	New LwIP version
+New files needed for STM32:
+
+IsmEthTransport.cpp — LwIP UDP receive (replaces IsmSimEth)
+IsmEmgLinkLwIP.cpp — LwIP UDP send (replaces IsmEmgLink.cpp)
+platform_time.cpp — HAL_GetTick() based timestamp
+CubeIDE project setup — step by step:
+
+File → New → STM32 Project
+
+Board: search NUCLEO-H753ZI → select it → C++ project
+In CubeMX (Pinout & Configuration):
+
+Connectivity → ETH → Mode: RMII
+Connectivity → USART3 → Asynchronous 115200 (ST-Link UART)
+Timers → TIM6 → Clock Source: Internal Clock, Prescaler: 239, Counter Period: 999 → 1ms tick → enable TIM6 global interrupt
+Middleware and Software Packs → LwIP → enable
+Under LwIP → General Settings: set IP Address to 192.168.55.3 (static, no DHCP needed)
+Project → Generate Code
+
+Once you have the project generated, share the path and I'll write the ISM transport layer and the three new STM32 files. The ISM logic itself (ISM.cpp) needs only 2 lines changed.
+
+Can you create the CubeIDE project now and tell me the path
+
+No worries. We can add the CubeMX configuration to this empty project. Right-click on ISM_STM32_Proj in the Project Explorer:
+
+Right-click → New → Other...
+
+In the wizard, look for STM32CubeIDE → Device Configuration Tool File (.ioc) → Next.
+
+That will open the board selector where you search for NUCLEO-H753ZI and configure the chip with CubeMX.
+
+Can you see that option in the list?
+
+
+Neither project has an .ioc file — CubeMX is not integrated. The easiest fix: switch to the STM32 perspective which exposes the proper new project wizard.
+
+In STM32CubeIDE: Window → Perspective → Open Perspective → Other...
+
+Look for "STM32CubeIDE" in the list and select it. After switching, File → New should show "STM32 Project" directly — and that wizard has the board selector.
+
+Can you try that?

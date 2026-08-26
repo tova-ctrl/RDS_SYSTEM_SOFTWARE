@@ -1,0 +1,8 @@
+<?xml version='1.0' encoding='utf-8'?>
+<Protocol>
+	<Message Key="1234" Name="Safe Mode" NumberOfBytes="0" Description="Set system to Safe Mode. Set predefined gimbal angles and sensors FOV" Protocol="Microcom">
+	</Message>
+	
+		<Message Key="1234" Name="Cage" NumberOfBytes="0" Protocol="Generic">
+	</Message>
+</Protocol>

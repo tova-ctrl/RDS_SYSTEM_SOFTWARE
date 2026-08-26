@@ -1,0 +1,4 @@
+<?xml version='1.0' encoding='utf-8'?>
+<Message Key="1" Name="Get Message" NumberOfBytes="4">
+	<Field LogicalId="0" StartByte="0" NumberOfBytes="2" StartBit="0" NumberOfBits="16" Type="USHORT" Name="Key ID" PermittedValue="[ 0 ÷ 59999 ]" Description="" />
+</Message>

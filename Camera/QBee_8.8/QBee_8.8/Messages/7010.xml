@@ -1,0 +1,11 @@
+<?xml version='1.0' encoding='utf-8'?>
+<Protocol>
+	<Message Key="7010" Name="Platform Navigation Data Accuracy" NumberOfBytes="2" Protocol="Microcom">
+		<Field LogicalId="0" StartByte="0" NumberOfBytes="1" StartBit="0" NumberOfBits="2" Type="CHAR" Name="Position Accuracy" CovertType="NavDataAccuracyMeter" Description="Estimated accuracy of platform horizontal position data (latitude, longitude)" />
+		<Field LogicalId="1" StartByte="0" NumberOfBytes="1" StartBit="2" NumberOfBits="2" Type="CHAR" Name="Altitude Accuracy" CovertType="NavDataAccuracyMeter" Description="Estimated accuracy of platform altitude data" />
+		<Field LogicalId="2" StartByte="0" NumberOfBytes="1" StartBit="4" NumberOfBits="2" Type="CHAR" Name="Attitude Accuracy" CovertType="NavDataAccuracyMRad" Description="Estimated accuracy of platform Attitude data" />
+		<Field LogicalId="3" StartByte="0" NumberOfBytes="1" StartBit="6" NumberOfBits="2" Type="CHAR" Name="Azimuth Accuracy" CovertType="NavDataAccuracyMRad" Description="Estimated accuracy of platform Azimuth data" />
+		<Field LogicalId="4" StartByte="1" NumberOfBytes="1" StartBit="0" NumberOfBits="2" Type="CHAR" Name="Velocity Accuracy" CovertType="NavDataAccuracyMS" Description="Estimated accuracy of platform  horizontal velocity data" />
+		<Field LogicalId="5" StartByte="1" NumberOfBytes="1" StartBit="2" NumberOfBits="2" Type="CHAR" Name="Rate of Climb Accuracy" CovertType="NavDataAccuracyMS" Description="Estimated accuracy of platform  vertical velocity data" />
+	</Message>
+</Protocol>

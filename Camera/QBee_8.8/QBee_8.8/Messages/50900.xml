@@ -1,0 +1,23 @@
+<?xml version='1.0' encoding='utf-8'?>
+<Protocol>
+	<Message Key="50900" Name="Gimbal Operation Report" NumberOfBytes="4" Protocol="Microcom">
+		<Field LogicalId="0" StartByte="0" NumberOfBytes="1" StartBit="0" NumberOfBits="8" Type="UCHAR" Name="Operation Mode" ConvertType="TOperationMode_Micro" Description="Gets Gimbal Operation Mode Status" />
+		<Field LogicalId="1" StartByte="1" NumberOfBytes="1" StartBit="0" NumberOfBits="8" Type="UCHAR" Name="Gimbal Rate Type" Description="Gets Gimbal Rate Type" />
+		<Field LogicalId="2" StartByte="2" NumberOfBytes="1" StartBit="0" NumberOfBits="8" Type="UCHAR" Name="Core 2 Run Time" Description="Gets Core 2 Run Time, in unit [%]" />
+	</Message>
+	
+	<Message Key="50900" Name="System General Report" NumberOfBytes="4" Protocol="Generic">
+		<Field LogicalId="0" StartByte="0" NumberOfBytes="1" StartBit="0" NumberOfBits="8" Type="UCHAR" Name="Operation Mode" ConvertType="TOperationMode_Generic" Description="Operation Mode Status" />
+		<Field LogicalId="1" StartByte="1" NumberOfBytes="1" StartBit="0" NumberOfBits="1" Type="BIT" Name="BUSY Status" Description="Busy Status" />
+		<Field LogicalId="2" StartByte="1" NumberOfBytes="1" StartBit="1" NumberOfBits="1" Type="BIT" Name="Hybrid Mode" Description="Hybrid Mode Status" />
+		<Field LogicalId="3" StartByte="1" NumberOfBytes="1" StartBit="2" NumberOfBits="1" Type="BIT" Name="GRR Usage" Description="GRR Usage" />
+		<Field LogicalId="4" StartByte="1" NumberOfBytes="1" StartBit="7" NumberOfBits="1" Type="BIT" Name="CPU Master Fail" Description="CPU Mater Failure" />
+		<Field LogicalId="5" StartByte="2" NumberOfBytes="1" StartBit="1" NumberOfBits="1" Type="BIT" Name="Sensors Master Fail/Warning" Description="Sensors Master Fail Or Warning" />
+		<Field LogicalId="6" StartByte="2" NumberOfBytes="1" StartBit="2" NumberOfBits="1" Type="BIT" Name="Servo Master Fail/Warning" Description="Servo Master Fail Or Warning" />
+		<Field LogicalId="7" StartByte="2" NumberOfBytes="1" StartBit="3" NumberOfBits="1" Type="BIT" Name="Sensors FTDI Power" Description="Sensors FTDI Power Status" />
+		<Field LogicalId="8" StartByte="2" NumberOfBytes="1" StartBit="4" NumberOfBits="1" Type="BIT" Name="Motors FTDI Power" Description="Motors FTDI Power Status" />
+		<Field LogicalId="9" StartByte="2" NumberOfBytes="1" StartBit="5" NumberOfBits="1" Type="BIT" Name="Video Stream Status" Description="Video Stream Status" />
+		<Field LogicalId="10" StartByte="3" NumberOfBytes="1" StartBit="0" NumberOfBits="8" Type="CHAR" Name="CPU 2 Utilization" Description="" />
+		<Field LogicalId="11" StartByte="1" NumberOfBytes="1" StartBit="3" NumberOfBits="1" Type="BIT" Name="END GAME" Description="" />
+	</Message>
+</Protocol>

@@ -1,0 +1,33 @@
+<?xml version='1.0' encoding='utf-8'?>
+<Protocol>
+	<Message Key="50902" Name="CPU FW Failure and Warnings Report" NumberOfBytes="2" Protocol="Microcom">
+		<Field LogicalId="0" StartByte="0" NumberOfBytes="1" StartBit="0" NumberOfBits="1" Type="BIT" Name="Memory RAM Fail" Description="Gets Memory RAM Fail BIT" />
+		<Field LogicalId="1" StartByte="0" NumberOfBytes="1" StartBit="1" NumberOfBits="1" Type="BIT" Name="Memory FLASH Fail" Description="Gets Memory FLASH Fail BIT" />
+		<Field LogicalId="2" StartByte="0" NumberOfBytes="1" StartBit="2" NumberOfBits="1" Type="BIT" Name="SW Crash Fail" Description="Gets SW Crash Fail BIT" />
+		<Field LogicalId="3" StartByte="0" NumberOfBytes="1" StartBit="3" NumberOfBits="1" Type="BIT" Name="Parameters Fail" Description="Gets Parameters Fail BIT" />
+		<Field LogicalId="4" StartByte="0" NumberOfBytes="1" StartBit="4" NumberOfBits="1" Type="BIT" Name="High Temperature Fail" Description="Gets High Temperature Fail BIT" />
+		<Field LogicalId="5" StartByte="0" NumberOfBytes="1" StartBit="5" NumberOfBits="1" Type="BIT" Name="Internal Communication Fail" Description="Gets Internal Communication Fail BIT" />		
+		<Field LogicalId="6" StartByte="0" NumberOfBytes="1" StartBit="6" NumberOfBits="1" Type="BIT" Name="Video Comm Fail" Description="Gets Video Comm Fail BIT" />
+		<Field LogicalId="7" StartByte="0" NumberOfBytes="1" StartBit="7" NumberOfBits="1" Type="BIT" Name="No Power Gimbal" Description="Gets No Power Gimbal BIT" />
+		<Field LogicalId="8" StartByte="1" NumberOfBytes="1" StartBit="0" NumberOfBits="1" Type="BIT" Name="No Power Sensors" Description="Gets No Power Sensors BIT" />
+		<Field LogicalId="9" StartByte="1" NumberOfBytes="1" StartBit="1" NumberOfBits="1" Type="BIT" Name="USB Hub Fail" Description="Gets USB Hub Fail BIT" />
+		<Field LogicalId="10" StartByte="1" NumberOfBytes="1" StartBit="2" NumberOfBits="1" Type="BIT" Name="Host Communication Fail" Description="Gets Host Communication Fail BIT" />
+		<Field LogicalId="11" StartByte="1" NumberOfBytes="1" StartBit="3" NumberOfBits="1" Type="BIT" Name="Host Invalid msg Fail" Description="Gets Host Rate Valid msg Fail BIT" />
+		<Field LogicalId="12" StartByte="1" NumberOfBytes="1" StartBit="4" NumberOfBits="1" Type="BIT" Name="Host Rate Valid msg Fail" Description="Gets Host Rate Valid msg Fail BIT" />
+		<Field LogicalId="13" StartByte="1" NumberOfBytes="1" StartBit="5" NumberOfBits="1" Type="BIT" Name="TX Message Blocked" Description="When Entering Track TX Messages Are Blocked For 2 Sec" />
+	</Message>
+	
+	<Message Key="50902" Name="CPU FW Failure and Warnings Report" NumberOfBytes="4" Protocol="Generic">
+		<Field LogicalId="0" StartByte="0" NumberOfBytes="1" StartBit="0" NumberOfBits="1" Type="BIT" Name="Memory RAM Fail" Description="Gets  BIT" />
+		<Field LogicalId="1" StartByte="0" NumberOfBytes="1" StartBit="1" NumberOfBits="1" Type="BIT" Name="Memory FLASH Fail" Description="Gets  BIT" />
+		<Field LogicalId="2" StartByte="0" NumberOfBytes="1" StartBit="2" NumberOfBits="1" Type="BIT" Name="Controller SW Fail" Description="Gets  BIT" />
+		<Field LogicalId="3" StartByte="0" NumberOfBytes="1" StartBit="3" NumberOfBits="1" Type="BIT" Name="Parameters Fail" Description="Gets  BIT" />
+		<Field LogicalId="4" StartByte="0" NumberOfBytes="1" StartBit="4" NumberOfBits="1" Type="BIT" Name="High Temperature Fail" Description="Gets  BIT" />
+		<Field LogicalId="5" StartByte="1" NumberOfBytes="1" StartBit="2" NumberOfBits="1" Type="BIT" Name="Magewell Comm Fail" Description="Gets  BIT" />
+		<Field LogicalId="6" StartByte="1" NumberOfBytes="1" StartBit="3" NumberOfBits="1" Type="BIT" Name="No Power Gimbal" Description="Gets  BIT" />
+		<Field LogicalId="7" StartByte="1" NumberOfBytes="1" StartBit="4" NumberOfBits="1" Type="BIT" Name="No Power Sensors" Description="Gets  BIT" />
+		<Field LogicalId="8" StartByte="1" NumberOfBytes="1" StartBit="5" NumberOfBits="1" Type="BIT" Name="FTDI Communication Fail" Description="Gets  BIT" />
+		<Field LogicalId="9" StartByte="1" NumberOfBytes="1" StartBit="6" NumberOfBits="1" Type="BIT" Name="Host Communication Fail" Description="Gets  BIT" />
+		<Field LogicalId="10" StartByte="1" NumberOfBytes="1" StartBit="7" NumberOfBits="1" Type="BIT" Name="Host Rate Valid msg Fail" Description="Gets  BIT" />
+	</Message>
+</Protocol>

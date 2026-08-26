@@ -1,0 +1,6 @@
+../Core/Inc/UartProtocol.h:5:23:uart_crc8	24	static
+../Core/Src/IsmUartTransport.c:33:6:ism_uart_rx_start	8	static
+../Core/Src/IsmUartTransport.c:36:5:isItFCCUartCommand	40	static
+../Core/Src/IsmUartTransport.c:42:5:check_isItFCCUartCommand	16	static
+../Core/Src/IsmUartTransport.c:59:6:ismToFcc_ack_send	120	static
+../Core/Src/IsmUartTransport.c:80:6:HAL_UART_RxCpltCallback	56	static

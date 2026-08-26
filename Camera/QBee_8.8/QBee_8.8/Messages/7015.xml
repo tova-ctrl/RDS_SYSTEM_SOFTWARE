@@ -1,0 +1,14 @@
+<?xml version='1.0' encoding='utf-8'?>
+<Protocol>
+	<Message Key="7015" Name="Navigation Init" NumberOfBytes="18" Protocol="Microcom">
+		<Field LogicalId="0" StartByte="0" NumberOfBytes="2" StartBit="0" NumberOfBits="16" Type="SHORT" Name="X Mounting Angle" Description="Sets platform X mounting angle installation [LSB:360º/65536]" />
+		<Field LogicalId="1" StartByte="2" NumberOfBytes="2" StartBit="0" NumberOfBits="16" Type="SHORT" Name="Y Mounting Angle" Description="Sets platform Y mounting angle installation [LSB:360º/65536]" />
+		<Field LogicalId="2" StartByte="4" NumberOfBytes="2" StartBit="0" NumberOfBits="16" Type="SHORT" Name="Z Mounting Angle" Description="Sets platform Z mounting angle installation [LSB:360º/65536]" />
+		<Field LogicalId="3" StartByte="6" NumberOfBytes="2" StartBit="0" NumberOfBits="16" Type="SHORT" Name="Lever Arm X" Description="Sets platform lever arm X installation [LSB: 1CM]" />
+		<Field LogicalId="4" StartByte="8" NumberOfBytes="2" StartBit="0" NumberOfBits="16" Type="SHORT" Name="Lever Arm Y" Description="Sets platform lever arm Y installation [LSB: 1CM]" />
+		<Field LogicalId="5" StartByte="10" NumberOfBytes="2" StartBit="0" NumberOfBits="16" Type="SHORT" Name="Lever Arm Z" Description="Sets platform lever arm Z installation [LSB: 1CM]" />
+		<Field LogicalId="6" StartByte="12" NumberOfBytes="2" StartBit="0" NumberOfBits="16" Type="SHORT" Name="Platform Body Azimuth" Description="Sets platform body azimuth installation [LSB:360º/65536]" />
+		<Field LogicalId="7" StartByte="14" NumberOfBytes="2" StartBit="0" NumberOfBits="16" Type="SHORT" Name="Platform Body Pitch" Description="Sets platform body pitch installation [LSB:360º/65536]" />
+		<Field LogicalId="8" StartByte="16" NumberOfBytes="2" StartBit="0" NumberOfBits="16" Type="SHORT" Name="Platform Body Roll" Description="Sets platform body roll installation [LSB:360º/65536]" />
+	</Message>
+</Protocol>

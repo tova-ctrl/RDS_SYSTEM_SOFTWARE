@@ -1,0 +1,40 @@
+cd FCC_App
+
+# שלב 1 — הגדרת virtual CAN
+make vcan
+
+# שלב 2 — בנייה + הרצה
+make run
+
+# בטרמינל נפרד — ניטור CAN traffic
+make monitor
+
+#If you have problem with virtual CAN then
+sudo apt update && sudo apt install -y build-essential flex bison dwarves libssl-dev libelf-dev cpio qemu-utils libncurses-dev bc python3 pahole
+
+git clone --depth 1 --branch linux-msft-wsl-6.6.114.1 https://github.com/microsoft/WSL2-Linux-Kernel.git
+cd WSL2-Linux-Kernel
+
+#vcan == virtual can
+cat << EOF >> Microsoft/config-wsl
+CONFIG_CAN=y
+CONFIG_CAN_RAW=y
+CONFIG_CAN_BCM=y
+CONFIG_CAN_GW=y
+CONFIG_CAN_DEV=y
+CONFIG_CAN_VCAN=y
+EOF
+
+make menuconfig KCONFIG_CONFIG=Microsoft/config-wsl
+
+scripts/config --file Microsoft/config-wsl --disable CONFIG_DEBUG_INFO_BTF
+scripts/config --file Microsoft/config-wsl --disable CONFIG_DEBUG_INFO
+
+make -j$(nproc) KCONFIG_CONFIG=Microsoft/config-wsl
+[wsl2]
+kernel=C:\\wsl_kernel\\vmlinux
+
+sudo ip link add dev vcan0 type vcan
+sudo ip link set up vcan0
+
+sudo apt update && sudo apt install -y can-utils

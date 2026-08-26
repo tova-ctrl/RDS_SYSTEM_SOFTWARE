@@ -1,0 +1,6 @@
+<?xml version='1.0' encoding='utf-8'?>
+<Message Key="30002" Name="" NumberOfBytes="8">
+	<Field LogicalId="0" StartByte="0" NumberOfBytes="2" StartBit="0" NumberOfBits="16" Type="USHORT" Name="Data Index" Description="" />
+	<Field LogicalId="1" StartByte="2" NumberOfBytes="1" StartBit="0" NumberOfBits="8" Type="UCHAR" Name="Data Type" ConvertType="DialDataType" Description="" />
+	<Field LogicalId="2" StartByte="4" NumberOfBytes="4" StartBit="0" NumberOfBits="32" Type="ULONG" Name="Requested Data" Description="" />
+</Message>

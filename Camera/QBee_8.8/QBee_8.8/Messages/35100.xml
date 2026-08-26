@@ -1,0 +1,9 @@
+<?xml version='1.0' encoding='utf-8'?>
+<Protocol>
+	<Message Key="35100" Name="Day Camera Status #1 Report" NumberOfBytes="16" Protocol="Generic">
+		<Field LogicalId="0" StartByte="0" NumberOfBytes="1" StartBit="4" NumberOfBits="1" Type="BIT" Name="Status Busy" Description="" />
+		<Field LogicalId="1" StartByte="0" NumberOfBytes="1" StartBit="5" NumberOfBits="1" Type="BIT" Name="Fail Master" Description="" />
+		<Field LogicalId="2" StartByte="2" NumberOfBytes="1" StartBit="5" NumberOfBits="1" Type="BIT" Name="Fail Flash" Description="" />
+		<Field LogicalId="3" StartByte="2" NumberOfBytes="1" StartBit="7" NumberOfBits="1" Type="BIT" Name="Fail Detector Communication" Description="" />
+	</Message>
+</Protocol>

@@ -1,0 +1,11 @@
+ 2 — Port forwarding (מיידי, ללא restart)
+
+# PowerShell כ-Admin:
+# מצא את ה-IP הפנימי של WSL2:
+wsl hostname -I
+
+# הוסף forwarding (החלף 172.x.x.x ב-IP שקיבלת):
+netsh interface portproxy add v4tov4 listenport=5300 listenaddress=0.0.0.0 connectport=5300 connectaddress=172.x.x.x
+
+# פתח את הFirewall:
+netsh advfirewall firewall add rule name="ISM-ETH 5300" dir=in action=allow protocol=UDP localport=5300

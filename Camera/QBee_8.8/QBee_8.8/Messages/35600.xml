@@ -1,0 +1,19 @@
+<?xml version='1.0' encoding='utf-8'?>
+<Protocol>
+	<Message Key="35600" Name="Day Camera Report" NumberOfBytes="56" Protocol="Microcom">
+		<Field LogicalId="0" StartByte="0" NumberOfBytes="4" StartBit="0" NumberOfBits="32" Type="Long" Name="Exposure Mode" ConvertType="DTVExposureMode" Description="Gets DayLightCamera Exposure Mode" />
+		<Field LogicalId="1" StartByte="4" NumberOfBytes="4" StartBit="0" NumberOfBits="32" Type="Long" Name="Exposure Time" Description="Gets DayLightCamera Exposure Time" />
+		<Field LogicalId="2" StartByte="8" NumberOfBytes="4" StartBit="0" NumberOfBits="32" Type="Long" Name="Exposure Gain" Description="Gets DayLightCamera Exposure Gain" />
+		<Field LogicalId="3" StartByte="12" NumberOfBytes="4" StartBit="0" NumberOfBits="32" Type="Float" Name="Gamma Value" Description="Gets DayLightCamera Gamma Value" />
+		<Field LogicalId="4" StartByte="16" NumberOfBytes="4" StartBit="0" NumberOfBits="32" Type="Float" Name="Saturation Value" Description="Gets DayLightCamera Saturation Value" />
+		<Field LogicalId="5" StartByte="20" NumberOfBytes="4" StartBit="0" NumberOfBits="32" Type="Float" Name="Contrast Value" Description="Gets DayLightCamera Contrast Value" />
+		<Field LogicalId="6" StartByte="24" NumberOfBytes="4" StartBit="0" NumberOfBits="32" Type="Float" Name="Sharpness Value" Description="Gets DayLightCamera Sharpness Value" />
+		<Field LogicalId="7" StartByte="28" NumberOfBytes="4" StartBit="0" NumberOfBits="32" Type="Float" Name="FOV" Description="Gets DayLightCamera FOV" />
+		<Field LogicalId="8" StartByte="32" NumberOfBytes="4" StartBit="0" NumberOfBits="32" Type="Float" Name="Zoom X Axis Center" Description="Gets DayLightCamera Zoom X Axis Center" />
+		<Field LogicalId="9" StartByte="36" NumberOfBytes="4" StartBit="0" NumberOfBits="32" Type="Float" Name="Zoom Y Axis Center" Description="Gets DayLightCamera Zoom Y Axis Center" />
+		<Field LogicalId="10" StartByte="40" NumberOfBytes="4" StartBit="0" NumberOfBits="32" Type="Float" Name="Brigthness Value" Description="Gets DayLightCamera Brigthness Value" />
+		<Field LogicalId="11" StartByte="44" NumberOfBytes="4" StartBit="0" NumberOfBits="32" Type="Long" Name="Auto White Balance" Description="Gets DayLightCamera Auto White Balance" />
+		<Field LogicalId="12" StartByte="48" NumberOfBytes="4" StartBit="0" NumberOfBits="32" Type="Long" Name="Temperature Value" Description="Gets DayLightCamera Temperature Value" />
+		<Field LogicalId="13" StartByte="52" NumberOfBytes="4" StartBit="0" NumberOfBits="32" Type="Float" Name="Flicker Mode" Description="Gets DayLightCamera Flicker Mode" />	
+	</Message>
+</Protocol>

@@ -1,0 +1,10 @@
+<?xml version='1.0' encoding='utf-8'?>
+<Protocol>
+	<Message Key="31216" Name="Inertial Rate" NumberOfBytes="4" Protocol="Microcom">
+		<Field LogicalId="0" StartByte="0" NumberOfBytes="4" StartBit="0" NumberOfBits="32" Type="TLowRes2DAngularVelocity" Name="Gimbal Angular Velocity" Description="Gets Gimbal Angilar Inertial, in units [°/Sec]" />
+	</Message>
+	
+	<Message Key="31216" Name="Low-res Gimbal Inertial Velocity" NumberOfBytes="4" Protocol="Generic">
+		<Field LogicalId="0" StartByte="0" NumberOfBytes="4" StartBit="0" NumberOfBits="32" Type="TLowRes2DAngularVelocity" Name="Gimbal Angular Velocity" Description="Gimbal Angilar Velocity Command" />
+	</Message>
+</Protocol>

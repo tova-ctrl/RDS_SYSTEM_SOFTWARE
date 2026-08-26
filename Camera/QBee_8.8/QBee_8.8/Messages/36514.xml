@@ -1,0 +1,8 @@
+<?xml version='1.0' encoding='utf-8'?>
+<Protocol>
+	<Message Key="36514" Name="Tracker Offset Controls Report" NumberOfBytes="5" Protocol="Microcom">
+		<Field LogicalId="0" StartByte="0" NumberOfBytes="1" StartBit="0" NumberOfBits="1" Type="BIT" Name="Offset Enable" Description="Gets if offset function is enabled/disabled" />
+		<Field LogicalId="1" StartByte="1" NumberOfBytes="2" StartBit="0" NumberOfBits="16" Type="SHORT" Name="Movement X" Description="Returns provided offset X movement" />
+		<Field LogicalId="2" StartByte="3" NumberOfBytes="2" StartBit="0" NumberOfBits="16" Type="SHORT" Name="Movement Y" Description="Returns provided offset Y movement" />
+	</Message>
+</Protocol>

@@ -1,0 +1,14 @@
+<?xml version='1.0' encoding='utf-8'?>
+<Protocol>
+	<Message Key="22850" Name="Video Channel Control" NumberOfBytes="5" Protocol="Microcom">
+		<Field LogicalId="0" StartByte="0" NumberOfBytes="1" StartBit="0" NumberOfBits="8" Type="UCHAR" Name="Primary Video Channel" ConvertType="Camera" DefaultValue="0" Description="" />	
+		<Field LogicalId="1" StartByte="1" NumberOfBytes="1" StartBit="0" NumberOfBits="8" Type="UCHAR" Name="Secondary PIP Sensor" ConvertType="DevicePurpose" DefaultValue="0" Description="" />	
+		<Field LogicalId="2" StartByte="2" NumberOfBytes="1" StartBit="0" NumberOfBits="8" Type="UCHAR" Name="1st Secondary Video Channel" ConvertType="DevicePurpose" DefaultValue="0" Description="" />
+		<Field LogicalId="3" StartByte="3" NumberOfBytes="1" StartBit="0" NumberOfBits="8" Type="UCHAR" Name="2st Secondary Video Channel" ConvertType="DevicePurpose" DefaultValue="0" Description="" />
+		<Field LogicalId="4" StartByte="4" NumberOfBytes="1" StartBit="0" NumberOfBits="1" Type="BIT" Name="FOV Synchronization mode" ConvertType="FOV Synchronization mode" DefaultValue="0" Description="" />
+		<Field LogicalId="5" StartByte="4" NumberOfBytes="1" StartBit="1" NumberOfBits="1" Type="BIT" Name="OSD Disabled" Description="" />
+		<Field LogicalId="6" StartByte="4" NumberOfBytes="1" StartBit="2" NumberOfBits="1" Type="BIT" Name="PIP Enable" Description="" />
+		<Field LogicalId="7" StartByte="4" NumberOfBytes="1" StartBit="3" NumberOfBits="1" Type="BIT" Name="1st Secondary Video Enable" Description="" />
+		<Field LogicalId="8" StartByte="4" NumberOfBytes="1" StartBit="4" NumberOfBits="1" Type="BIT" Name="2st Secondary Video Enable" Description="" />
+	</Message>
+</Protocol>

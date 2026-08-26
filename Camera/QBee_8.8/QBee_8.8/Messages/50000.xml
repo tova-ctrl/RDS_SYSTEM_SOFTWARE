@@ -1,0 +1,10 @@
+<?xml version='1.0' encoding='utf-8'?>
+<Protocol>
+	<Message Key="50000" Name="Log Record Report" NumberOfBytes="16" Protocol="Microcom">
+		<Field LogicalId="0" StartByte="0" NumberOfBytes="1" StartBit="0" NumberOfBits="1" Type="BIT" Name="Enable" Description="Gets if log is Enabled/Disabled" />
+		<Field LogicalId="1" StartByte="0" NumberOfBytes="1" StartBit="1" NumberOfBits="1" Type="BIT" Name="Error Level" Description="Gets if Error Level is Enabled/Disabled" />
+		<Field LogicalId="2" StartByte="0" NumberOfBytes="1" StartBit="2" NumberOfBits="1" Type="BIT" Name="Info Level" Description="Gets if Info Level is Enabled/Disabled" />
+		<Field LogicalId="3" StartByte="0" NumberOfBytes="1" StartBit="3" NumberOfBits="1" Type="BIT" Name="Debug Level" Description="Gets if Debug Level is Enabled/Disabled" />
+		<Field LogicalId="4" StartByte="1" NumberOfBytes="15" StartBit="0" NumberOfBits="120" Type="ASCII" Name="File Name" Description="Gets log's folder name" />		
+	</Message>
+</Protocol>

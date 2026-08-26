@@ -1,0 +1,5 @@
+<?xml version='1.0' encoding='utf-8'?>
+<Protocol>
+	<Message Key="1224" Name="USER NUC" NumberOfBytes="0" Description="Enter 2Point Nuc Mode" Protocol="Generic">
+	</Message>
+</Protocol>

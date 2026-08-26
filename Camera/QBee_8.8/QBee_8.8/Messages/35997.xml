@@ -1,0 +1,13 @@
+<?xml version='1.0' encoding='utf-8'?>
+<Protocol>
+	<Message Key="35997" Name="Sensors Parameters" NumberOfBytes="16" Protocol="Generic">
+		<Field LogicalId="0" StartByte="0" NumberOfBytes="2" StartBit="0" NumberOfBits="16" Type="USHORT" Name="MAX DAY FOV" Description="" />
+		<Field LogicalId="1" StartByte="2" NumberOfBytes="2" StartBit="0" NumberOfBits="16" Type="USHORT" Name="MIN DAY FOV" Description="" />
+		<Field LogicalId="2" StartByte="4" NumberOfBytes="2" StartBit="0" NumberOfBits="16" Type="USHORT" Name="MAX TI FOV" Description="" />
+		<Field LogicalId="3" StartByte="6" NumberOfBytes="2" StartBit="0" NumberOfBits="16" Type="USHORT" Name="MIN TI FOV" Description="" />
+		<Field LogicalId="4" StartByte="8" NumberOfBytes="2" StartBit="0" NumberOfBits="16" Type="USHORT" Name="MAX Day GAIN" Description="" />
+		<Field LogicalId="5" StartByte="10" NumberOfBytes="2" StartBit="0" NumberOfBits="16" Type="USHORT" Name="MAX Day Level" Description="" />
+		<Field LogicalId="6" StartByte="12" NumberOfBytes="2" StartBit="0" NumberOfBits="16" Type="USHORT" Name="MAX TI GAIN" Description="" />
+		<Field LogicalId="7" StartByte="14" NumberOfBytes="2" StartBit="0" NumberOfBits="16" Type="USHORT" Name="MAX TI Level" Description="" />
+	</Message>
+</Protocol>

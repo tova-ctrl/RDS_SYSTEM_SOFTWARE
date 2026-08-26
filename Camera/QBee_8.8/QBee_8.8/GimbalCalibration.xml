@@ -1,0 +1,323 @@
+<?xml version='1.0' encoding='utf-8'?>
+<Projects>
+<Project Typa="0">
+	<MsgList>
+		<MsgId ID="3139803" Text="GCU Mode and Temp"/>
+		<MsgId ID="3139804" Text="Gimbal Limits"/>
+		<MsgId ID="3139805" Text="Factory Drift"/>
+		<MsgId ID="3139806" Text="IMU CCSF"/>
+		<MsgId ID="3139807" Text="IMU CCSF"/>
+		<MsgId ID="3139808" Text="IMU CCSF"/>
+		<MsgId ID="3139809" Text="Torque Desturbances"/>
+		<MsgId ID="3139810" Text="Torque Desturbances"/>
+		<MsgId ID="3139811" Text="Encoder Error"/>
+	</MsgList>
+	<GimbalBIT>
+		<Field>1</Field>
+		<Field>3</Field>
+		<Field>4</Field>
+		<Field>5</Field>
+		<Field>6</Field>
+		<Field>7</Field>
+		<Field>8</Field>
+		<Field>9</Field>
+		<Field>10</Field>
+		<Field>11</Field>
+		<Field>12</Field>
+		<Field>17</Field>
+	</GimbalBIT>
+	<Steps>
+		<Step ID="0">		
+			<Media>StingI_Step0.mp4</Media>
+			<Text>
+				Please Note:
+				- Check that all 4 barriersare free
+				- Using hands Set gimal at center position (0,0).
+				- Do not calibrate in noisy enviroment.
+				- Do not touch or disturb the surrounding area unless instructed to.
+			</Text>		
+		</Step>
+		<Step ID="1">		
+			<Media>StingI_Step1_4_5_6_7_8.jpeg</Media>
+			<Text>
+				MOTOR COMMUTATION
+				- Gimbal should be in belly orientation
+				- System Should Move
+			</Text>		
+		</Step>
+		<Step ID="2">		
+			<Media>StingI_Step2.mp4</Media>
+			<Text>
+				ENCODER OFFSET CURRENT VALUE
+				- Gimbal should be in belly orientation
+				- Remove the seal screw using a 4mm Allen driver
+				- Attach the Gimbal Restrictor and insert the screw using a 6mm Allen
+				- System Should Remain Static.
+			</Text>		
+		</Step>
+		<Step ID="3">		
+			<Media>StingI_Step3.mp4</Media>
+			<Text>
+				INIT CALIB1
+				- Gimbal should be in belly orientation
+				- Remove the Gimbal Restrictor completely from gig
+				- Re-insert the seal screw using a 4mm Allen driver.
+				- System Should Preform INIT.
+			</Text>		
+		</Step>
+		<Step ID="4">
+			<Media>StingI_Step1_4_5_6_7_8.jpeg</Media>
+			<Text>
+				ENCODER OFFSET USE LIMITS
+				- System will preform this step automatically
+				- Gimbal should be in belly orientation
+				- System Should Remain Static.
+			</Text>
+		</Step>
+		<Step ID="5">
+			<Media>StingI_Step1_4_5_6_7_8.jpeg</Media>
+			<Text>
+				INIT CALIB2
+				- System will preform this step automatically
+				- Gimbal should be in belly orientation
+				- System Should Preform INIT.
+			</Text>
+		</Step>
+		<Step ID="6">
+			<Media>StingI_Step1_4_5_6_7_8.jpeg</Media>
+			<Text>
+				LONG DRIFT
+				- System will preform this step automatically
+				- Gimbal should be in belly orientation
+				- System Should Remain Static.
+			</Text>
+		</Step>
+		<Step ID="7">
+			<Media>StingI_Step1_4_5_6_7_8.jpeg</Media>
+			<Text>
+				CCSF
+				- System will preform this step automatically
+				- Gimbal should be in belly orientation
+				- System Should Move.
+			</Text>
+		</Step>
+		<Step ID="8">
+			<Media>StingI_Step1_4_5_6_7_8.jpeg</Media>
+			<Text>
+				ENCODER ECCENTRICITY ELEVATION1
+				- Gimbal should be in belly orientation
+				- System Should Move In Elevation.
+			</Text>
+		</Step>
+		<Step ID="9">
+			<Media>StingI_Step9_11.mp4</Media>
+			<Text>
+				ENCODER ECCENTRICITY AZIMUTH1
+				- Gimbal should be in nose orientation
+				- System Should Move In Azimuth.
+			</Text>
+		</Step>
+		<Step ID="10">
+			<Media>MS30_Step10_12.mp4</Media>
+			<Text>
+				ENCODER ECCENTRICITY ELEVATION2
+				- Gimbal should be in belly orientation
+				- System Should Move In Elevation.
+			</Text>
+		</Step>
+		<Step ID="11">
+			<Media>StingI_Step9_11.mp4</Media>
+			<Text>
+				ENCODER ECCENTRICITY AZIMUTH2
+				- Gimbal should be in nose orientation
+				- System Should Move In Azimuth.
+			</Text>
+		</Step>
+		<Step ID="12">
+			<Media>StingI_Step9_11.mp4</Media>
+			<Text>
+				CALIBRATION FINISHED
+				- Please save system parameters
+				- Please preform gimbal ATP
+			</Text>
+		</Step>
+	</Steps>
+</Project>
+<Project Typa="1">
+	<MsgList>
+		<MsgId ID="3499803" Text="GCU Mode and Temp"/>
+		<MsgId ID="3499804" Text="Gimbal Limits"/>
+		<MsgId ID="3499805" Text="Factory Drift"/>
+		<MsgId ID="3499806" Text="IMU CCSF"/>
+		<MsgId ID="3499807" Text="IMU CCSF"/>
+		<MsgId ID="3499808" Text="IMU CCSF"/>
+		<MsgId ID="3499809" Text="Torque Desturbances"/>
+		<MsgId ID="3499810" Text="Torque Desturbances"/>
+		<MsgId ID="3499811" Text="Encoder Error"/>
+		<MsgId ID="3499816" Text="Base IMU Scale Factors"/>
+		<MsgId ID="3499817" Text="Base IMU Cross Couplings 1"/>
+		<MsgId ID="3499818" Text="Base IMU Cross Couplings 2"/>
+		<MsgId ID="3499820" Text="Base IMU Biases"/>
+		<MsgId ID="3499821" Text="Gimbal Installation Errors"/>
+		<MsgId ID="3499822" Text="Payload Accelerometer IMU Scale Factors"/>
+		<MsgId ID="3499823" Text="Payload IMU Accelerometer Cross Couplings 1"/>
+		<MsgId ID="3499824" Text="Payload IMU Accelerometer Cross Couplings 2"/>
+		<MsgId ID="3499825" Text="Base Gyro Azimuth IMU Scale Factors"/>
+		<MsgId ID="3499826" Text="Base Gyro Azimuth IMU Cross Couplings 1"/>
+		<MsgId ID="3499827" Text="Base Gyro Azimuth IMU Cross Couplings 2"/>
+		<MsgId ID="3499828" Text="Base Gyro Elevation IMU Scale Factors"/>
+		<MsgId ID="3499829" Text="Base Gyro Elevation IMU Cross Couplings 1"/>
+		<MsgId ID="3499830" Text="Base Gyro Elevation IMU Cross Couplings 2"/>
+	</MsgList>
+	<GimbalBIT>
+		<Field>3</Field>
+		<Field>4</Field>
+		<Field>8</Field>
+		<Field>9</Field>
+		<Field>13</Field>
+		<Field>14</Field>
+		<Field>21</Field>
+	</GimbalBIT>
+	<Steps>
+		<Step ID="0">		
+			<Media>MS30_Step0_1_2_3_4_5_6_7_8.jpeg</Media>
+			<Text>
+				Please Note:
+				- Check that all 4 barriersare free.
+				- Using hands Set gimal at center position (0,-60).
+				- Do not calibrate in noisy enviroment.
+				- Do not touch or disturb the surrounding area unless instructed to.
+			</Text>		
+		</Step>
+		<Step ID="1">		
+			<Media>MS30_Step0_1_2_3_4_5_6_7_8.jpeg</Media>
+			<Text>
+				MOTOR COMMUTATION
+				- Gimbal should be in belly orientation
+				- System Should Move
+			</Text>		
+		</Step>
+		<Step ID="2">		
+			<Media>MS30_Step0_1_2_3_4_5_6_7_8.jpeg</Media>
+			<Text>
+				ENCODER OFFSET CURRENT VALUE
+				- Gimbal should be in belly orientation
+				- System Should Remain Static
+			</Text>		
+		</Step>
+		<Step ID="3">		
+			<Media>MS30_Step0_1_2_3_4_5_6_7_8.jpeg</Media>
+			<Text>
+				INIT CALIB1
+				- Gimbal should be in belly orientation
+				- System Should Preform INIT
+			</Text>		
+		</Step>
+		<Step ID="4">
+			<Media>MS30_Step0_1_2_3_4_5_6_7_8.jpeg</Media>
+			<Text>
+				ENCODER OFFSET USE LIMITS
+				- System will preform this step automatically
+				- Gimbal should be in belly orientation
+				- System Should Remain Static.
+			</Text>
+		</Step>
+		<Step ID="5">
+			<Media>MS30_Step0_1_2_3_4_5_6_7_8.jpeg</Media>
+			<Text>
+				INIT CALIB2
+				- System will preform this step automatically
+				- Gimbal should be in belly orientation
+				- System Should Preform INIT.
+			</Text>
+		</Step>
+		<Step ID="6">
+			<Media>MS30_Step0_1_2_3_4_5_6_7_8.jpeg</Media>
+			<Text>
+				LONG DRIFT
+				- System will preform this step automatically
+				- Gimbal should be in belly orientation
+				- System Should Remain Static.
+			</Text>
+		</Step>
+		<Step ID="7">
+			<Media>MS30_Step0_1_2_3_4_5_6_7_8.jpeg</Media>
+			<Text>
+				CCSF
+				- System will preform this step automatically
+				- Gimbal should be in belly orientation
+				- System Should Move.
+			</Text>
+		</Step>
+		<Step ID="11">
+			<Media>MS30_Step0_1_2_3_4_5_6_7_8.jpeg</Media>
+			<Text>
+				ENCODER ECCENTRICITY ELEVATION1
+				- Gimbal should be in belly orientation
+				- System Should Move In Elevation.
+			</Text>
+		</Step>
+		<Step ID="12">
+			<Media>MS30_Step9_11_13.mp4</Media>
+			<Text>
+				ENCODER ECCENTRICITY AZIMUTH1
+				- Gimbal should be in nose orientation
+				- System Should Move In Azimuth.
+			</Text>
+		</Step>
+		<Step ID="13">
+			<Media>MS30_Step10_12.mp4</Media>
+			<Text>
+				ENCODER ECCENTRICITY ELEVATION2
+				- Gimbal should be in belly orientation
+				- System Should Move In Elevation.
+			</Text>
+		</Step>
+		<Step ID="14">
+			<Media>MS30_Step9_11_13.mp4</Media>
+			<Text>
+				ENCODER ECCENTRICITY AZIMUTH2
+				- Gimbal should be in nose orientation
+				- System Should Move In Azimuth.
+			</Text>
+		</Step>
+		<Step ID="8">
+			<Media>MS30_Step10_12.mp4</Media>
+			<Text>
+				BASE CCSF
+				- System will preform this step automatically
+				- Gimbal should be in belly orientation
+				- System Should NOT Move.
+			</Text>
+		</Step>
+		<Step ID="9">
+			<Media>MS30_Step9_11_13.mp4</Media>
+			<Text>
+				BASE CCSF2
+				- System will preform this step automatically
+				- Gimbal should be in nose orientation
+				- System Should NOT Move.
+			</Text>
+		</Step>	  
+		<Step ID="10">
+			<Media>MS30_Step14.mp4</Media>
+			<Text>
+				BASE CCSF3
+				- System will preform this step automatically
+				- Gimbal should be in El motor facing down orientation
+				- System Should NOT Move.
+			</Text>
+		</Step>	  
+		<Step ID="15">
+			<Media>MS30_Step14.mp4</Media>
+			<Text>
+				CALIBRATION FINISHED
+				- Please save system parameters
+				- Please preform gimbal ATP
+			</Text>
+		</Step>	  
+	</Steps>
+</Project>
+</Projects>
+
+

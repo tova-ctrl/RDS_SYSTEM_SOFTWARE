@@ -1,0 +1,113 @@
+html, body {
+    height: 100%;
+    margin: 0;
+    overflow: hidden;
+}
+
+/* Blazor wraps interactive components in an extra div — make it fill its parent */
+article.content > div {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-height: 0;
+    height: 100%;
+}
+
+.main-container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    background-color: #1a1a1a;
+    color: white;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;    
+}
+
+.content {
+    flex: 1;
+    padding: 20px;
+}
+
+.status-border {
+    border-radius: 12px;
+    padding: 20px;
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.status-text {
+    font-size: 2rem;
+    font-weight: bold;
+    margin: 0;
+}
+
+.telemetry-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.label {
+    color: gray;
+    font-size: 0.8rem;
+    display: block;
+}
+
+.value {
+    font-size: 1.8rem;
+    font-weight: 600;
+}
+
+.button-group {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.btn {
+    width: 150px;
+    height: 60px;
+    border: none;
+    border-radius: 8px;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.btn-arm {
+    background-color: #D35400;
+}
+
+.btn-safe {
+    background-color: #C0392B;
+}
+
+.event-log {
+    width: 100%;
+    height: 200px;
+    background: #050505;
+    color: #00FF00;
+    font-family: 'Consolas', monospace;
+    border: 1px solid #444;
+    padding: 10px;
+    margin-top: 5px;
+}
+
+.demo-tools {
+    background-color: #252525;
+    padding: 15px;
+    border-top: 1px solid #333;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.btn-fault {
+    background: #6C3483;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+}

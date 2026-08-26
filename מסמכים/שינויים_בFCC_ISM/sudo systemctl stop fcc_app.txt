@@ -1,0 +1,6 @@
+sudo systemctl stop fcc_app
+sudo systemctl disable fcc_app
+
+screen -S fcc
+cd ~/projects/rds_system/FCC_App/build
+./fcc_app eth:192.168.55.3 192.168.55.2 5200

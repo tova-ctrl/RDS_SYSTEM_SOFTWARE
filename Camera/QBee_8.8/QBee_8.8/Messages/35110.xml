@@ -1,0 +1,6 @@
+<?xml version='1.0' encoding='utf-8'?>
+<Protocol>
+	<Message Key="35110" Name="Day Camera Control #2 Report" NumberOfBytes="16" Protocol="Generic">
+		<Field LogicalId="0" StartByte="10" NumberOfBytes="1" StartBit="2" NumberOfBits="1" Type="BIT" Name="AutoExposure" Description="" />
+	</Message>
+</Protocol>

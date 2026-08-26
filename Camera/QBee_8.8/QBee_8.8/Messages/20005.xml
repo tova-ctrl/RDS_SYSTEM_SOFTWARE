@@ -1,0 +1,11 @@
+<?xml version='1.0' encoding='utf-8'?>
+<Protocol>
+	<Message Key="20005" Name="Set System Clock" NumberOfBytes="8" Protocol="Microcom">
+		<Field LogicalId="0" StartByte="0" NumberOfBytes="2" StartBit="0" NumberOfBits="16" Type="USHORT" Name="Year" Description="Sets Year as decimal integer [YYYY]" />
+		<Field LogicalId="1" StartByte="2" NumberOfBytes="1" StartBit="0" NumberOfBits="8" Type="UCHAR" Name="Month" Description="Sets Month as decimal integer [1-12]" />
+		<Field LogicalId="2" StartByte="3" NumberOfBytes="1" StartBit="0" NumberOfBits="8" Type="UCHAR" Name="Day" Description="Sets Day as decimal integer [1-31]" />
+		<Field LogicalId="3" StartByte="4" NumberOfBytes="1" StartBit="0" NumberOfBits="8" Type="UCHAR" Name="Hour" Description="Sets Hour as decimal integer in 24Hrs Pattern [0-23]" />
+		<Field LogicalId="4" StartByte="5" NumberOfBytes="1" StartBit="0" NumberOfBits="8" Type="UCHAR" Name="Minute" Description="Sets Minute as decimal integer [0-59]" />
+		<Field LogicalId="5" StartByte="6" NumberOfBytes="1" StartBit="0" NumberOfBits="8" Type="UCHAR" Name="Second" Description="Sets Second as decimal integer [0-59]" />
+	</Message>
+</Protocol>

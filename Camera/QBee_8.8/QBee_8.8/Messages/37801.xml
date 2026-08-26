@@ -1,0 +1,13 @@
+<?xml version='1.0' encoding='utf-8'?>
+<Protocol>
+	<Message Key="37801" Name="GPS Data" NumberOfBytes="24" Protocol="Microcom">
+		<Field LogicalId="0" StartByte="0" NumberOfBytes="4" StartBit="0" NumberOfBits="32" Type="LONG" Name="Longitude" Description="Gets GPS Longitude [rad]" />
+		<Field LogicalId="1" StartByte="4" NumberOfBytes="4" StartBit="0" NumberOfBits="32" Type="LONG" Name="Latitude" Description="Gets GPS Latitude [rad]" />
+		<Field LogicalId="2" StartByte="8" NumberOfBytes="4" StartBit="0" NumberOfBits="32" Type="LONG" Name="Altitude" Description="Gets GPS Altitude [rad]" />
+		<Field LogicalId="3" StartByte="12" NumberOfBytes="2" StartBit="0" NumberOfBits="16" Type="SHORT" Name="Azimuth" Description="Gets GPS Azimuth [LSB:360º/65536]" />
+		<Field LogicalId="4" StartByte="14" NumberOfBytes="4" StartBit="0" NumberOfBits="32" Type="ULONG" Name="Second" Description="Gets GPS Time in seconds elapsed since Jan. 6, 1980. [LSB: 1 sec]" />
+		<Field LogicalId="5" StartByte="18" NumberOfBytes="4" StartBit="0" NumberOfBits="32" Type="ULONG" Name="milliseconds" Description="Gets GPS Time remainder in msec. [LSB: 1 msec]" />
+		<Field LogicalId="6" StartByte="22" NumberOfBytes="1" StartBit="0" NumberOfBits="8" Type="CHAR" Name="NumerOfSatellites" Description="Gets GPS Numer of Satellites" />
+		<Field LogicalId="7" StartByte="23" NumberOfBytes="1" StartBit="0" NumberOfBits="1" Type="BIT" Name="PositionValid" Description="Gets GPS Position information valid. 0 - valid. 1 - not valid" />
+	</Message>
+</Protocol>

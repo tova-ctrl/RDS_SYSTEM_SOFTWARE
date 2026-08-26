@@ -1,0 +1,19 @@
+<?xml version='1.0' encoding='utf-8'?>
+<Message Key="25855" Name="HSP Commad" NumberOfBytes="16">
+	<Field LogicalId="0" StartByte="0" NumberOfBytes="1" StartBit="0" NumberOfBits="8" Type="CHAR" Name="Data0" Description="" />
+	<Field LogicalId="1" StartByte="1" NumberOfBytes="1" StartBit="0" NumberOfBits="8" Type="CHAR" Name="Data1" Description="" />
+	<Field LogicalId="2" StartByte="2" NumberOfBytes="1" StartBit="0" NumberOfBits="8" Type="CHAR" Name="Data2" Description="" />
+	<Field LogicalId="3" StartByte="3" NumberOfBytes="1" StartBit="0" NumberOfBits="8" Type="CHAR" Name="Data3" Description="" />
+	<Field LogicalId="4" StartByte="4" NumberOfBytes="1" StartBit="0" NumberOfBits="8" Type="CHAR" Name="Data4" Description="" />
+	<Field LogicalId="5" StartByte="5" NumberOfBytes="1" StartBit="0" NumberOfBits="8" Type="CHAR" Name="Data5" Description="" />
+	<Field LogicalId="6" StartByte="6" NumberOfBytes="1" StartBit="0" NumberOfBits="8" Type="CHAR" Name="Data6" Description="" />
+	<Field LogicalId="7" StartByte="7" NumberOfBytes="1" StartBit="0" NumberOfBits="8" Type="CHAR" Name="Data7" Description="" />
+	<Field LogicalId="8" StartByte="8" NumberOfBytes="1" StartBit="0" NumberOfBits="8" Type="CHAR" Name="Data8" Description="" />
+	<Field LogicalId="9" StartByte="9" NumberOfBytes="1" StartBit="0" NumberOfBits="8" Type="CHAR" Name="Data9" Description="" />
+	<Field LogicalId="10" StartByte="10" NumberOfBytes="1" StartBit="0" NumberOfBits="8" Type="CHAR" Name="Data10" Description="" />
+	<Field LogicalId="11" StartByte="11" NumberOfBytes="1" StartBit="0" NumberOfBits="8" Type="CHAR" Name="Data11" Description="" />
+	<Field LogicalId="12" StartByte="12" NumberOfBytes="1" StartBit="0" NumberOfBits="8" Type="CHAR" Name="Data12" Description="" />
+	<Field LogicalId="13" StartByte="13" NumberOfBytes="1" StartBit="0" NumberOfBits="8" Type="CHAR" Name="Data13" Description="" />
+	<Field LogicalId="14" StartByte="14" NumberOfBytes="1" StartBit="0" NumberOfBits="8" Type="CHAR" Name="Data14" Description="" />
+	<Field LogicalId="15" StartByte="15" NumberOfBytes="1" StartBit="0" NumberOfBits="8" Type="CHAR" Name="Data15" Description="" />
+</Message>

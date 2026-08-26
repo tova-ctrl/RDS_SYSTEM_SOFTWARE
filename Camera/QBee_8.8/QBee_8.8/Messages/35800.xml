@@ -1,0 +1,8 @@
+<?xml version='1.0' encoding='utf-8'?>
+<Protocol>
+	<Message Key="35800" Name="Serial Numbers Report" NumberOfBytes="90" Protocol="Microcom">
+		<Field LogicalId="0" StartByte="0" NumberOfBytes="40" StartBit="0" NumberOfBits="320" Type="STRING" Name="DTV Narrow SN High" Description="Gets DTV Narrow Serial Number" />
+		<Field LogicalId="1" StartByte="40" NumberOfBytes="40" StartBit="0" NumberOfBits="320" Type="STRING" Name="DTV Wide SN High" Description="Gets DTV Wide Serial Number" />
+		<Field LogicalId="2" StartByte="80" NumberOfBytes="10" StartBit="0" NumberOfBits="80" Type="STRING" Name="DTV TI" Description="Gets TI Serial Number" />
+	</Message>
+</Protocol>

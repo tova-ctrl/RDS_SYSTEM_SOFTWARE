@@ -1,0 +1,18 @@
+<?xml version='1.0' encoding='utf-8'?>
+<Protocol>
+	<Message Key="6513" Name="Tracker Controls" NumberOfBytes="8" Protocol="Generic">
+		<Field LogicalId="0" StartByte="0" NumberOfBytes="1" StartBit="4" NumberOfBits="1" Type="BIT" Name="Search Enable" Description="" />
+		<Field LogicalId="1" StartByte="0" NumberOfBytes="1" StartBit="5" NumberOfBits="1" Type="BIT" Name="Offset Enable" Description="" />
+		<Field LogicalId="2" StartByte="0" NumberOfBytes="1" StartBit="6" NumberOfBits="1" Type="BIT" Name="SPARE" Description="" />
+		<Field LogicalId="3" StartByte="0" NumberOfBytes="1" StartBit="7" NumberOfBits="1" Type="BIT" Name="Adjust Enable" Description="" />	
+		<Field LogicalId="4" StartByte="1" NumberOfBytes="1" StartBit="0" NumberOfBits="1" Type="BIT" Name="Inertial Offset Enable" Description="" />
+		<Field LogicalId="5" StartByte="1" NumberOfBytes="1" StartBit="1" NumberOfBits="3" Type="BIT" Name="SPARE" Description="" />	
+		<Field LogicalId="6" StartByte="1" NumberOfBytes="1" StartBit="4" NumberOfBits="4" Type="UINT" Name="Movement Control Function" ConvertType="MovementControlFunction" Description="" />
+		<Field LogicalId="7" StartByte="2" NumberOfBytes="2" StartBit="0" NumberOfBits="16" Type="INT" Name="TrackErrPre" Description="" />
+		<Field LogicalId="8" StartByte="4" NumberOfBytes="4" StartBit="0" NumberOfBits="32" Type="TSecondJoystick" Name="Movement command" Description="" />
+	</Message>
+	<Message Key="6513" Name="Tracker Adjust Controls" NumberOfBytes="5" Protocol="Microcom" Compact="True">
+		<Field LogicalId="0" StartByte="0" NumberOfBytes="1" StartBit="0" NumberOfBits="1" Type="BIT" Name="Adjust Enable" Description="Enables/Disables adjust function. This function adjust the tracker gate position." />
+		<Field LogicalId="1" StartByte="1" NumberOfBytes="4" StartBit="0" NumberOfBits="32" Type="TSecondJoystick" Name="Movement Command" Description="Sets the values how much to adjust the tracker gate, in units of pixels, for both axis X, Y. Positive direction is Right, Down." />
+	</Message>	
+</Protocol>

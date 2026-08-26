@@ -1,0 +1,35 @@
+# =============================================================================
+# fcc_app.service — systemd unit so FCC_App runs "burned in": starts on boot,
+# restarts on crash, and keeps running regardless of whether anyone is
+# SSH'd/PuTTY'd in at all. Replaces the old `screen -S fcc` workflow, which
+# still depends on an operator manually reconnecting and reattaching every
+# time the PuTTY session drops.
+#
+# Installed by install_service.sh (same folder) — that script fills in the
+# real path automatically. Don't copy this file by hand into
+# /etc/systemd/system/ without running the installer, since ExecStart below
+# uses a placeholder path.
+# =============================================================================
+
+[Unit]
+Description=FCC Application (Fire Control Computer)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+WorkingDirectory=__FCC_APP_DIR__/build
+# The Jetson<->PC bridge must be re-applied after every Jetson reboot (see
+# [[project-state]] memory, 2026-07-13 entry) — folded in here so it's never
+# a manual step again. Leading "-" means a failure here does NOT block
+# fcc_app itself from starting (e.g. if the bridge is already applied, or the
+# connection UUID ever changes on this Jetson).
+ExecStartPre=-/usr/bin/nmcli connection modify "Wired connection 1" master 64b66a76-f825-4995-81db-9b7a3204780e slave-type bridge
+ExecStart=__FCC_APP_DIR__/build/fcc_app eth:192.168.55.3 192.168.55.2 5200
+Restart=always
+RestartSec=2
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target

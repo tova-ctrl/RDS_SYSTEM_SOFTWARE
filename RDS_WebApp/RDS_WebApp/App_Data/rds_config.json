@@ -1,0 +1,23 @@
+{
+  "FccIp": "192.168.55.1",
+  "FccPort": 5000,
+  "IsmIp": "192.168.55.3",
+  "UartDev": "/dev/ttyTHS0",
+  "UartBaud": 115200,
+  "CamCtrlIp": "1.1.1.3",
+  "CamCtrlPort": 1024,
+  "CamHostPort": 1025,
+  "CamStreamIp": "1.1.1.3",
+  "StreamPort1": 51000,
+  "StreamPort2": 51001,
+  "StreamPort3": 51002,
+  "DayFov": 42.6,
+  "Gamma": 2,
+  "Saturation": 2,
+  "Level": -3,
+  "Gain": 0,
+  "ExpTime": 500,
+  "ExposureMode": 12,
+  "IrFov": 12.4,
+  "PrimaryChannel": 2
+}

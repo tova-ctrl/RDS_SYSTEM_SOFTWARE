@@ -1,0 +1,30 @@
+T1= button #7 PRESSED (forward) , button #23 PRESSED (backward)
+T2= button #15 PRESSED (forward) , button #23 PRESSED (backward)
+B1=button #6 PRESSED
+B2=button #14 PRESSED
+S1=DOWN is #4 left   (D-PAD as AXIS)
+S1=UP is #4 right    (D-PAD as AXIS)
+S2=DOWN is #6 right  (D-PAD as AXIS) 
+S2=UP is #6 left     (D-PAD as AXIS)
+J1=left is #3 left   (D-PAD as AXIS)
+J1=right is #3 right (D-PAD as AXIS) 
+J1=down is #2 left   (D-PAD as AXIS)
+J1=up is #2 right     (D-PAD as AXIS)
+B3=button #0 PRESSED  
+B4=button #1 PRESSED
+S3=DOWN is #5 left    (D-PAD as AXIS)
+S3=UP is #5 right     (D-PAD as AXIS)	
+J2=left is #0 left    (D-PAD as AXIS)
+J2=right is #0 right  (D-PAD as AXIS)
+J2=down is #1 left    (D-PAD as AXIS)
+J2=up is #1 right      (D-PAD as AXIS)
+B5=button #2 PRESSED
+B6=button #3 PRESSED
+
+
+smart app control
+
+
+
+
+

@@ -1,0 +1,9 @@
+<?xml version='1.0' encoding='utf-8'?>
+<Protocol>
+	<Message Key="35103" Name="Day Camera Control #1 Report" NumberOfBytes="16" Protocol="Generic">
+		<Field LogicalId="0" StartByte="1" NumberOfBytes="1" StartBit="3" NumberOfBits="1" Type="BIT" Name="Cooler Inhibit" Description="" />	
+		<Field LogicalId="1" StartByte="8" NumberOfBytes="2" StartBit="0" NumberOfBits="16" Type="USHORT" Name="Active Image Width" DefaultValue="768" PermittedValue="[ 0 ÷ 65535 ]" Description="" />
+		<Field LogicalId="2" StartByte="10" NumberOfBytes="2" StartBit="0" NumberOfBits="16" Type="USHORT" Name="Active Image Height" DefaultValue="577" PermittedValue="[ 0 ÷ 65535 ]" Description="" />
+		<Field LogicalId="3" StartByte="12" NumberOfBytes="1" StartBit="7" NumberOfBits="1" Type="BIT" Name="2nd Order Stabilization" Description="" />
+	</Message>
+</Protocol>

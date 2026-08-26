@@ -1,0 +1,15 @@
+<?xml version='1.0' encoding='utf-8'?>
+<Protocol>
+	<Message Key="36510" Name="Tracker Parameters Report" NumberOfBytes="8" Protocol="Generic">
+		<Field LogicalId="0" StartByte="0" NumberOfBytes="1" StartBit="0" NumberOfBits="8" Type="UCHAR" Name="Tracker Type" ConvertType="TrackerType" DefaultValue="0" Description="" />
+		<Field LogicalId="1" StartByte="2" NumberOfBytes="2" StartBit="0" NumberOfBits="16" Type="USHORT" Name="Gate X Size" DefaultValue="0" Description="" />
+		<Field LogicalId="2" StartByte="4" NumberOfBytes="2" StartBit="0" NumberOfBits="16" Type="USHORT" Name="Gate Y Size" DefaultValue="0" Description="" />
+		<Field LogicalId="3" StartByte="6" NumberOfBytes="1" StartBit="0" NumberOfBits="1" Type="BIT" Name="Gate Size Enable" DefaultValue="0" Description="" />
+	</Message>
+	<Message Key="36510" Name="Tracker Parameters Report" NumberOfBytes="7" Protocol="Microcom">
+		<Field LogicalId="0" StartByte="0" NumberOfBytes="1" StartBit="0" NumberOfBits="8" Type="CHAR" Name="Tracker Type"  DefaultValue="0" Description="Gets selected target type." />
+		<Field LogicalId="1" StartByte="2" NumberOfBytes="2" StartBit="0" NumberOfBits="16" Type="USHORT" Name="Gate X Size" DefaultValue="0" Description="Gets current gate X size" />
+		<Field LogicalId="2" StartByte="4" NumberOfBytes="2" StartBit="0" NumberOfBits="16" Type="USHORT" Name="Gate Y Size" DefaultValue="0" Description="Gets current gate Y size" />
+		<Field LogicalId="3" StartByte="6" NumberOfBytes="1" StartBit="0" NumberOfBits="1" Type="BIT" Name="Gate Size Enable" DefaultValue="0" Description="Gets if manual gate size enabled/disabled" />
+	</Message>
+</Protocol>

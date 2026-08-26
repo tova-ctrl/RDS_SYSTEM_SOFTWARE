@@ -1,0 +1,9 @@
+<?xml version='1.0' encoding='utf-8'?>
+<Protocol>
+	<Message Key="20999" Name="Payload Information" NumberOfBytes="24" Protocol="Microcom">
+		<Field LogicalId="0" StartByte="0" NumberOfBytes="1" StartBit="0" NumberOfBits="8" Type="CHAR" Name="Payload Type"  Description="Sets Payload Type" />
+		<Field LogicalId="1" StartByte="1" NumberOfBytes="20" StartBit="0" NumberOfBits="160" Type="FREETEXT" Name="Free Text" Description="Sets folder name to save log file" />
+		
+		
+	</Message>
+</Protocol>

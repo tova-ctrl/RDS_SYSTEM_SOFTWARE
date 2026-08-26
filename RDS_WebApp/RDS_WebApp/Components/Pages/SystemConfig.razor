@@ -1,0 +1,580 @@
+@page "/SystemConfig"
+@rendermode InteractiveServer
+@inject RDS_WebApp.Services.EthernetService eth
+@inject RDS_WebApp.Services.ConfigPersistenceService cfg
+@inject RDS_WebApp.Services.StkDirectCameraService stkDirect
+@using RDS_WebApp.Services
+
+<div style="background-color:#212529;padding:20px;border-radius:16px;
+            box-shadow:inset 0 0 20px #000, 0 10px 30px rgba(0,0,0,0.7);
+            border:4px solid #15181b;display:flex;flex-direction:column;
+            flex:1;min-height:0;box-sizing:border-box;">
+
+    <!-- Page title -->
+    <div style="font-size:1rem;font-weight:700;color:#d1b06a;font-family:Consolas,monospace;
+                letter-spacing:0.12em;margin-bottom:14px;">
+        SYSTEM CONFIGURATION
+    </div>
+
+    <!-- Subtab bar -->
+    <div style="display:flex;gap:4px;margin-bottom:16px;border-bottom:2px solid #2a2d32;padding-bottom:8px;">
+        <button @onclick='()=>_tab="NETWORK"' style="@TabStyle("NETWORK")">NETWORK</button>
+        <button @onclick='()=>_tab="CAMERA"'  style="@TabStyle("CAMERA")">CAMERA</button>
+    </div>
+
+    <!-- ═══════════════════════ NETWORK TAB ═══════════════════════ -->
+    @if (_tab == "NETWORK")
+    {
+        <!-- 2×2 grid — no scroll needed -->
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+
+            <!-- FCC / Jetson -->
+            <div style="@SectionStyle">
+                <div style="@SectionTitleStyle">FCC / JETSON</div>
+                <div style="display:grid;grid-template-columns:90px 130px 44px;gap:4px 6px;align-items:center;">
+                    <span style="@LabelStyle">IP ADDRESS</span>
+                    <input @bind="_fccIp"   style="@InputStyle" placeholder="192.168.55.1"/>
+                    <span style="@UnitStyle">TCP</span>
+
+                    <span style="@LabelStyle">PORT</span>
+                    <input @bind="_fccPort" style="@InputStyle" type="number" min="1" max="65535"/>
+                    <span style="@UnitStyle">5000</span>
+                </div>
+                <div style="display:flex;gap:5px;margin-top:7px;align-items:center;">
+                    <button style="@ActionBtnStyle" @onclick="SaveFccConnection">SAVE</button>
+                    <button style="@ActionBtnStyle" @onclick="ReconnectFcc">RECONNECT</button>
+                    @if (_netMsg != null)
+                    {
+                        <span style="font-size:0.65rem;font-family:Consolas,monospace;color:#4ade80;">@_netMsg</span>
+                    }
+                </div>
+            </div>
+
+            <!-- ISM / STM32 -->
+            <div style="@SectionStyle">
+                <div style="@SectionTitleStyle">ISM / STM32</div>
+                <div style="display:grid;grid-template-columns:90px 130px 44px;gap:4px 6px;align-items:center;">
+                    <span style="@LabelStyle">IP ADDRESS</span>
+                    <input @bind="_ismIp"   style="@InputStyle" placeholder="192.168.55.3"/>
+                    <span style="@UnitStyle">UDP</span>
+
+                    <span style="@LabelStyle">UART PATH</span>
+                    <input @bind="_uartDev" style="@InputStyle" placeholder="/dev/ttyTHS0"/>
+                    <span></span>
+
+                    <span style="@LabelStyle">BAUD RATE</span>
+                    <input @bind="_uartBaud" style="@InputStyle" type="number"/>
+                    <span style="@UnitStyle">bps</span>
+                </div>
+                <button style="@ActionBtnStyle;margin-top:7px;" @onclick="SaveIsmConfig">SAVE</button>
+            </div>
+
+            <!-- Camera Micro300 — control -->
+            <div style="@SectionStyle">
+                <div style="@SectionTitleStyle">CAMERA — MICRO300 CONTROL</div>
+                <div style="display:grid;grid-template-columns:90px 130px 44px;gap:4px 6px;align-items:center;">
+                    <span style="@LabelStyle">CONTROL IP</span>
+                    <input @bind="_camCtrlIp"   style="@InputStyle" placeholder="1.1.1.3"/>
+                    <span style="@UnitStyle">UDP</span>
+
+                    <span style="@LabelStyle">CAM PORT</span>
+                    <input @bind="_camCtrlPort" style="@InputStyle" type="number" min="1" max="65535"/>
+                    <span style="@UnitStyle">cam</span>
+
+                    <span style="@LabelStyle">HOST PORT</span>
+                    <input @bind="_camHostPort" style="@InputStyle" type="number" min="1" max="65535"/>
+                    <span style="@UnitStyle">host</span>
+                </div>
+                <button style="@ActionBtnStyle;margin-top:7px;" @onclick="SaveCamControl">SAVE</button>
+            </div>
+
+            <!-- Camera Micro300 — video streams -->
+            <div style="@SectionStyle">
+                <div style="@SectionTitleStyle">CAMERA — VIDEO STREAMS</div>
+                <div style="display:grid;grid-template-columns:90px 130px 44px;gap:4px 6px;align-items:center;">
+                    <span style="@LabelStyle">STREAM IP</span>
+                    <input @bind="_camStreamIp" style="@InputStyle" placeholder="1.1.1.2"/>
+                    <span></span>
+
+                    <span style="@LabelStyle">PORT 1</span>
+                    <input @bind="_streamPort1" style="@InputStyle" type="number"/>
+                    <span style="@UnitStyle">main</span>
+
+                    <span style="@LabelStyle">PORT 2</span>
+                    <input @bind="_streamPort2" style="@InputStyle" type="number"/>
+                    <span style="@UnitStyle">2nd</span>
+
+                    <span style="@LabelStyle">PORT 3</span>
+                    <input @bind="_streamPort3" style="@InputStyle" type="number"/>
+                    <span style="@UnitStyle">3rd</span>
+                </div>
+                <button style="@ActionBtnStyle;margin-top:7px;" @onclick="SaveStreamConfig">SAVE</button>
+            </div>
+
+        </div>
+    }
+
+    <!-- ═══════════════════════ CAMERA TAB ═══════════════════════ -->
+    @if (_tab == "CAMERA")
+    {
+        <!-- Camera sensor power — real stkAPI CameraPowerControl (DTV + Thermal), not the RTSP stream -->
+        <div style="@SectionStyle;display:flex;align-items:center;gap:10px;margin-bottom:8px;">
+            <span style="font-size:0.7rem;color:#d0d0d0;font-family:Consolas,monospace;font-weight:bold;">
+                CAMERA POWER: <span style="color:@(_cameraPowerOn ? "#22c55e" : "#ef4444");font-weight:700;">@(_cameraPowerOn ? "ON" : "OFF")</span>
+            </span>
+            <button style="@ActionBtnStyle" @onclick="CamOn">PWR ON</button>
+            <button style="@ActionBtnStyle" @onclick="CamOff">PWR OFF</button>
+        </div>
+
+        <!-- Manual telemetry refresh — mirrors the vendor demo's own "Manual Sync Local" button -->
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+            <button style="@ActionBtnStyle" @onclick="RefreshCameraStatus">REFRESH STATUS</button>
+            @if (_refreshMsg != null)
+            {
+                <span style="font-size:0.65rem;font-family:Consolas,monospace;color:#4ade80;">@_refreshMsg</span>
+            }
+        </div>
+
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+
+            <!-- ── LEFT: GIMBAL + OPERATION MODE + VIDEO CONTROL ── -->
+            <div style="display:flex;flex-direction:column;gap:8px;">
+
+                <!-- Gimbal Movement — press-and-hold rate buttons (SetRateCommandAngularVelocities_X/Y) -->
+                <div style="@SectionStyle">
+                    <div style="@SectionTitleStyle">GIMBAL MOVEMENT</div>
+
+                    <div style="display:grid;grid-template-columns:1fr auto 1fr;gap:4px;align-items:center;margin-bottom:8px;">
+                        <span></span>
+                        <button style="@CamBtnStyle" @onmousedown="() => stkDirect.SetRateY(GIMBAL_RATE_DPS)" @onmouseup="() => stkDirect.SetRateY(0)">ELEVATION +</button>
+                        <span></span>
+
+                        <div style="display:flex;justify-content:flex-end;">
+                            <button style="@CamBtnStyle" @onmousedown="() => stkDirect.SetRateX(-GIMBAL_RATE_DPS)" @onmouseup="() => stkDirect.SetRateX(0)">AZIMUTH -</button>
+                        </div>
+                        <div style="width:44px;height:44px;background:#0a0c10;border:1px solid #2a2d32;border-radius:4px;margin:0 auto;"></div>
+                        <div>
+                            <button style="@CamBtnStyle" @onmousedown="() => stkDirect.SetRateX(GIMBAL_RATE_DPS)" @onmouseup="() => stkDirect.SetRateX(0)">AZIMUTH +</button>
+                        </div>
+
+                        <span></span>
+                        <button style="@CamBtnStyle" @onmousedown="() => stkDirect.SetRateY(-GIMBAL_RATE_DPS)" @onmouseup="() => stkDirect.SetRateY(0)">ELEVATION -</button>
+                        <span></span>
+                    </div>
+
+                    <!-- Rate & Position — read-only telemetry, populated by Manual Sync Local -->
+                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+                        <div>
+                            <div style="@SubTitleStyle">RATE [°/s]</div>
+                            <div style="display:grid;grid-template-columns:66px 1fr;gap:3px 5px;align-items:center;">
+                                <span style="@LabelStyle">ELEVATION</span>
+                                <span style="@TelemetryVal">@_rateEl.ToString("F1")</span>
+                                <span style="@LabelStyle">AZIMUTH</span>
+                                <span style="@TelemetryVal">@_rateAz.ToString("F1")</span>
+                            </div>
+                        </div>
+                        <div>
+                            <div style="@SubTitleStyle">POSITION [°]</div>
+                            <div style="display:grid;grid-template-columns:66px 1fr;gap:3px 5px;align-items:center;">
+                                <span style="@LabelStyle">ELEVATION</span>
+                                <span style="@TelemetryVal">@_posEl.ToString("F1")</span>
+                                <span style="@LabelStyle">AZIMUTH</span>
+                                <span style="@TelemetryVal">@_posAz.ToString("F1")</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Operation Mode -->
+                <div style="@SectionStyle">
+                    <div style="@SectionTitleStyle">OPERATION MODE</div>
+                    <div style="display:flex;gap:6px;align-items:center;margin-bottom:6px;">
+                        <button style="@CamBtnStyle" @onclick="() => stkDirect.SetCenterMode()">CENTER MODE</button>
+                        <span style="@LabelStyle;white-space:nowrap;">MODE</span>
+                        <span style="@TelemetryVal">@_opModeStr</span>
+                    </div>
+                    <!-- SetTrack(0,0) re-centers the track box; Track X/Y set the tracker GATE SIZE in pixels -->
+                    <div style="display:flex;gap:6px;align-items:center;">
+                        <button style="@CamBtnStyle" @onclick="() => stkDirect.SetTrack(0, 0)">TRACK</button>
+                        <input @bind="_gateX" style="@CompactInput;width:52px;" type="number" placeholder="0"/>
+                        <button style="@SmallBtnStyle" @onclick="() => stkDirect.SetTrackerGateX(_gateX)">GATE X</button>
+                        <input @bind="_gateY" style="@CompactInput;width:52px;" type="number" placeholder="0"/>
+                        <button style="@SmallBtnStyle" @onclick="() => stkDirect.SetTrackerGateY(_gateY)">GATE Y</button>
+                    </div>
+                </div>
+
+                <!-- Video Control Commands -->
+                <div style="@SectionStyle">
+                    <div style="@SectionTitleStyle">VIDEO CONTROL COMMANDS</div>
+                    <div style="display:flex;gap:8px;align-items:center;margin-bottom:6px;">
+                        <button style="@CamBtnStyle" @onclick="ToggleActiveCamera">TOGGLE ACTIVE CAMERA</button>
+                        <span style="@LabelStyle">CAMERA</span>
+                        <span style="@TelemetryVal">@_activeCamera</span>
+                    </div>
+                    <!-- Channel 0 ("Main") bitrate only — no SDK equivalent for 2nd/3rd streams -->
+                    <div style="display:flex;gap:6px;align-items:center;">
+                        <span style="@LabelStyle;white-space:nowrap;">BITRATE</span>
+                        <input @bind="_bitrate" style="@CompactInput;width:80px;" type="number" placeholder="0"/>
+                        <button style="@SmallBtnStyle" @onclick="SetBitrate">SET (0=NO CHANGE)</button>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- ── RIGHT: DAY LIGHT + THERMAL ── -->
+            <div style="display:flex;flex-direction:column;gap:8px;">
+
+                <!-- Day Light Channel — press-and-hold Inc/Dec/Zoom, matches SetDayCameraCommandXxx -->
+                <div style="@SectionStyle">
+                    <div style="@SectionTitleStyle">DAY LIGHT CHANNEL</div>
+                    <div style="display:flex;flex-direction:column;gap:5px;margin-top:4px;">
+
+                        <div style="@DayRow">
+                            <button style="@(isZoomingIn ? DayBtnActiveStyle : DayBtnStyle)"
+                                    @onmousedown="StartZoomIn"
+                                    @onmouseup="StopZoom">
+                                Zoom In
+                            </button>
+                            <span style="@DayLabel">FOV</span>
+                            <span style="@DayVal">@_dayFov.ToString("F1")</span>
+                            <button style="@DayBtnStyle" @onmousedown="() => stkDirect.SetDayZoom((int)ZoomChange.Zoomout)" @onmouseup="() => stkDirect.SetDayZoom((int)ZoomChange.Nochange)">Zoom Out</button>
+                        </div>
+
+                        <!-- DIAGNOSTIC (2026-08-08): same Zoom In/Out, but sent DIRECTLY from
+                             this PC to the camera's control port via stkapi_native.dll,
+                             bypassing the FCC relay entirely — see StkDirectCameraService.cs.
+                             Built to isolate whether the FCC relay or the SDK/camera itself is
+                             why zoom via the normal path above has no visible effect. -->
+                        <div style="@DayRow">
+                            <button style="@DayBtnStyle;border-color:#d1b06a;" @onmousedown="() => stkDirect.SetDayZoom(2)" @onmouseup="() => stkDirect.SetDayZoom(0)">Zoom In (DIRECT)</button>
+                            <span style="@DayLabel">DIRECT</span>
+                            <span style="@DayVal;font-size:0.65rem;color:@(stkDirect.Initialized ? "#4ade80" : "#ef4444");">@(stkDirect.Initialized ? "INIT OK" : (stkDirect.LastError ?? "not init"))</span>
+                            <button style="@DayBtnStyle;border-color:#d1b06a;" @onmousedown="() => stkDirect.SetDayZoom(1)" @onmouseup="() => stkDirect.SetDayZoom(0)">Zoom Out (DIRECT)</button>
+                        </div>
+
+                        <div style="@DayRow">
+                            <button style="@DayBtnStyle" @onmousedown="() => stkDirect.SetDayGamma((int)GenericIncDecVal.DecreaseValue)" @onmouseup="() => stkDirect.SetDayGamma((int)GenericIncDecVal.NoChange)">Gamma -</button>
+                            <span style="@DayLabel">Gamma</span>
+                            <span style="@DayVal">@_gammaVal.ToString("F1")</span>
+                            <button style="@DayBtnStyle" @onmousedown="() => stkDirect.SetDayGamma((int)GenericIncDecVal.IncreaseValue)" @onmouseup="() => stkDirect.SetDayGamma((int)GenericIncDecVal.NoChange)">Gamma +</button>
+                        </div>
+
+                        <div style="@DayRow">
+                            <button style="@DayBtnStyle" @onmousedown="() => stkDirect.SetDaySaturation((int)GenericIncDecVal.DecreaseValue)" @onmouseup="() => stkDirect.SetDaySaturation((int)GenericIncDecVal.NoChange)">Saturation -</button>
+                            <span style="@DayLabel">Saturation</span>
+                            <span style="@DayVal">@_saturationVal.ToString("F1")</span>
+                            <button style="@DayBtnStyle" @onmousedown="() => stkDirect.SetDaySaturation((int)GenericIncDecVal.IncreaseValue)" @onmouseup="() => stkDirect.SetDaySaturation((int)GenericIncDecVal.NoChange)">Saturation +</button>
+                        </div>
+
+                        <div style="@DayRow">
+                            <button style="@DayBtnStyle" @onmousedown="() => stkDirect.SetDayLevel((int)GenericIncDecVal.DecreaseValue)" @onmouseup="() => stkDirect.SetDayLevel((int)GenericIncDecVal.NoChange)">Level -</button>
+                            <span style="@DayLabel">Level</span>
+                            <span style="@DayVal">@_levelVal</span>
+                            <button style="@DayBtnStyle" @onmousedown="() => stkDirect.SetDayLevel((int)GenericIncDecVal.IncreaseValue)" @onmouseup="() => stkDirect.SetDayLevel((int)GenericIncDecVal.NoChange)">Level +</button>
+                        </div>
+
+                        <div style="@DayRow">
+                            <button style="@DayBtnStyle" @onmousedown="() => stkDirect.SetDayGain((int)GenericIncDecVal.DecreaseValue)" @onmouseup="() => stkDirect.SetDayGain((int)GenericIncDecVal.NoChange)">Gain -</button>
+                            <span style="@DayLabel">Gain</span>
+                            <span style="@DayVal">@_gainVal</span>
+                            <button style="@DayBtnStyle" @onmousedown="() => stkDirect.SetDayGain((int)GenericIncDecVal.IncreaseValue)" @onmouseup="() => stkDirect.SetDayGain((int)GenericIncDecVal.NoChange)">Gain +</button>
+                        </div>
+
+                        <div style="@DayRow">
+                            <button style="@DayBtnStyle" @onclick="SetAutoGain">Auto Gain</button>
+                            <span style="@DayLabel">Exposure</span>
+                            <span style="@DayVal">@_exposureModeStr</span>
+                            <button style="@DayBtnStyle" @onclick="SetAutoExposure">Auto Exposure</button>
+                        </div>
+
+                        <div style="@DayRow">
+                            <button style="@DayBtnStyle" @onmousedown="() => stkDirect.SetDayExposureTime((int)GenericIncDecVal.DecreaseValue)" @onmouseup="() => stkDirect.SetDayExposureTime((int)GenericIncDecVal.NoChange)">Exp Time -</button>
+                            <span style="@DayLabel">Exp Time</span>
+                            <span style="@DayVal">@_expTimeVal</span>
+                            <button style="@DayBtnStyle" @onmousedown="() => stkDirect.SetDayExposureTime((int)GenericIncDecVal.IncreaseValue)" @onmouseup="() => stkDirect.SetDayExposureTime((int)GenericIncDecVal.NoChange)">Exp Time +</button>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- Thermal Channel -->
+                <div style="@SectionStyle">
+                    <div style="@SectionTitleStyle">THERMAL CHANNEL</div>
+                    <div style="display:flex;flex-direction:column;gap:5px;margin-top:4px;">
+                        <div style="@DayRow">
+                            <button style="@DayBtnStyle" @onmousedown="() => stkDirect.SetThermalZoom((int)ZoomChange.Zoomin)" @onmouseup="() => stkDirect.SetThermalZoom((int)ZoomChange.Nochange)">Zoom In</button>
+                            <span style="@DayLabel">FOV</span>
+                            <span style="@DayVal">@_irFov.ToString("F1")</span>
+                            <button style="@DayBtnStyle" @onmousedown="() => stkDirect.SetThermalZoom((int)ZoomChange.Zoomout)" @onmouseup="() => stkDirect.SetThermalZoom((int)ZoomChange.Nochange)">Zoom Out</button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    }
+
+</div>
+
+@code {
+
+    // ── tab state ───────────────────────────────────────────────────────────
+    private string _tab = "NETWORK";
+
+    // ── Network fields ──────────────────────────────────────────────────────
+    private string _fccIp       = "192.168.55.1";
+    private int    _fccPort     = 5000;
+    private string _ismIp       = "192.168.55.3";
+    private string _uartDev     = "/dev/ttyTHS0";
+    private int    _uartBaud    = 115200;
+    private string _camCtrlIp   = "1.1.1.3";
+    private int    _camCtrlPort = 1024;
+    private int    _camHostPort = 1025;   // editable host-side receive port
+    private string _camStreamIp = "1.1.1.2";
+    private int    _streamPort1 = 51000;
+    private int    _streamPort2 = 51001;
+    private int    _streamPort3 = 51002;
+    private string? _netMsg;
+
+    // ── Camera fields ───────────────────────────────────────────────────────
+    // Gimbal rate command, deg/sec (matches the demo app's fixed ±5 hold-rate)
+    private const float GIMBAL_RATE_DPS = 5.0f;
+
+    // Rate/Position — read-only telemetry (populated later by a camera status
+    // poll from the FCC; the SDK equivalents are GetRate_GRRAngularVelocities_X/Y
+    // and GetPositionReportRelativeGimbalAngles_X/Y, read via "Manual Sync Local")
+    private float  _rateEl   = 0f;
+    private float  _rateAz   = 0f;
+    private float  _posEl    = 0f;
+    private float  _posAz    = 0f;
+
+    // Operation mode / tracker
+    private string _opModeStr    = "IDLE";
+    private int    _gateX        = 20;
+    private int    _gateY        = 20;
+
+    // Video channel
+    private CameraSensor _activeCamera = CameraSensor.DTV;
+    private int _bitrate = 0;  // Channel 0 ("Main") only; 0 = no change per stkAPI.h
+
+    // Day Light Channel — telemetry mirrors (DayCameraReport)
+    private float  _dayFov        = 0f;
+    private float  _gammaVal      = 0f;
+    private float  _saturationVal = 0f;
+    private int    _levelVal      = 0;
+    private int    _gainVal       = 0;
+    private int    _expTimeVal    = 0;
+    private DTVExposureMode _exposureMode = DTVExposureMode.ManualExposureMode;
+    private string _exposureModeStr => _exposureMode switch
+    {
+        DTVExposureMode.AutomaticExposureMode => "AUTO EXP",
+        DTVExposureMode.AutomaticGainMode     => "AUTO GAIN",
+        _                                     => "MANUAL"
+    };
+
+    // Thermal Channel telemetry
+    private float  _irFov = 0f;
+
+    private string? _refreshMsg;
+    private bool    _cameraPowerOn = false;  // optimistic — real state comes from GetCameraPowerReport* once wired
+
+    // ── Startup load: config file first (works offline), then FCC's live
+    // values win if reachable — see [[project-state]] for the rationale. ──
+    protected override async Task OnInitializedAsync()
+    {
+        var saved = await cfg.LoadAsync();
+        _fccIp = saved.FccIp; _fccPort = saved.FccPort;
+        _ismIp = saved.IsmIp; _uartDev = saved.UartDev; _uartBaud = saved.UartBaud;
+        _camCtrlIp = saved.CamCtrlIp; _camCtrlPort = saved.CamCtrlPort; _camHostPort = saved.CamHostPort;
+        _camStreamIp = saved.CamStreamIp;
+        _streamPort1 = saved.StreamPort1; _streamPort2 = saved.StreamPort2; _streamPort3 = saved.StreamPort3;
+        _dayFov = saved.DayFov; _gammaVal = saved.Gamma; _saturationVal = saved.Saturation;
+        _levelVal = (int)saved.Level; _gainVal = (int)saved.Gain;
+        _expTimeVal = saved.ExpTime; _exposureMode = (DTVExposureMode)saved.ExposureMode;
+        _irFov = saved.IrFov; _activeCamera = (CameraSensor)saved.PrimaryChannel;
+
+        // 2026-08-16: was `cam.GetConfigAsync()` + `cam.GetStatusAsync()` (both via
+        // the FCC relay) — removed per the user's explicit request that
+        // everything camera-related bypass the FCC entirely. GetConfigAsync had
+        // no direct-path equivalent to begin with (it asked the FCC for ITS OWN
+        // camera-link settings, a concept that doesn't exist in the camera's own
+        // SDK) and StkDirectCameraService never read _camCtrlIp/_camHostPort/etc.
+        // anyway — those fields are still here (and still saved/loaded) only
+        // because CameraAdmin.razor's MicroAccess iframe URL uses _camCtrlIp.
+        // Status now comes from stkDirect.RefreshFullStatus() instead, no FCC/eth
+        // connection required.
+        var liveStatus = stkDirect.RefreshFullStatus();
+        if (liveStatus.SyncError == 0)
+            ApplyStatus(liveStatus);
+
+        await PersistSnapshot();
+    }
+
+    private RdsPersistedConfig BuildSnapshot() => new()
+    {
+        FccIp = _fccIp, FccPort = _fccPort,
+        IsmIp = _ismIp, UartDev = _uartDev, UartBaud = _uartBaud,
+        CamCtrlIp = _camCtrlIp, CamCtrlPort = _camCtrlPort, CamHostPort = _camHostPort,
+        CamStreamIp = _camStreamIp, StreamPort1 = _streamPort1, StreamPort2 = _streamPort2, StreamPort3 = _streamPort3,
+        DayFov = _dayFov, Gamma = _gammaVal, Saturation = _saturationVal,
+        Level = _levelVal, Gain = _gainVal, ExpTime = _expTimeVal, ExposureMode = (int)_exposureMode,
+        IrFov = _irFov, PrimaryChannel = (int)_activeCamera
+    };
+
+    private Task PersistSnapshot() => cfg.SaveAsync(BuildSnapshot());
+
+    private void ApplyStatus(StkDirectCameraService.CamFullStatus s)
+    {
+        _posAz = s.PosAz; _posEl = s.PosEl;
+        _rateAz = s.RateAz; _rateEl = s.RateEl;
+        _dayFov = s.DayFov;
+        _gammaVal = s.Gamma;
+        _saturationVal = s.Saturation;
+        _levelVal = (int)s.Level;
+        _gainVal = (int)s.Gain;
+        _expTimeVal = s.ExpTime;
+        _exposureMode = (DTVExposureMode)s.ExposureMode;
+        _irFov = s.IrFov;
+        _activeCamera = (CameraSensor)s.PrimaryChannel;
+    }
+
+    // ── Network handlers ────────────────────────────────────────────────────
+    private async Task SaveFccConnection()
+    {
+        _netMsg = "SAVED";
+        await eth.SendCommandAsync("CONFIG_FCC", new { ip = _fccIp, port = _fccPort });
+        await PersistSnapshot();
+        StateHasChanged();
+    }
+
+    private async Task ReconnectFcc()
+    {
+        eth.Disconnect();
+        await eth.ConnectAsync();
+        _netMsg = eth.Status == EthernetStatus.Connected ? "CONNECTED" : "FAILED";
+        StateHasChanged();
+    }
+
+    private async Task SaveIsmConfig()
+    {
+        await eth.SendCommandAsync("CONFIG_ISM", new { ip = _ismIp, uart = _uartDev, baud = _uartBaud });
+        await PersistSnapshot();
+    }
+
+    private async Task SaveCamControl()
+    {
+        await eth.SendCommandAsync("CONFIG_CAM_CTRL", new { ip = _camCtrlIp, port = _camCtrlPort, host_port = _camHostPort });
+        await PersistSnapshot();
+    }
+
+    private async Task SaveStreamConfig()
+    {
+        await eth.SendCommandAsync("CONFIG_CAM_STREAM", new { ip = _camStreamIp, p1 = _streamPort1, p2 = _streamPort2, p3 = _streamPort3 });
+        await PersistSnapshot();
+    }
+
+    // ── Camera sensor power — real stkAPI CameraPowerControl, both sensors
+    // together. 2026-08-16: migrated to the direct path along with everything
+    // else on this page — note this is the "Sensor ON/OFF" feature that was
+    // found unreliable even in the vendor's own QBee app and abandoned as a
+    // primary Home.razor control (see [[project-state]] memory); moving its
+    // routing off the FCC relay doesn't change that underlying unreliability.
+    // powerRequest: 0=NoChange, 1=On, 2=Off (StkDirectCameraService's own convention).
+    private void CamOn()
+    {
+        stkDirect.SetDayPower(1);
+        stkDirect.SetThermalPower(1);
+        _cameraPowerOn = true;
+    }
+
+    private void CamOff()
+    {
+        stkDirect.SetDayPower(2);
+        stkDirect.SetThermalPower(2);
+        _cameraPowerOn = false;
+    }
+
+    // ── Camera handlers ─────────────────────────────────────────────────────
+    private void ToggleActiveCamera()
+    {
+        _activeCamera = _activeCamera == CameraSensor.DTV ? CameraSensor.TI : CameraSensor.DTV;
+        stkDirect.SetPrimaryVideoChannel((int)_activeCamera);
+    }
+
+    private void SetBitrate() => stkDirect.SetBandwidth(_bitrate);
+
+    private void SetAutoGain()
+    {
+        _exposureMode = DTVExposureMode.AutomaticGainMode;
+        stkDirect.SetDayExposureMode((int)DTVExposureModeSet.SetAutomaticGainMode);
+    }
+
+    private void SetAutoExposure()
+    {
+        _exposureMode = DTVExposureMode.AutomaticExposureMode;
+        stkDirect.SetDayExposureMode((int)DTVExposureModeSet.SetAutomaticExposureMode);
+    }
+
+    private async Task RefreshCameraStatus()
+    {
+        var s = stkDirect.RefreshFullStatus();
+        if (s.SyncError != 0)
+        {
+            _refreshMsg = "REFRESH FAILED";
+            return;
+        }
+
+        ApplyStatus(s);
+        await PersistSnapshot();
+        _refreshMsg = "UPDATED";
+        StateHasChanged();
+    }
+
+    // ── Style helpers ───────────────────────────────────────────────────────
+    private string TabStyle(string name) =>
+        _tab == name
+            ? "background:#d1b06a;color:#151718;font-weight:700;border:none;border-radius:6px 6px 0 0;padding:5px 18px;font-family:Consolas,monospace;font-size:0.75rem;cursor:pointer;letter-spacing:0.08em;"
+            : "background:#1a1d22;color:#888;border:1px solid #4a351a;border-radius:6px 6px 0 0;padding:5px 18px;font-family:Consolas,monospace;font-size:0.75rem;cursor:pointer;letter-spacing:0.08em;";
+
+    private const string SectionStyle      = "background:#16191e;border:1px solid #2a2d32;border-radius:8px;padding:10px 12px;";
+    private const string SectionTitleStyle = "font-size:0.7rem;font-weight:700;color:#d1b06a;font-family:Consolas,monospace;letter-spacing:0.1em;margin-bottom:8px;";
+    private const string SubTitleStyle     = "font-size:0.62rem;font-weight:700;color:#7a8a9a;font-family:Consolas,monospace;letter-spacing:0.08em;margin-bottom:3px;";
+    private const string LabelStyle        = "font-size:0.68rem;color:#a0a0a0;font-family:Consolas,monospace;font-weight:bold;";
+    private const string UnitStyle         = "font-size:0.65rem;color:#64748b;font-family:Consolas,monospace;";
+    private const string InputStyle        = "background:#0a0c10;border:1px solid #1e293b;color:#e2e8f0;font-family:Consolas,monospace;font-size:0.72rem;padding:4px 6px;border-radius:4px;width:100%;box-sizing:border-box;";
+    private const string CompactInput      = "background:#0a0c10;border:1px solid #1e293b;color:#e2e8f0;font-family:Consolas,monospace;font-size:0.68rem;padding:3px 5px;border-radius:3px;width:100%;box-sizing:border-box;";
+    private const string ActionBtnStyle    = "background:#1e293b;color:#d1b06a;border:1px solid #4a351a;border-radius:4px;padding:5px 12px;font-family:Consolas,monospace;font-size:0.72rem;font-weight:700;cursor:pointer;letter-spacing:0.06em;";
+    private const string SmallBtnStyle     = "background:#1a1d22;color:#64748b;border:1px solid #2a2d32;border-radius:3px;padding:3px 7px;font-family:Consolas,monospace;font-size:0.62rem;cursor:pointer;";
+    private const string CamBtnStyle       = "background:#252b36;color:#c8d0e0;border:1px solid #3a4455;border-radius:4px;padding:5px 10px;font-family:Consolas,monospace;font-size:0.65rem;font-weight:600;cursor:pointer;white-space:nowrap;";
+    // Day Light / Thermal channel row layout
+    private const string DayRow            = "display:grid;grid-template-columns:1fr 74px 50px 1fr;gap:4px;align-items:center;";
+    private const string DayBtnStyle       = "background:#252b36;color:#c8d0e0;border:1px solid #3a4455;border-radius:3px;padding:4px 6px;font-family:Consolas,monospace;font-size:0.62rem;font-weight:600;cursor:pointer;";
+    private const string DayLabel          = "font-size:0.65rem;color:#a0a0a0;font-family:Consolas,monospace;text-align:center;";
+    private const string DayVal            = "font-size:0.7rem;color:#4ade80;font-family:Consolas,monospace;font-weight:bold;text-align:center;";
+    private const string TelemetryVal       = "font-size:0.68rem;color:#4ade80;font-family:Consolas,monospace;font-weight:bold;";
+
+    // משתנים למעקב אחר מצב הלחיצה
+    private bool isZoomingIn = false;
+    private bool isZoomingOut = false;
+
+    // עיצוב כפתור לחוץ (דוגמה: רקע אפור כהה וטקסט לבן)
+    private string DayBtnActiveStyle => DayBtnStyle + "; background-color: #333; color: #fff; transform: scale(0.98);";
+
+    private void StartZoomIn()
+    {
+        isZoomingIn = true;
+        stkDirect.SetDayZoom((int)ZoomChange.Zoomin);
+    }
+    private void StartZoomOut()
+    {
+        isZoomingOut = true;
+        stkDirect.SetDayZoom((int)ZoomChange.Zoomout);
+    }
+
+    private void StopZoom()
+    {
+        isZoomingIn = false;
+        isZoomingOut = false;
+        stkDirect.SetDayZoom((int)ZoomChange.Nochange);
+    }
+}

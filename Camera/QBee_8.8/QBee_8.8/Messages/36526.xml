@@ -1,0 +1,26 @@
+<?xml version='1.0' encoding='utf-8'?>
+<Protocol>
+	<Message Key="36526" Name="Tracker Target Error Report" NumberOfBytes="16" Protocol="Generic">
+		<Field LogicalId="0" StartByte="0" NumberOfBytes="1" StartBit="0" NumberOfBits="8" Type="UINT" Name="Camera" ConvertType="Camera" Description="" />
+		<Field LogicalId="1" StartByte="1" NumberOfBytes="1" StartBit="0" NumberOfBits="4" Type="UINT" Name="Tracker General Status" ConvertType="TrackerStatus" Description="" />
+		<Field LogicalId="2" StartByte="1" NumberOfBytes="1" StartBit="4" NumberOfBits="3" Type="UINT" Name="Tracking Quality" DefaultValue="3" PermittedValue="[ 0 ÷ 7 ]" Description="" />
+		<Field LogicalId="3" StartByte="2" NumberOfBytes="2" StartBit="0" NumberOfBits="16" Type="USHORT" Name="Curr FOV" Description="" />
+		<Field LogicalId="4" StartByte="4" NumberOfBytes="4" StartBit="0" NumberOfBits="32" Type="FLOAT" Name="Tracker X Error" PermittedValue="[ -466000 ÷ + 466000 ]" Description="" />
+		<Field LogicalId="5" StartByte="8" NumberOfBytes="4" StartBit="0" NumberOfBits="32" Type="FLOAT" Name="Tracker Y Error" PermittedValue="[ -466000 ÷ + 466000 ]" Description="" />
+		<Field LogicalId="6" StartByte="12" NumberOfBytes="2" StartBit="0" NumberOfBits="16" Type="SHORT" Name="GMC" Description="" />
+		<Field LogicalId="7" StartByte="13" NumberOfBytes="2" StartBit="0" NumberOfBits="16" Type="INT" Name="Track Err Pre-Filter" Description="" />
+		<Field LogicalId="8" StartByte="1" NumberOfBytes="1" StartBit="7" NumberOfBits="1" Type="BIT" Name="First Time Track" Description="" />
+	</Message>
+	<Message Key="36526" Name="Tracker Target Error Report" NumberOfBytes="17" Protocol="Microcom">
+		<Field LogicalId="0" StartByte="0" NumberOfBytes="1" StartBit="0" NumberOfBits="8" Type="UINT" Name="Camera" ConvertType="Camera" Description="Gets active sensor" />
+		<Field LogicalId="1" StartByte="1" NumberOfBytes="1" StartBit="0" NumberOfBits="4" Type="UINT" Name="Tracker General Status" ConvertType="TrackerStatus" Description="Gets tracker status" />
+		<Field LogicalId="2" StartByte="1" NumberOfBytes="1" StartBit="4" NumberOfBits="3" Type="UINT" Name="Tracking Quality" DefaultValue="3" PermittedValue="[ 0 ÷ 7 ]" Description="Gets tracker quality, in range [0 (worst) ÷ 7(best)]" />
+		<Field LogicalId="3" StartByte="2" NumberOfBytes="2" StartBit="0" NumberOfBits="16" Type="USHORT" Name="Curr FOV" Description="Gets current FOV of selected sensor" />
+		<Field LogicalId="4" StartByte="4" NumberOfBytes="4" StartBit="0" NumberOfBits="32" Type="FLOAT" Name="Tracker X Error" PermittedValue="[ -466000 ÷ + 466000 ]" Description="Gets tracker error at X axis, in pixles" />
+		<Field LogicalId="5" StartByte="8" NumberOfBytes="4" StartBit="0" NumberOfBits="32" Type="FLOAT" Name="Tracker Y Error" PermittedValue="[ -466000 ÷ + 466000 ]" Description="Gets tracker error at Y axis, in pixles" />
+		<Field LogicalId="6" StartByte="12" NumberOfBytes="1" StartBit="0" NumberOfBits="8" Type="CHAR" Name="GMC" Description="Gets GMC value" />
+		<Field LogicalId="7" StartByte="13" NumberOfBytes="2" StartBit="0" NumberOfBits="16" Type="USHORT" Name="Gate Size X" Description="Gets tracker gate size width" />
+		<Field LogicalId="8" StartByte="15" NumberOfBytes="2" StartBit="0" NumberOfBits="16" Type="USHORT" Name="Gate Size Y" Description="Gets tracker gate size heigh" />		
+		<Field LogicalId="9" StartByte="1" NumberOfBytes="1" StartBit="7" NumberOfBits="1" Type="BIT" Name="First Time Track" Description="" />
+	</Message>
+</Protocol>

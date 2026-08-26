@@ -1,0 +1,12 @@
+<?xml version='1.0' encoding='utf-8'?>
+<Protocol>
+	<Message Key="35504" Name="Channel Image Single Pixel Report" NumberOfBytes="24" Protocol="Generic">
+		<Field LogicalId="0" StartByte="0" NumberOfBytes="1" StartBit="0" NumberOfBits="8" Type="UCHAR" Name="Channel (Sensor)" ConvertType="Camera" Description="" />
+		<Field LogicalId="1" StartByte="1" NumberOfBytes="1" StartBit="0" NumberOfBits="4" Type="UINT" Name="Pixel Status" ConvertType="PixelStatus" Description="" />
+		<Field LogicalId="2" StartByte="4" NumberOfBytes="4" StartBit="0" NumberOfBits="32" Type="ULONG" Name="Pixel Number" Description="" />
+		<Field LogicalId="3" StartByte="8" NumberOfBytes="4" StartBit="0" NumberOfBits="32" Type="ULONG" Name="Total Quantity" Description="" />
+		<Field LogicalId="4" StartByte="12" NumberOfBytes="2" StartBit="0" NumberOfBits="16" Type="SHORT" Name="X coordinate" Description="" />
+		<Field LogicalId="5" StartByte="14" NumberOfBytes="2" StartBit="0" NumberOfBits="16" Type="SHORT" Name="Y coordinate" Description="" />
+		<Field LogicalId="6" StartByte="16" NumberOfBytes="4" StartBit="0" NumberOfBits="32" Type="ULONG" Name="Pixel Data" Description="" />
+	</Message>
+</Protocol>

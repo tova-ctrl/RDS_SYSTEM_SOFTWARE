@@ -1,0 +1,22 @@
+<?xml version='1.0' encoding='utf-8'?>
+<Protocol>
+	<Message Key="5600" Name="Day Camera Command" NumberOfBytes="16" Protocol="Microcom">
+		<Field LogicalId="0" StartByte="0" NumberOfBytes="1" StartBit="0" NumberOfBits="2" Type="TIncDecButton" Name="Zoom Command" ConvertType="@ZoomChange" Description="Sets DayLightCamera Zoom" />
+		<Field LogicalId="1" StartByte="0" NumberOfBytes="1" StartBit="2" NumberOfBits="2" Type="TIncDecButton" Name="Sharpness Command" ConvertType="@GenericIncDecVal" Description="Sets DayLightCamera Sharpness" />
+		<Field LogicalId="2" StartByte="1" NumberOfBytes="1" StartBit="0" NumberOfBits="2" Type="TIncDecButton" Name="Gamma Command" ConvertType="@GenericIncDecVal" Description="Sets DayLightCamera Gamma" />
+		<Field LogicalId="3" StartByte="1" NumberOfBytes="1" StartBit="2" NumberOfBits="2" Type="TIncDecButton" Name="Saturation Command" ConvertType="@GenericIncDecVal" Description="Sets DayLightCamera Saturation" />
+		<Field LogicalId="4" StartByte="1" NumberOfBytes="1" StartBit="4" NumberOfBits="2" Type="TIncDecButton" Name="Gain Command" ConvertType="@GenericIncDecVal" Description="Sets DayLightCamera Gain" />
+		<Field LogicalId="5" StartByte="1" NumberOfBytes="1" StartBit="6" NumberOfBits="2" Type="TIncDecButton" Name="Level Command" ConvertType="@GenericIncDecVal" Description="Sets DayLightCamera Level" />
+		<Field LogicalId="6" StartByte="2" NumberOfBytes="1" StartBit="0" NumberOfBits="2" Type="INT" Name="Exposure Mode" ConvertType="DTVExposureModeSet" Description="Sets DayLightCamera Exposure Mode" DefaultValue="0"/>
+		<Field LogicalId="7" StartByte="2" NumberOfBytes="1" StartBit="2" NumberOfBits="2" Type="TIncDecButton" Name="Exposure Time" ConvertType="@GenericIncDecVal" Description="Sets DayLightCamera Exposure Time" />
+		<Field LogicalId="8" StartByte="2" NumberOfBytes="1" StartBit="4" NumberOfBits="2" Type="TIncDecButton" Name="Exposure Gain" ConvertType="@GenericIncDecVal" Description="Sets DayLightCamera Exposure Gain" />
+		<Field LogicalId="9" StartByte="2" NumberOfBytes="1" StartBit="6" NumberOfBits="2" Type="INT" Name="Auto White Balance" ConvertType="DTVAutoWhiteBalanceType" Description="Sets Auto White Balance" />
+		<Field LogicalId="10" StartByte="3" NumberOfBytes="1" StartBit="0" NumberOfBits="2" Type="TIncDecButton" Name="Temperature" Description="Sets Temperature" />
+		<Field LogicalId="11" StartByte="3" NumberOfBytes="1" StartBit="2" NumberOfBits="2" Type="INT" Name="Flicker Mode" Description="Sets Flicker Mode" />
+		<Field LogicalId="12" StartByte="3" NumberOfBytes="1" StartBit="4" NumberOfBits="1" Type="BIT" Name="Restore To Default" Description="Restores All Parameters And Disables All Changes Excpet Zoom While Active" />
+	</Message>
+</Protocol>
+
+
+		
+

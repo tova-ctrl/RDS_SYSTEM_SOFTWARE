@@ -1,0 +1,32 @@
+<?xml version='1.0' encoding='utf-8'?>
+<Protocol>
+	<Message Key="35107" Name="Day Camera Image Processing #2 Command" NumberOfBytes="16" Protocol="Generic">
+		<Field LogicalId="0" StartByte="0" NumberOfBytes="1" StartBit="0" NumberOfBits="2" Type="UINT" Name="Electronic Zoom" ConvertType="TIElectronicZoom" Description="" />
+		<Field LogicalId="1" StartByte="0" NumberOfBytes="1" StartBit="2" NumberOfBits="1" Type="BIT" Name="Horizontal Flip" Description="" />
+		<Field LogicalId="2" StartByte="0" NumberOfBytes="1" StartBit="3" NumberOfBits="1" Type="BIT" Name="Vertical Flip" DefaultValue="1" Description="" />
+		<Field LogicalId="3" StartByte="0" NumberOfBytes="1" StartBit="4" NumberOfBits="1" Type="BIT" Name="Rotation 90 Degrees" Description="" />
+		<Field LogicalId="4" StartByte="0" NumberOfBytes="1" StartBit="5" NumberOfBits="1" Type="BIT" Name="Standard RS170A" Description="" />
+		
+		<Field LogicalId="5" StartByte="1" NumberOfBytes="1" StartBit="0" NumberOfBits="3" Type="UINT" Name="Frame Averaging" ConvertType="FrameAveraging" Description="" />
+		
+		<Field LogicalId="6" StartByte="1" NumberOfBytes="1" StartBit="4" NumberOfBits="1" Type="BIT" Name="Color Video" Description="" />
+		<Field LogicalId="7" StartByte="1" NumberOfBytes="1" StartBit="5" NumberOfBits="2" Type="UINT" Name="Sharpness" ConvertType="SHARPNESS" Description="" />
+		<Field LogicalId="8" StartByte="1" NumberOfBytes="1" StartBit="7" NumberOfBits="1" Type="BIT" Name="HDR" Description="" />
+		
+		<Field LogicalId="9" StartByte="3" NumberOfBytes="1" StartBit="0" NumberOfBits="3" Type="UINT" Name="Spatial Median Filter" ConvertType="SpatialMedianFilter" Description="" />
+		<Field LogicalId="10" StartByte="3" NumberOfBytes="1" StartBit="3" NumberOfBits="2" Type="UINT" Name="Cameralink Mux" ConvertyType="CameralinkMux" Description="" />
+		<Field LogicalId="11" StartByte="3" NumberOfBytes="1" StartBit="5" NumberOfBits="2" Type="UINT" Name="Cameralink Resolution" ConvertType="CameralinkResolution" Description="" />
+		
+		<Field LogicalId="12" StartByte="4" NumberOfBytes="1" StartBit="0" NumberOfBits="8" Type="UINT" Name="Electronic Zoom Factor" ConvertType="ElectronicZoomFactor" Description="" />
+		
+		<Field LogicalId="13" StartByte="6" NumberOfBytes="2" StartBit="0" NumberOfBits="16" Type="UINT" Name="Video Standard Width" Description="" />
+		<Field LogicalId="14" StartByte="8" NumberOfBytes="2" StartBit="0" NumberOfBits="16" Type="UINT" Name="Video Standard Height" Description="" />
+		<Field LogicalId="15" StartByte="10" NumberOfBytes="1" StartBit="0" NumberOfBits="3" Type="UINT" Name="White Balance Type" ConvertType="WhiteBalanceType" Description="" />
+		
+		<Field LogicalId="16" StartByte="11" NumberOfBytes="1" StartBit="0" NumberOfBits="8" Type="UINT" Name="Red Gain" Description="" />
+		<Field LogicalId="17" StartByte="12" NumberOfBytes="1" StartBit="0" NumberOfBits="8" Type="UINT" Name="Blue Gain" Description="" />
+		
+		
+		<Field LogicalId="18" StartByte="15" NumberOfBytes="1" StartBit="0" NumberOfBits="8" Type="UINT" Name="Gamma Value" Description="" />
+	</Message>
+</Protocol>

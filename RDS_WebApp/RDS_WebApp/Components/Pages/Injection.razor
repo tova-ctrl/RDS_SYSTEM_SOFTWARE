@@ -1,0 +1,316 @@
+@page "/injection"
+@rendermode InteractiveServer
+@using RDS_WebApp.Services
+@inject SystemControlService svc
+@inject EthernetService eth
+
+<PageTitle>Fault Injection</PageTitle>
+
+<div class="inj-page">
+    <div class="inj-header">
+        <div class="inj-title-block">
+            <span class="inj-badge">SWR</span>
+            <div>
+                <h1 class="inj-title">Fault Injection Console</h1>
+                <p class="inj-subtitle">Software Safety Requirements — Select and inject fault scenarios</p>
+            </div>
+        </div>
+        <div class="inj-stats">
+            <div class="inj-stat">
+                <span class="inj-stat-value">@TotalSelectableCount</span>
+                <span class="inj-stat-label">Test Cases</span>
+            </div>
+            <div class="inj-stat">
+                <span class="inj-stat-value">@selectedIds.Count</span>
+                <span class="inj-stat-label">Selected</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="inj-card">
+        <div class="inj-card-header">
+            <span class="inj-card-title">⚡ Safety Requirements</span>
+            <div class="inj-select-all">
+                <label class="inj-toggle-label">
+                    <input type="checkbox"
+                           class="inj-toggle-input"
+                           @onchange="ToggleAll"
+                           checked="@(selectedIds.Count == TotalSelectableCount)" />
+                    <span class="inj-toggle-track"></span>
+                    Select All
+                </label>
+            </div>
+        </div>
+
+        <div class="inj-table-wrap">
+            <table class="inj-table">
+                <thead>
+                    <tr>
+                        <th class="col-check"></th>
+                        <th class="col-id">Req. ID</th>
+                        <th class="col-req">Requirement</th>
+                        <th class="col-alloc">Allocated To</th>
+                        <th class="col-ver">Verification Method</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var req in requirements)
+                    {
+                        bool hasSubCases  = req.SubCases?.Count > 0;
+                        bool isExpanded   = expandedIds.Contains(req.Id);
+                        int  subCount     = req.SubCases?.Count ?? 0;
+                        int  subSelected  = req.SubCases?.Count(s => selectedIds.Contains(s.Id)) ?? 0;
+                        bool allSelected  = hasSubCases && subSelected == subCount;
+                        bool someSelected = hasSubCases && subSelected > 0 && subSelected < subCount;
+                        bool isSelected   = hasSubCases ? allSelected : selectedIds.Contains(req.Id);
+
+                        <!-- ── Main requirement row ── -->
+                        <tr class="@(isSelected || someSelected ? "row-selected" : "") @(hasSubCases ? "row-group" : "")"
+                            @onclick="() => ToggleRow(req)">
+                            <td class="col-check" @onclick:stopPropagation>
+                                <span class="inj-checkbox @(isSelected ? "checked" : someSelected ? "partial" : "")"
+                                      @onclick="() => ToggleRow(req)">
+                                    @if (isSelected)       { <span class="check-mark">✓</span> }
+                                    else if (someSelected) { <span class="check-mark">—</span> }
+                                </span>
+                            </td>
+                            <td class="col-id">
+                                <span class="req-id">@req.Id</span>
+                            </td>
+                            <td class="col-req">
+                                @req.Text
+                                @if (hasSubCases)
+                                {
+                                    <span class="sub-count-badge">@subCount sub-cases</span>
+                                }
+                            </td>
+                            <td class="col-alloc"><span class="alloc-tag">@req.AllocatedTo</span></td>
+                            <td class="col-ver" style="display:flex;justify-content:space-between;align-items:center;">
+                                <span>@req.VerificationMethod</span>
+                                @if (hasSubCases)
+                                {
+                                    <button class="expand-btn" @onclick="() => ToggleExpand(req.Id)" @onclick:stopPropagation>
+                                        @(isExpanded ? "▲" : "▼")
+                                    </button>
+                                }
+                            </td>
+                        </tr>
+
+                        <!-- ── Sub-case rows (shown when expanded) ── -->
+                        @if (hasSubCases && isExpanded)
+                        {
+                            @foreach (var sub in req.SubCases!)
+                            {
+                                bool subSelected2 = selectedIds.Contains(sub.Id);
+                                <tr class="row-subcase @(subSelected2 ? "row-selected" : "")"
+                                    @onclick="() => ToggleSubCase(sub.Id, !subSelected2)">
+                                    <td class="col-check">
+                                        <span class="inj-checkbox @(subSelected2 ? "checked" : "")">
+                                            @if (subSelected2) { <span class="check-mark">✓</span> }
+                                        </span>
+                                    </td>
+                                    <td class="col-id">
+                                        <span class="req-id req-id-sub">@sub.Id</span>
+                                    </td>
+                                    <td class="col-req">
+                                        <strong>@sub.Scenario</strong>
+                                        <span class="sub-mechanism">@sub.Mechanism</span>
+                                    </td>
+                                    <td class="col-alloc"></td>
+                                    <td class="col-ver" style="color:#8bc34a;font-size:10px;">@sub.Expected</td>
+                                </tr>
+                            }
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="inj-actions">
+        <button class="inj-btn-inject @(selectedIds.Count == 0 ? "disabled" : "")"
+                @onclick="InjectSelected"
+                disabled="@(selectedIds.Count == 0 || injecting)">
+            <span class="btn-icon">⚡</span>
+            Inject Selected
+            @if (selectedIds.Count > 0)
+            {
+                <span class="btn-count">@selectedIds.Count</span>
+            }
+        </button>
+        <button class="inj-btn-clear" @onclick="ClearSelection" disabled="@(selectedIds.Count == 0)">
+            Clear Selection
+        </button>
+    </div>
+
+    @if (!string.IsNullOrEmpty(injectionLog))
+    {
+        <div class="inj-log-card">
+            <div class="inj-log-header">
+                <span class="log-dot"></span>
+                INJECTION LOG
+            </div>
+            <pre class="inj-log">@injectionLog</pre>
+            <button class="inj-btn-recovery" @onclick="RecoveryReset" disabled="@recovering">
+                @(recovering ? "Sending..." : "⟳ Recovery Reset (FAULT → SAFE)")
+            </button>
+        </div>
+    }
+</div>
+
+@code {
+    private record SwrSubCase(string Id, string Scenario, string Mechanism, string Expected, string FaultType);
+    private record SwrRequirement(string Id, string Text, string AllocatedTo,
+                                   string VerificationMethod, List<SwrSubCase>? SubCases = null);
+
+    private List<SwrRequirement> requirements = new()
+    {
+        new("SWR-SAFE-001",
+            "The system shall enter SAFE state on power-up, reset, watchdog timeout, communication loss, invalid command, or safety-monitor internal fault.",
+            "ISM / Interlock",
+            "Fault injection per sub-case",
+            new List<SwrSubCase> {
+                new("001a", "Invalid command",   "FCC → CAN 0x1FF → ISM type=0xFF",           "ISM: FAULT(INVALID_COMMAND)", "INVALID_CMD"),
+                new("001b", "System reset",      "FCC → CAN 0x1FE → ISM enterSafe, seq reset", "ISM: SAFE",                   "RESET"),
+                new("001c", "Watchdog timeout",  "FCC pauses HB 600ms → ISM watchdog 500ms",   "ISM: FAULT(COMM_LOSS)",       "WATCHDOG"),
+                new("001d", "Communication loss","FCC pauses HB 600ms → ISM watchdog 500ms",   "ISM: FAULT(COMM_LOSS)",       "COMM_LOSS"),
+                new("001e", "Internal fault",    "FCC → CAN 0x1FD → ISM type=0xFE",            "ISM: FAULT(INTERNAL_ERROR)",  "INTERNAL_FAULT"),
+            }),
+        new("SWR-SAFE-003",
+            "The ISM shall validate command range, rate, direction, current state, and limit status before enabling motion.",
+            "ISM",
+            "Boundary-value injection",
+            new List<SwrSubCase> {
+                new("003a", "Azimuth out of range",  "FCC → MOTION az=200° (MAX=180°)",         "ISM: FAULT(AZ_OUT_OF_RANGE) — requires ARMED",  "AZ_RANGE"),
+                new("003b", "Elevation out of range","FCC → MOTION el=100° (MAX=90°)",           "ISM: FAULT(EL_OUT_OF_RANGE) — requires ARMED",  "EL_RANGE"),
+                new("003c", "Rate exceeded",         "FCC → MOTION rate=60dps (MAX=45dps)",      "ISM: FAULT(RATE_EXCEEDED) — requires ARMED",    "RATE_EXCEED"),
+                new("003d", "Motion when not ARMED", "FCC → MOTION while ISM in SAFE/STANDBY",  "ISM: rejects (log only, no FAULT)",             "NOT_ARMED"),
+            }),
+        new("SWR-SAFE-004",
+            "All hazardous-action commands shall require independent interlock authorization and clear operator state annunciation.",
+            "Interlock / HMI",
+            "Interlock test, HMI review, misuse-case test"),
+        new("SWR-SAFE-005",
+            "Safety-critical software shall be separated from non-safety services so that video, logging, or GUI failure cannot block torque disable.",
+            "System Architecture",
+            "Design review, resource exhaustion test"),
+        new("SWR-SAFE-006",
+            "Safety-relevant faults shall be logged with time, state, source, and mitigation outcome.",
+            "ISM / Logger",
+            "Log review after injected faults"),
+        new("SWR-SAFE-007",
+            "Software update and configuration loading shall verify authenticity and integrity before activation.",
+            "Bootloader / Maintenance",
+            "Signed-package test, rollback test"),
+        new("SWR-SAFE-008",
+            "The system shall provide a controlled recovery path from FAULT that requires fault clearance and authorized reset.",
+            "ISM / HMI",
+            "Recovery procedure test"),
+    };
+
+    private HashSet<string> selectedIds  = new();
+    private HashSet<string> expandedIds  = new() { "SWR-SAFE-001", "SWR-SAFE-003" };  // expanded by default
+    private string          injectionLog = "";
+    private bool            injecting    = false;
+    private bool            recovering   = false;
+
+    private int TotalSelectableCount =>
+        requirements.Sum(r => r.SubCases?.Count > 0 ? r.SubCases.Count : 1);
+
+    // ── Toggle helpers ────────────────────────────────────────────────────────
+
+    private void ToggleExpand(string id)
+    {
+        if (!expandedIds.Add(id)) expandedIds.Remove(id);
+    }
+
+    private void ToggleSubCase(string id, bool select)
+    {
+        if (select) selectedIds.Add(id);
+        else        selectedIds.Remove(id);
+    }
+
+    private void ToggleRow(SwrRequirement req)
+    {
+        if (req.SubCases?.Count > 0)
+        {
+            bool allSel = req.SubCases.All(s => selectedIds.Contains(s.Id));
+            foreach (var s in req.SubCases)
+            {
+                if (allSel) selectedIds.Remove(s.Id);
+                else        selectedIds.Add(s.Id);
+            }
+        }
+        else
+        {
+            if (!selectedIds.Add(req.Id)) selectedIds.Remove(req.Id);
+        }
+    }
+
+    private void ToggleAll(ChangeEventArgs e)
+    {
+        bool select = (bool)e.Value!;
+        foreach (var req in requirements)
+        {
+            if (req.SubCases?.Count > 0)
+                foreach (var s in req.SubCases)
+                    if (select) selectedIds.Add(s.Id); else selectedIds.Remove(s.Id);
+            else
+                if (select) selectedIds.Add(req.Id); else selectedIds.Remove(req.Id);
+        }
+    }
+
+    private void ClearSelection() => selectedIds.Clear();
+
+    // ── Inject ────────────────────────────────────────────────────────────────
+
+    private async Task InjectSelected()
+    {
+        if (selectedIds.Count == 0 || injecting) return;
+        injecting = true;
+
+        // Collect all sub-cases and standalone requirements that are selected
+        var toInject = new List<(string Id, string Label, string? FaultType)>();
+        foreach (var req in requirements)
+        {
+            if (req.SubCases?.Count > 0)
+            {
+                foreach (var sub in req.SubCases.Where(s => selectedIds.Contains(s.Id)))
+                    toInject.Add((sub.Id, $"{sub.Id} {sub.Scenario}", sub.FaultType));
+            }
+            else if (selectedIds.Contains(req.Id))
+            {
+                toInject.Add((req.Id, req.Id, null));
+            }
+        }
+
+        foreach (var (id, label, faultType) in toInject)
+        {
+            if (faultType != null)
+            {
+                await eth.ConnectAsync();
+                var result = await eth.SendAndReceiveAsync("inject_fault", new { type = faultType });
+                bool ok = result?.Contains("\"ok\":true") == true;
+                injectionLog = $"[{DateTime.Now:HH:mm:ss}] {(ok ? "✓" : "✗")} {label} ({faultType})\n" + injectionLog;
+            }
+            else
+            {
+                svc.UpdateState(SystemState.FAULT, $"[SIM] {label}");
+                injectionLog = $"[{DateTime.Now:HH:mm:ss}] [SIM] {label}\n" + injectionLog;
+            }
+        }
+
+        selectedIds.Clear();
+        injecting = false;
+    }
+
+    private async Task RecoveryReset()
+    {
+        recovering = true;
+        await eth.ConnectAsync();
+        var result = await eth.SendAndReceiveAsync("recovery");
+        bool ok = result?.Contains("\"ok\":true") == true;
+        injectionLog = $"[{DateTime.Now:HH:mm:ss}] {(ok ? "✓" : "✗")} RECOVERY RESET → {(ok ? "SAFE" : "FAILED")}\n" + injectionLog;
+        recovering = false;
+    }
+}

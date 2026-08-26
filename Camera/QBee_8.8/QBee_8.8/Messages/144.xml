@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Protocol>
+	<Message Key="144" Name="Set/Get DATA" NumberOfBytes="16" Protocol="Generic">
+		<Field LogicalId="0" StartByte="0" NumberOfBytes="4" StartBit="0" NumberOfBits="32" Type="ULONG" Name="Module ID" ConvertType="ModuleID"></Field>
+		<Field LogicalId="1" StartByte="4" NumberOfBytes="1" StartBit="0" NumberOfBits="1" Type="BIT" Name="Set Data"></Field>
+		<Field LogicalId="2" StartByte="5" NumberOfBytes="1" StartBit="0" NumberOfBits="8" Type="UCHAR" Name="Dail Data Type" ConvertType="DialDataType"></Field>
+		<Field LogicalId="3" StartByte="6" NumberOfBytes="2" StartBit="0" NumberOfBits="16" Type="USHORT" Name="Dail Address"></Field>
+		<Field LogicalId="4" StartByte="8" NumberOfBytes="4" StartBit="0" NumberOfBits="32" Type="ULONG" Name="Dail Data"></Field>
+	</Message>
+
+	<Message Key="144" Name="Get DATA" NumberOfBytes="3" Protocol="Microcom" Compact="True">
+		<Field LogicalId="0" StartByte="0" NumberOfBytes="2" StartBit="0" NumberOfBits="16" Type="USHORT" Name="Data" Description="Retreive data from system"></Field>
+		<Field LogicalId="1" StartByte="2" NumberOfBytes="1" StartBit="0" NumberOfBits="8" Type="CHAR" Name="Retreive Type" ConvertType="RetreiveDataType" Description="Set method to retreive data"></Field>
+	</Message>
+</Protocol>

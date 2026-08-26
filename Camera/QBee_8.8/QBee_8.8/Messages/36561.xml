@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<Protocol>
+	<Message Key="36561" Name="ATR Report" NumberOfBytes="2" Protocol="Microcom">
+		<Field LogicalId="0" StartByte="0" NumberOfBytes="1" StartBit="0" NumberOfBits="1" Type="BIT" Name="Enabled" Description="Gets ATR Status Enabled/Disabled" />
+		<Field LogicalId="1" StartByte="1" NumberOfBytes="1" StartBit="0" NumberOfBits="8" Type="UCHAR" Name="Quantity of Detections" Description="Gets Quantity of Detections" />
+	</Message>
+</Protocol>

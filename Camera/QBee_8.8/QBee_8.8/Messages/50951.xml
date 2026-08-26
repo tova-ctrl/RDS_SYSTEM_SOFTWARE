@@ -1,0 +1,11 @@
+<?xml version='1.0' encoding='utf-8'?>
+<Protocol>
+	<Message Key="50951" Name="System Secondary Video Channel Report" NumberOfBytes="8" Protocol="Generic">
+		<Field LogicalId="0" StartByte="0" NumberOfBytes="1" StartBit="0" NumberOfBits="3" Type="UINT" Name="Camera" ConvertType="Camera" Description="Get active primary sensor" />
+		<Field LogicalId="1" StartByte="0" NumberOfBytes="1" StartBit="5" NumberOfBits="1" Type="BIT" Name="Electronic Zomm Active" Description="Get Electronic Zomm Active" />
+		<Field LogicalId="2" StartByte="1" NumberOfBytes="1" StartBit="0" NumberOfBits="7" Type="UCHAR" Name="Displayed FOV Percent" PermittedValue="[ 0 ÷ 255 ]" Description="Get Displayed FOV Percent [ 0 ÷ 255 ]" />
+		<Field LogicalId="3" StartByte="2" NumberOfBytes="2" StartBit="0" NumberOfBits="16" Type="USHORT" Name="FOV" PermittedValue="[ 0 ÷ 65535 ]" Description="Get Primary sensors's FOV [°]" />
+		<Field LogicalId="4" StartByte="6" NumberOfBytes="7" StartBit="0" NumberOfBits="16" Type="USHORT" Name="Horizontal Boresight" PermittedValue="[ -10000 ÷ +10000 ]" Description="Get Horizontal Boresight" />
+		<Field LogicalId="5" StartByte="8" NumberOfBytes="9" StartBit="0" NumberOfBits="16" Type="USHORT" Name="Vertical Boresight" PermittedValue="[ -10000 ÷ +10000 ]" Description="Get Vertical Boresight" />
+	</Message>
+</Protocol>

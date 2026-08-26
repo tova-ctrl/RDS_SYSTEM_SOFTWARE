@@ -1,0 +1,19 @@
+<?xml version='1.0' encoding='utf-8'?>
+<Protocol>
+	<Message Key="34996" Name="Gimbal Master BIT Status" NumberOfBytes="3" Protocol="Microcom">
+		<Field LogicalId="0" StartByte="0" NumberOfBytes="1" StartBit="0" NumberOfBits="1" Type="BIT" Name="System Busy" Description="Gets Busy Flag Mode" />
+		<Field LogicalId="1" StartByte="0" NumberOfBytes="1" StartBit="1" NumberOfBits="1" Type="BIT" Name="Gimbal not initialized" Description="Gets Control Operational Failure" />
+		<Field LogicalId="2" StartByte="0" NumberOfBytes="1" StartBit="2" NumberOfBits="1" Type="BIT" Name="Gimbal Init Fail" Description="Gets HW + Sensors" />
+		<Field LogicalId="3" StartByte="0" NumberOfBytes="1" StartBit="3" NumberOfBits="1" Type="BIT" Name="Gimbal Fail" Description="Gets Azimuth Gimbal General Bit" />
+		<Field LogicalId="4" StartByte="0" NumberOfBytes="1" StartBit="4" NumberOfBits="1" Type="BIT" Name="Gimbal High/Low Temp Warning" Description="Gets Elevation Gimbal General Bit" />
+		<Field LogicalId="13" StartByte="0" NumberOfBytes="1" StartBit="5" NumberOfBits="1" Type="BIT" Name="Track Init Flag" Description="Gets Track Init Flag" />
+		<Field LogicalId="5" StartByte="1" NumberOfBytes="1" StartBit="0" NumberOfBits="1" Type="BIT" Name="Payload comm fail" Description="Gets Elevation Gimbal General Bit" />
+		<Field LogicalId="6" StartByte="1" NumberOfBytes="1" StartBit="1" NumberOfBits="1" Type="BIT" Name="Low storage warning" Description="Gets Elevation Gimbal General Bit" />
+		<Field LogicalId="7" StartByte="1" NumberOfBytes="1" StartBit="2" NumberOfBits="1" Type="BIT" Name="Hive Temperature warning" Description="Gets Elevation Gimbal General Bit" />
+		<Field LogicalId="8" StartByte="1" NumberOfBytes="1" StartBit="3" NumberOfBits="1" Type="BIT" Name="Hive software fail" Description="Gets Elevation Gimbal General Bit" />
+		<Field LogicalId="9" StartByte="1" NumberOfBytes="1" StartBit="4" NumberOfBits="1" Type="BIT" Name="Host Comm fail" Description="Gets Elevation Gimbal General Bit" />
+		<Field LogicalId="10" StartByte="2" NumberOfBytes="1" StartBit="0" NumberOfBits="1" Type="BIT" Name="VIS Wide Fail" Description="Gets Wide Visable Camera fail Bit" />
+		<Field LogicalId="11" StartByte="2" NumberOfBytes="1" StartBit="1" NumberOfBits="1" Type="BIT" Name="VIS Narrow Fail" Description="Gets Narrow Visable Camera fail Bit" />
+		<Field LogicalId="12" StartByte="2" NumberOfBytes="1" StartBit="2" NumberOfBits="1" Type="BIT" Name="TI Fail" Description="Gets TI Camera fail Bit" />		
+	</Message>
+</Protocol>

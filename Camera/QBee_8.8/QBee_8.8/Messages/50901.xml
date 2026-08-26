@@ -1,0 +1,10 @@
+<?xml version='1.0' encoding='utf-8'?>
+<Protocol>
+	<Message Key="50901" Name="System General Report" NumberOfBytes="4" Protocol="Microcom">
+		<Field LogicalId="0" StartByte="0" NumberOfBytes="1" StartBit="0" NumberOfBits="8" Type="UCHAR" Name="Operation Mode" ConvertType="TOperationMode_Micro" Description="Gets Operation Mode Status" />
+		<Field LogicalId="1" StartByte="1" NumberOfBytes="1" StartBit="1" NumberOfBits="1" Type="BIT" Name="Hybrid Mode" Description="Gets Hybrid Mode Status" />
+		<Field LogicalId="2" StartByte="2" NumberOfBytes="1" StartBit="0" NumberOfBits="8" Type="CHAR" Name="Hive Temperature" Description="Gets Hive Temperature" />
+	</Message>
+</Protocol>
+
+<!-- |x8|x6|x| -->

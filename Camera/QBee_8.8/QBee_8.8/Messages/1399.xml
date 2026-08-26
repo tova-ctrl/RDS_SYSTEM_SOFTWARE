@@ -1,0 +1,28 @@
+<?xml version='1.0' encoding='utf-8'?>
+<Protocol>
+	<Message Key="1399" Name="Internal Use" NumberOfBytes="4" Protocol="Microcom">
+		<Field LogicalId="0" StartByte="0" NumberOfBytes="1" StartBit="0" NumberOfBits="1" Type="BIT" Name="Reset Dolfino" Description="" />	
+		<Field LogicalId="1" StartByte="0" NumberOfBytes="1" StartBit="1" NumberOfBits="1" Type="BIT" Name="Enable HSP" Description="" />
+		<Field LogicalId="2" StartByte="0" NumberOfBytes="1" StartBit="2" NumberOfBits="1" Type="BIT" Name="HSP Bypass Generic" Description="" />
+		<Field LogicalId="3" StartByte="0" NumberOfBytes="1" StartBit="3" NumberOfBits="1" Type="BIT" Name="Disable AZ motor" Description="" />
+		<Field LogicalId="4" StartByte="0" NumberOfBytes="1" StartBit="4" NumberOfBits="1" Type="BIT" Name="Disable EL motor" Description="" />
+		<Field LogicalId="5" StartByte="0" NumberOfBytes="1" StartBit="5" NumberOfBits="1" Type="BIT" Name="Disable PI-COM" Description="" />
+		<Field LogicalId="6" StartByte="0" NumberOfBytes="1" StartBit="6" NumberOfBits="1" Type="BIT" Name="SBIU COMM MUX" Description="" />
+		<Field LogicalId="7" StartByte="1" NumberOfBytes="1" StartBit="0" NumberOfBits="8" Type="UCHAR" Name="Window Detection" PermittedValue="[ 0 ÷ 255 uSec]" Description="" />     
+		<Field LogicalId="8" StartByte="2" NumberOfBytes="1" StartBit="0" NumberOfBits="8" Type="UCHAR" Name="Window Pass" PermittedValue="[ 0 ÷ 255 mSec]" Description="" />          
+		<Field LogicalId="9" StartByte="3" NumberOfBytes="1" StartBit="0" NumberOfBits="8" Type="UCHAR" Name="Window Block" PermittedValue="[ 0 ÷ 255 mSec]" Description="" />          
+	</Message>
+
+	<Message Key="1399" Name="Internal Use" NumberOfBytes="4" Protocol="Generic">
+		<Field LogicalId="0" StartByte="0" NumberOfBytes="1" StartBit="0" NumberOfBits="1" Type="BIT" Name="Reset Dolfino" Description="" />	
+		<Field LogicalId="1" StartByte="0" NumberOfBytes="1" StartBit="1" NumberOfBits="1" Type="BIT" Name="Enable HSP" Description="" />
+		<Field LogicalId="2" StartByte="0" NumberOfBytes="1" StartBit="2" NumberOfBits="1" Type="BIT" Name="HSP Bypass Generic" Description="" />
+		<Field LogicalId="3" StartByte="0" NumberOfBytes="1" StartBit="3" NumberOfBits="1" Type="BIT" Name="Disable AZ motor" Description="" />
+		<Field LogicalId="4" StartByte="0" NumberOfBytes="1" StartBit="4" NumberOfBits="1" Type="BIT" Name="Disable EL motor" Description="" />
+		<Field LogicalId="5" StartByte="0" NumberOfBytes="1" StartBit="5" NumberOfBits="1" Type="BIT" Name="Disable PI-COM" Description="" />
+		<Field LogicalId="9" StartByte="0" NumberOfBytes="1" StartBit="6" NumberOfBits="1" Type="BIT" Name="SBIU COMM MUX" Description="" />
+		<Field LogicalId="6" StartByte="1" NumberOfBytes="1" StartBit="0" NumberOfBits="8" Type="UCHAR" Name="Window Detection" PermittedValue="[ 0 ÷ 255 uSec]" Description="" />     
+		<Field LogicalId="7" StartByte="2" NumberOfBytes="1" StartBit="0" NumberOfBits="8" Type="UCHAR" Name="Window Pass" PermittedValue="[ 0 ÷ 255 mSec]" Description="" />          
+		<Field LogicalId="8" StartByte="3" NumberOfBytes="1" StartBit="0" NumberOfBits="8" Type="UCHAR" Name="Window Block" PermittedValue="[ 0 ÷ 255 mSec]" Description="" />          
+	</Message>
+</Protocol>

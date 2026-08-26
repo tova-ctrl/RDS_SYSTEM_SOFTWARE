@@ -1,0 +1,10 @@
+<?xml version='1.0' encoding='utf-8'?>
+<Protocol>
+	<Message Key="6561" Name="ATR Controls" NumberOfBytes="8" Protocol="Generic">
+		<Field LogicalId="0" StartByte="0" NumberOfBytes="1" StartBit="5" NumberOfBits="1" Type="BIT" Name="Detections Report" Description="" />
+	</Message>
+	<Message Key="6561" Name="ATR Controls" NumberOfBytes="8" Protocol="Microcom">
+		<Field LogicalId="0" StartByte="0" NumberOfBytes="1" StartBit="5" NumberOfBits="1" Type="BIT" Name="Detections Report" Description="Enable/Disable ATR" />
+		<Field LogicalId="1" StartByte="1" NumberOfBytes="1" StartBit="0" NumberOfBits="8" Type="CHAR" Name="Detection Threshold" Description="Set Detection Threshold [0-100]" />
+	</Message>
+</Protocol>

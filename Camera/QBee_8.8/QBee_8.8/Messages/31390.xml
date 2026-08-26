@@ -1,0 +1,12 @@
+<?xml version='1.0' encoding='utf-8'?>
+<Protocol>
+	<Message Key="31390" Name="GCU Maintenance" NumberOfBytes="16" Protocol="Generic">
+		<Field LogicalId="0" StartByte="0" NumberOfBytes="1" StartBit="0" NumberOfBits="8" Type="UCHAR" Name="Cycle Counter" Description="" />
+		<Field LogicalId="1" StartByte="1" NumberOfBytes="1" StartBit="0" NumberOfBits="8" Type="UCHAR" Name="Index Param1" Description="" />
+		<Field LogicalId="2" StartByte="2" NumberOfBytes="4" StartBit="0" NumberOfBits="32" Type="FLOAT" Name="Value Param1" Description="" />
+		<Field LogicalId="3" StartByte="6" NumberOfBytes="1" StartBit="0" NumberOfBits="8" Type="UCHAR" Name="Index Param2" Description="" />
+		<Field LogicalId="4" StartByte="7" NumberOfBytes="4" StartBit="0" NumberOfBits="32" Type="FLOAT" Name="Value Param2" Description="" />
+		<Field LogicalId="5" StartByte="11" NumberOfBytes="1" StartBit="0" NumberOfBits="8" Type="UCHAR" Name="Index Param3" Description="" />
+		<Field LogicalId="6" StartByte="12" NumberOfBytes="4" StartBit="0" NumberOfBits="32" Type="FLOAT" Name="Value Param3" Description="" />	
+	</Message>
+</Protocol>

@@ -1,0 +1,9 @@
+<?xml version='1.0' encoding='utf-8'?>
+<Protocol>
+	<Message Key="6551" Name="VMD Controls" NumberOfBytes="8" Protocol="Generic">
+		<Field LogicalId="0" StartByte="0" NumberOfBytes="1" StartBit="5" NumberOfBits="1" Type="BIT" Name="Detections Report" Description="" />
+	</Message>
+	<Message Key="6551" Name="VMD Controls" NumberOfBytes="8" Protocol="Microcom">
+		<Field LogicalId="0" StartByte="0" NumberOfBytes="1" StartBit="5" NumberOfBits="1" Type="BIT" Name="Enable" Description="Enable/Disable VMD" />
+	</Message>
+</Protocol>

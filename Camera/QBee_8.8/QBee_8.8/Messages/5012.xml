@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<Message Key="5012" Name="Thermal Camera Lens Control #1 Command" NumberOfBytes="16">
+	<Field LogicalId="0" StartByte="0" NumberOfBytes="1" StartBit="0" NumberOfBits="2" Type="CHAR" Name="Data0" Description="" />
+	<Field LogicalId="1" StartByte="1" NumberOfBytes="1" StartBit="2" NumberOfBits="2" Type="CHAR" Name="Data1" Description="" />
+	<Field LogicalId="2" StartByte="2" NumberOfBytes="1" StartBit="0" NumberOfBits="2" Type="CHAR" Name="Data2" Description="" />
+	<Field LogicalId="3" StartByte="3" NumberOfBytes="1" StartBit="4" NumberOfBits="2" Type="CHAR" Name="Data3" Description="" />
+</Message>

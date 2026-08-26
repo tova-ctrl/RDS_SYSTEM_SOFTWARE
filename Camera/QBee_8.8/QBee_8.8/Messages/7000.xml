@@ -1,0 +1,9 @@
+<?xml version='1.0' encoding='utf-8'?>
+<Protocol>
+	<Message Key="7000" Name="Navigation Properties" NumberOfBytes="1" Protocol="Microcom">
+		<Field LogicalId="0" StartByte="0" NumberOfBytes="1" StartBit="0" NumberOfBits="2" Type="CHAR" Name="Platform Data Source" Description="Enables data position and velocity from platform. 0 - Disable. 1 - Enable" />
+		<Field LogicalId="1" StartByte="0" NumberOfBytes="1" StartBit="2" NumberOfBits="1" Type="BIT" Name="Use Platform Data" Description="Sets either to use platform data (if Platfrom Data source enabled). 0 - Disable. 1 - Enable" />
+		<Field LogicalId="2" StartByte="0" NumberOfBytes="1" StartBit="3" NumberOfBits="1" Type="BIT" Name="Navigation Type" ConvertType="NavigationType" Description="Sets navigation type from. 0 - Payload IMU. 1 - Base IMU + Encoders" />
+		<Field LogicalId="3" StartByte="0" NumberOfBytes="1" StartBit="4" NumberOfBits="1" Type="BIT" Name="Altitude Type" ConvertType="NavAltituteType" Description="Sets Altitude type. 0 - ellipsoid. 1 - mean sea level." />		
+	</Message>
+</Protocol>

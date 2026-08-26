@@ -1,0 +1,21 @@
+{
+  "permissions": {
+    "allow": [
+      "PowerShell(wsl --exec bash -c \"cd '/mnt/c/Projects/???????_?????/????_??????/ISM_Firmware' && rm -rf build && mkdir build && cd build && cmake .. -DCMAKE_BUILD_TYPE=Debug 2>&1 && make -j4 2>&1\")",
+      "PowerShell(wsl bash -c \"cd /home/tova/FCC_App/FCC_App && make 2>&1 | grep -E 'error|warning|Build OK'\")",
+      "PowerShell(wsl bash -c \"pkill -f fcc_app; sleep 1; echo done\")",
+      "PowerShell(wsl bash -c \"fuser -k 5201/tcp 2>&1; sleep 1; ss -tlnp | grep 5201\")",
+      "PowerShell(wsl bash -c \"fuser -k 5201/udp 2>&1; fuser -k 5201/tcp 2>&1; sleep 2; ss -ulnp | grep 5201; ss -tlnp | grep 5201\")",
+      "PowerShell(wsl bash -c \"kill -9 4999 2>&1; sleep 1; ss -ulnp | grep 5201\")",
+      "PowerShell(wsl bash -c \"ss -ulnp | grep 5201\")",
+      "PowerShell(wsl bash -c \"cp /mnt/c/Projects/???????_?????/????_??????/FCC_App/src/FccController.cpp /home/tova/FCC_App/FCC_App/src/FccController.cpp && cp /mnt/c/Projects/???????_?????/????_??????/FCC_App/src/EthernetServer.cpp /home/tova/FCC_App/FCC_App/src/EthernetServer.cpp && cd /home/tova/FCC_App/FCC_App && make 2>&1 | grep -E 'error|Build OK'\")"
+    ],
+    "additionalDirectories": [
+      "c:\\Projects\\ראיונות_עבודה\\אלפו_סיסטמס\\ISM_Firmware\\tests",
+      "c:\\Projects\\ראיונות_עבודה\\אלפו_סיסטמס\\ISM_Firmware",
+      "c:\\Projects\\ראיונות_עבודה\\אלפו_סיסטמס\\FCC_App\\include",
+      "c:\\Projects\\ראיונות_עבודה\\אלפו_סיסטמס\\FCC_App\\src",
+      "c:\\Projects\\ראיונות_עבודה\\אלפו_סיסטמס\\FCC_App"
+    ]
+  }
+}

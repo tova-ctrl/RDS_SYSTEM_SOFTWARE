@@ -1,0 +1,10 @@
+<?xml version='1.0' encoding='utf-8'?>
+<Protocol>
+	<Message Key="20000" Name="Log Record Command" NumberOfBytes="21" Protocol="Microcom">
+		<Field LogicalId="0" StartByte="0" NumberOfBytes="1" StartBit="0" NumberOfBits="1" Type="BIT" Name="Enable" Description="Enables/Disables systerm logging" />
+		<Field LogicalId="1" StartByte="0" NumberOfBytes="1" StartBit="1" NumberOfBits="1" Type="BIT" Name="Error Level" Description="Enables/Disables Error Level" />
+		<Field LogicalId="2" StartByte="0" NumberOfBytes="1" StartBit="2" NumberOfBits="1" Type="BIT" Name="Info Level" Description="Enables/Disables Info Level" />
+		<Field LogicalId="3" StartByte="0" NumberOfBytes="1" StartBit="3" NumberOfBits="1" Type="BIT" Name="Debug Level" Description="Enables/Disables Debug Level" />
+		<Field LogicalId="4" StartByte="1" NumberOfBytes="20" StartBit="0" NumberOfBits="160" Type="FREETEXT" Name="Free Text" Description="Sets folder name to save log file" />
+	</Message>
+</Protocol>

@@ -1,0 +1,16 @@
+<?xml version='1.0' encoding='utf-8'?>
+<Protocol>
+	<Message Key="50501" Name="USB5734 Hub GPIO Report" NumberOfBytes="2" Protocol="Microcom">
+		<Field LogicalId="0" StartByte="0" NumberOfBytes="1" StartBit="1" NumberOfBits="1" Type="BIT" Name="GPIO 1 State" Description="" />
+		<Field LogicalId="1" StartByte="0" NumberOfBytes="1" StartBit="2" NumberOfBits="1" Type="BIT" Name="GPIO 2 State" Description="" />
+		<Field LogicalId="2" StartByte="0" NumberOfBytes="1" StartBit="3" NumberOfBits="1" Type="BIT" Name="GPIO 3 State" Description="" />
+		<Field LogicalId="3" StartByte="0" NumberOfBytes="1" StartBit="4" NumberOfBits="1" Type="BIT" Name="GPIO 4 State" Description="" />
+		<Field LogicalId="4" StartByte="0" NumberOfBytes="1" StartBit="5" NumberOfBits="1" Type="BIT" Name="GPIO 5 State" Description="" />
+		<Field LogicalId="5" StartByte="0" NumberOfBytes="1" StartBit="6" NumberOfBits="1" Type="BIT" Name="GPIO 6 State" Description="" />
+		<Field LogicalId="6" StartByte="0" NumberOfBytes="1" StartBit="7" NumberOfBits="1" Type="BIT" Name="GPIO 7 State" Description="" />
+		<Field LogicalId="7" StartByte="1" NumberOfBytes="1" StartBit="0" NumberOfBits="1" Type="BIT" Name="GPIO 8 State" Description="" />
+		<Field LogicalId="8" StartByte="1" NumberOfBytes="1" StartBit="1" NumberOfBits="1" Type="BIT" Name="GPIO 9 State" Description="" />
+		<Field LogicalId="9" StartByte="1" NumberOfBytes="1" StartBit="2" NumberOfBits="1" Type="BIT" Name="GPIO 10 State" Description="" />
+		<Field LogicalId="10" StartByte="1" NumberOfBytes="1" StartBit="3" NumberOfBits="1" Type="BIT" Name="GPIO 11 State" Description="" />
+	</Message>
+</Protocol>

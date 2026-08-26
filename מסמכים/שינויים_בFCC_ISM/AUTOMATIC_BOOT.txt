@@ -1,0 +1,11 @@
+cd FCC_App/scripts
+chmod +x install_service.sh
+sudo ./install_service.sh
+
+
+journalctl -u fcc_app -f       # לצפות בלוג
+
+sudo systemctl status fcc_app     # מצב נוכחי
+sudo systemctl restart fcc_app    # אחרי בנייה מחדש מהקוד
+sudo systemctl stop fcc_app       # עצירה זמנית
+

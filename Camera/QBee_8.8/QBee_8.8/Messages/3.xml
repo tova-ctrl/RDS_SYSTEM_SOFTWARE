@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<Message Key="3" Name="Error Message" NumberOfBytes="8">
+	<Field LogicalId="0" StartByte="0" NumberOfBytes="2" StartBit="0" NumberOfBits="12" Type="UINT" Name="Packet ID" PermittedValue="[ 0 ÷ 4095 ]" Description="" />
+	<Field LogicalId="1" StartByte="2" NumberOfBytes="2" StartBit="0" NumberOfBits="16" Type="USHORT" Name="Key ID" PermittedValue="[ 0 ÷ 32767 ]" Description="" />
+	<Field LogicalId="2" StartByte="4" NumberOfBytes="1" StartBit="0" NumberOfBits="8" Type="UCHAR" Name="Error Code" ConvertType="TErrorCode" Description="" />
+	<Field LogicalId="3" StartByte="5" NumberOfBytes="1" StartBit="0" NumberOfBits="8" Type="UCHAR" Name="Error Data" ConvertType="TErrorDataContainer" ConvertLookupId="2" Description="" />
+</Message>

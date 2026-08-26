@@ -1,0 +1,25 @@
+<?xml version='1.0' encoding='utf-8'?>
+<Protocol>
+	<Message Key="20753" Name="Calibration Tables" NumberOfBytes="16" Protocol="Microcom">
+		<Field LogicalId="0" StartByte="0" NumberOfBytes="1" StartBit="0" NumberOfBits="8" Type="CHAR" Name="Table Number" Description="" />
+		<Field LogicalId="1" StartByte="1" NumberOfBytes="1" StartBit="0" NumberOfBits="8" Type="CHAR" Name="Command" Description="" />
+		<Field LogicalId="2" StartByte="2" NumberOfBytes="1" StartBit="0" NumberOfBits="8" Type="CHAR" Name="Total Rows" Description="" />
+		<Field LogicalId="3" StartByte="3" NumberOfBytes="2" StartBit="0" NumberOfBits="16" Type="INT" Name="Header" Description="" />
+		<Field LogicalId="4" StartByte="5" NumberOfBytes="2" StartBit="0" NumberOfBits="16" Type="INT" Name="PosX" Description="" />
+		<Field LogicalId="5" StartByte="7" NumberOfBytes="2" StartBit="0" NumberOfBits="16" Type="INT" Name="PosY" Description="" />
+		<Field LogicalId="6" StartByte="9" NumberOfBytes="1" StartBit="0" NumberOfBits="8" Type="CHAR" Name="Data8" Description="" />
+		<Field LogicalId="7" StartByte="10" NumberOfBytes="2" StartBit="0" NumberOfBits="16" Type="INT" Name="Data16" Description="" />
+		<Field LogicalId="8" StartByte="12" NumberOfBytes="4" StartBit="0" NumberOfBits="32" Type="LONG" Name="Data32" Description="" />
+	</Message>
+	<Message Key="20753" Name="Calibration Tables" NumberOfBytes="16" Protocol="Generic">
+		<Field LogicalId="0" StartByte="0" NumberOfBytes="1" StartBit="0" NumberOfBits="8" Type="CHAR" Name="Table Number" Description="" />
+		<Field LogicalId="1" StartByte="1" NumberOfBytes="1" StartBit="0" NumberOfBits="8" Type="CHAR" Name="Command" Description="" />
+		<Field LogicalId="2" StartByte="2" NumberOfBytes="1" StartBit="0" NumberOfBits="8" Type="CHAR" Name="Total Rows" Description="" />
+		<Field LogicalId="3" StartByte="3" NumberOfBytes="2" StartBit="0" NumberOfBits="16" Type="INT" Name="Header" Description="" />
+		<Field LogicalId="4" StartByte="5" NumberOfBytes="2" StartBit="0" NumberOfBits="16" Type="INT" Name="PosX" Description="" />
+		<Field LogicalId="5" StartByte="7" NumberOfBytes="2" StartBit="0" NumberOfBits="16" Type="INT" Name="PosY" Description="" />
+		<Field LogicalId="6" StartByte="9" NumberOfBytes="1" StartBit="0" NumberOfBits="8" Type="CHAR" Name="Data8" Description="" />
+		<Field LogicalId="7" StartByte="10" NumberOfBytes="2" StartBit="0" NumberOfBits="16" Type="INT" Name="Data16" Description="" />
+		<Field LogicalId="8" StartByte="12" NumberOfBytes="4" StartBit="0" NumberOfBits="32" Type="LONG" Name="Data32" Description="" />
+	</Message>
+</Protocol>

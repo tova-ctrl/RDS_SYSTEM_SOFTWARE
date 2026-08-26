@@ -1,0 +1,18 @@
+<?xml version='1.0' encoding='utf-8'?>
+<Protocol>
+	<Message Key="36513" Name="Tracker Controls Report" NumberOfBytes="8" Protocol="Generic">
+		<Field LogicalId="0" StartByte="0" NumberOfBytes="1" StartBit="4" NumberOfBits="1" Type="BIT" Name="Search Enable" Description="" />
+		<Field LogicalId="1" StartByte="0" NumberOfBytes="1" StartBit="5" NumberOfBits="1" Type="BIT" Name="Offset Enable" Description="" />
+		<Field LogicalId="2" StartByte="0" NumberOfBytes="1" StartBit="6" NumberOfBits="1" Type="BIT" Name="Retrack" Description="" />
+		<Field LogicalId="3" StartByte="0" NumberOfBytes="1" StartBit="7" NumberOfBits="1" Type="BIT" Name="Adjust Enable" Description="" />
+		<Field LogicalId="4" StartByte="1" NumberOfBytes="1" StartBit="0" NumberOfBits="1" Type="BIT" Name="nertial Offset Enable" Description="" />
+		<Field LogicalId="5" StartByte="1" NumberOfBytes="1" StartBit="4" NumberOfBits="4" Type="UINT" Name="Movement Control Function" ConvertType="MovementControlFunction" Description="" />
+		<Field LogicalId="6" StartByte="4" NumberOfBytes="2" StartBit="0" NumberOfBits="16" Type="SHORT" Name="Movement command X" PermittedValue="[ -1000 ÷ + 1000 ]" Description="" />
+		<Field LogicalId="7" StartByte="6" NumberOfBytes="2" StartBit="0" NumberOfBits="16" Type="SHORT" Name="Movement command Y" PermittedValue="[ -32500 ÷ + 32500 ]" Description="" />
+	</Message>
+	<Message Key="36513" Name="Tracker Adjust Controls Report" NumberOfBytes="5" Protocol="Microcom">
+		<Field LogicalId="0" StartByte="0" NumberOfBytes="1" StartBit="0" NumberOfBits="1" Type="BIT" Name="Adjust Enable" Description="Gets if adjust function is enabled/disabled" />
+		<Field LogicalId="1" StartByte="1" NumberOfBytes="2" StartBit="0" NumberOfBits="16" Type="SHORT" Name="Movement X" Description="Returns provided adjust X movement" />
+		<Field LogicalId="2" StartByte="3" NumberOfBytes="2" StartBit="0" NumberOfBits="16" Type="SHORT" Name="Movement Y" Description="Returns provided adjust Y movement" />
+	</Message>
+</Protocol>

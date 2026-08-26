@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<Protocol>
+	<Message Key="8450" Name="Designator" NumberOfBytes="4" Protocol="Microcom">
+		<Field LogicalId="0" StartByte="0" NumberOfBytes="1" StartBit="0" NumberOfBits="1" Type="BIT" Name="Power" Description="Sets Designator Power 0 - Off. 1 - On" />
+		<Field LogicalId="1" StartByte="1" NumberOfBytes="1" StartBit="0" NumberOfBits="1" Type="BIT" Name="Arm" Description="Sets Designator Arm 0 - Off. 1 - On" />
+	</Message>
+</Protocol>

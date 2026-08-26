@@ -1,0 +1,13 @@
+<?xml version='1.0' encoding='utf-8'?>
+<Protocol>
+	<Message Key="5115" Name="DTV Camera Minimum Control Command" NumberOfBytes="16" Protocol="Generic">
+		<Field LogicalId="0" StartByte="0" NumberOfBytes="1" StartBit="0" NumberOfBits="4" Type="UINT" Name="Camera" ConvertType="Camera" DefaultValue="2" Description="" />
+		<Field LogicalId="1" StartByte="1" NumberOfBytes="1" StartBit="0" NumberOfBits="8" Type="UCHAR" Name="Mode" ConvertType="TDayCameraModes" DefaultValue="0" Description="" />
+		<Field LogicalId="2" StartByte="0" NumberOfBytes="1" StartBit="4" NumberOfBits="1" Type="BIT" Name="Cooler Inhibit" DefaultValue="0" Description="" />
+		<Field LogicalId="3" StartByte="4" NumberOfBytes="1" StartBit="0" NumberOfBits="2" Type="UINT" Name="Gain Change" Description="" />
+		<Field LogicalId="4" StartByte="4" NumberOfBytes="1" StartBit="2" NumberOfBits="2" Type="UINT" Name="Level Change" Description="" />
+		<Field LogicalId="5" StartByte="4" NumberOfBytes="1" StartBit="5" NumberOfBits="1" Type="BIT" Name="Freeze" DefaultValue="0" Description="" />
+		<Field LogicalId="6" StartByte="10" NumberOfBytes="1" StartBit="0" NumberOfBits="1" Type="BIT" Name="AGC" DefaultValue="1" Description="" />
+		<Field LogicalId="7" StartByte="2" NumberOfBytes="1" StartBit="2" NumberOfBits="2" Type="UINT" Name="Sharpness" DefaultValue="1" ConvertType="GenericSharpness" Description="" />	
+	</Message>
+</Protocol>

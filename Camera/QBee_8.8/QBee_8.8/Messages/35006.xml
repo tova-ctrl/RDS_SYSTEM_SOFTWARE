@@ -1,0 +1,21 @@
+<?xml version='1.0' encoding='utf-8'?>
+<Protocol>
+	<Message Key="35006" Name="Thermal Camera Image Processing #1 Report" NumberOfBytes="16" Protocol="Generic">
+		<Field LogicalId="0" StartByte="0" NumberOfBytes="1" StartBit="0" NumberOfBits="2" Type="UINT" Name="Gain Change" ConvertType="TIGainChange" Description="" />
+		<Field LogicalId="1" StartByte="0" NumberOfBytes="1" StartBit="2" NumberOfBits="2" Type="UINT" Name="Level Change" ConvertType="TILevelChange" Description="" />
+		<Field LogicalId="2" StartByte="0" NumberOfBytes="1" StartBit="4" NumberOfBits="1" Type="BIT" Name="AGC" DefaultValue="1" Description="" />
+		<Field LogicalId="3" StartByte="0" NumberOfBytes="1" StartBit="5" NumberOfBits="1" Type="BIT" Name="Freeze" Description="" />
+		<Field LogicalId="4" StartByte="0" NumberOfBytes="1" StartBit="6" NumberOfBits="1" Type="BIT" Name="Polarity" DefaultValue="1" Description="" />
+		<Field LogicalId="5" StartByte="1" NumberOfBytes="1" StartBit="0" NumberOfBits="8" Type="UCHAR" Name="Image Type" ConvertType="ImageType" Description="" />
+		<Field LogicalId="6" StartByte="2" NumberOfBytes="1" StartBit="0" NumberOfBits="3" Type="UINT" Name="AGC ROI" ConvertType="AGCROI" DefaultValue="4" Description="" />
+		<Field LogicalId="7" StartByte="2" NumberOfBytes="1" StartBit="3" NumberOfBits="2" Type="UINT" Name="AGC Mode" ConvertType="TIAGCMode" Description="" />
+		<Field LogicalId="8" StartByte="4" NumberOfBytes="2" StartBit="0" NumberOfBits="16" Type="USHORT" Name="Manual Gain" PermittedValue="[ 0 ÷ 65535 ]" Description="" />
+		<Field LogicalId="9" StartByte="6" NumberOfBytes="2" StartBit="0" NumberOfBits="16" Type="USHORT" Name="Manual Level" PermittedValue="[ 0 ÷ 65535 ]" Description="" />
+		<Field LogicalId="10" StartByte="8" NumberOfBytes="1" StartBit="0" NumberOfBits="8" Type="UCHAR" Name="AGC Level Setpoint" DefaultValue="128" PermittedValue="[ 0 ÷ 255 ]" Description="" />
+		<Field LogicalId="11" StartByte="9" NumberOfBytes="1" StartBit="0" NumberOfBits="8" Type="UCHAR" Name="AGC Gain Setpoint" DefaultValue="32" PermittedValue="[ 0 ÷ 255 ]" Description="" />
+		<Field LogicalId="12" StartByte="10" NumberOfBytes="2" StartBit="0" NumberOfBits="16" Type="USHORT" Name="Image Average Report" PermittedValue="[ 0 ÷ 65535 ]" Description="" />
+		<Field LogicalId="13" StartByte="12" NumberOfBytes="2" StartBit="0" NumberOfBits="16" Type="USHORT" Name="Image Stdev Report" PermittedValue="[ 0 ÷ 65535 ]" Description="" />
+		<Field LogicalId="14" StartByte="2" NumberOfBytes="1" StartBit="7" NumberOfBits="1" Type="UINT" Name="Color Video" DefaultValue="0" Description="" />
+		<Field LogicalId="15" StartByte="3" NumberOfBytes="1" StartBit="0" NumberOfBits="2" Type="UINT" Name="Sharpness" DefaultValue="0" ConvertType="SHARPNESS" Description="" />
+	</Message>
+</Protocol>

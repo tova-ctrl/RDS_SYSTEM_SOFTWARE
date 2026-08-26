@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<Protocol>
+	<Message Key="50754" Name="Flir Lines Wiper Report" NumberOfBytes="16" Protocol="Generic">
+		<Field LogicalId="0" StartByte="0" NumberOfBytes="1" StartBit="0" NumberOfBits="8" Type="CHAR" Name="Active Status" Description="" />
+		<Field LogicalId="1" StartByte="1" NumberOfBytes="2" StartBit="0" NumberOfBits="16" Type="INT" Name="Total Bad Lines" Description="" />
+	</Message>
+</Protocol>

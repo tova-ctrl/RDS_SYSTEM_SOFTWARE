@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<SerialConfigData xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <PortName>COM4</PortName>
+  <BaudRate>115200</BaudRate>
+  <Parity>None</Parity>
+  <DataBits>8</DataBits>
+  <StopBits>One</StopBits>
+  <Interval>20</Interval>
+  <DestinationIP>1.1.1.3</DestinationIP>
+  <destPort>1024</destPort>
+  <localPort>1023</localPort>
+  <ethProtocol>0</ethProtocol>
+  <DelayTx>100</DelayTx>
+  <dataLenDivide>4</dataLenDivide>
+  <dataLenDivideCheckBox>1</dataLenDivideCheckBox>
+  <WhoAmI>HOST</WhoAmI>
+  <VideoIP>1.1.1.4</VideoIP>
+  <VideoPort>55103</VideoPort>
+  <VideoIP2>192.168.1.102</VideoIP2>
+  <VideoPort2>51001</VideoPort2>
+  <VideoIP3>192.168.1.102</VideoIP3>
+  <VideoPort3>51002</VideoPort3>
+  <payloadProtocol>0</payloadProtocol> <!-- 0 - Generic Comm | 1 - MicroCom -->
+  <projectName>Default</projectName>
+</SerialConfigData>

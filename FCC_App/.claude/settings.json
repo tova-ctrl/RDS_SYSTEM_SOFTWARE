@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(//c/Projects/RDS_SYSTEM_SOFTWARE/ISM_STM32/**)",
+      "PowerShell(Set-Location \"C:\\\\Projects\\\\RDS_SYSTEM_SOFTWARE\\\\RDS_WebApp\\\\RDS_WebApp\"; Start-Process -FilePath \"dotnet\" -ArgumentList \"run\",\"--no-build\" -RedirectStandardOutput \"$env:TEMP\\\\rds_stdout.log\" -RedirectStandardError \"$env:TEMP\\\\rds_stderr.log\" -PassThru | Select-Object -ExpandProperty Id)"
+    ],
+    "additionalDirectories": [
+      "C:\\Projects\\RDS_SYSTEM_SOFTWARE\\RDS_WebApp\\RDS_WebApp"
+    ]
+  }
+}

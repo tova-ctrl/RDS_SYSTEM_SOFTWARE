@@ -1,0 +1,11 @@
+cd ~/FCC_App
+rm -rf build && mkdir build && cd build
+cmake ..
+make -j$(nproc)
+
+
+# On Jetson
+cd ~/FCC_App
+cd projects/rds_system/FCC_App/
+make
+./build/fcc_app eth:192.168.55.3 192.168.55.2 5200

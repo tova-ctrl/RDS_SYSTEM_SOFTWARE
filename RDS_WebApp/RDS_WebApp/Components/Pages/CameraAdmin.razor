@@ -1,0 +1,81 @@
+@page "/camera-admin"
+@rendermode InteractiveServer
+@inject RDS_WebApp.Services.ConfigPersistenceService cfg
+
+<div style="background-color:#212529;padding:20px;border-radius:16px;
+            box-shadow:inset 0 0 20px #000, 0 10px 30px rgba(0,0,0,0.7);
+            border:4px solid #15181b;display:flex;flex-direction:column;
+            flex:1;min-height:0;box-sizing:border-box;">
+
+    <!-- Page title + toolbar -->
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
+        <div style="display:flex;align-items:baseline;gap:10px;">
+            <span style="font-size:1rem;font-weight:700;color:#d1b06a;font-family:Consolas,monospace;letter-spacing:0.12em;">
+                CAMERA ADMIN — MICROACCESS
+            </span>
+            <span style="font-size:0.7rem;color:#7b8794;font-family:Consolas,monospace;">
+                @_dashboardUrl
+            </span>
+        </div>
+        <div style="display:flex;gap:6px;">
+            <button style="@BtnStyle" @onclick="Reload">RELOAD</button>
+            <a href="@_dashboardUrl" target="_blank" rel="noopener" style="@LinkBtnStyle">OPEN IN NEW TAB ↗</a>
+        </div>
+    </div>
+
+    <!-- The vendor's own admin dashboard, served directly by the camera —
+         embedded as-is rather than reimplemented, since it's the camera's own
+         live source of truth (Network/Streams/Videos/System/Admin/Updates —
+         see [[project-state]] memory). Confirmed the camera's dashboard sends
+         no X-Frame-Options/CSP frame-ancestors header, so framing isn't
+         blocked; both this app and the camera dashboard are plain HTTP on the
+         local link, so there's no mixed-content block either — if either of
+         those ever changes (camera firmware update, or this app moving to
+         HTTPS), this iframe will need the "open in new tab" fallback above
+         instead. -->
+    <div style="flex:1;min-height:0;border:1px solid #2a2d32;border-radius:8px;overflow:hidden;background:#0a0c10;">
+        @if (_ip == null)
+        {
+            <div style="height:100%;display:flex;align-items:center;justify-content:center;color:#7b8794;font-family:Consolas,monospace;font-size:0.8rem;">
+                LOADING CONFIG...
+            </div>
+        }
+        else
+        {
+            <iframe @key="_reloadKey" src="@_dashboardUrl" title="Camera MicroAccess dashboard"
+                    style="width:100%;height:100%;border:0;display:block;"></iframe>
+        }
+    </div>
+</div>
+
+@code {
+    private string? _ip;
+    private int _reloadKey = 0;
+    private string _dashboardUrl => $"http://{_ip}:8080/home";
+
+    private const string BtnStyle =
+        "font-family:Consolas,monospace;font-size:0.7rem;font-weight:700;letter-spacing:0.06em;" +
+        "color:#d0d0d0;background:#2a2d32;border:1px solid #3b3f45;border-radius:4px;padding:5px 12px;cursor:pointer;";
+
+    private const string LinkBtnStyle =
+        "font-family:Consolas,monospace;font-size:0.7rem;font-weight:700;letter-spacing:0.06em;" +
+        "color:#151718;background:#d1b06a;border:1px solid #d1b06a;border-radius:4px;padding:5px 12px;" +
+        "text-decoration:none;display:inline-flex;align-items:center;";
+
+    protected override async Task OnInitializedAsync()
+    {
+        var config = await cfg.LoadAsync();
+        _ip = config.CamCtrlIp;
+    }
+
+    private async Task Reload()
+    {
+        // Re-read in case the operator changed the camera's control IP on the
+        // NETWORK tab since this page loaded, then force the iframe to a fresh
+        // navigation (changing @key remounts the element — a src reassignment
+        // alone wouldn't reload if the URL string is unchanged).
+        var config = await cfg.LoadAsync();
+        _ip = config.CamCtrlIp;
+        _reloadKey++;
+    }
+}

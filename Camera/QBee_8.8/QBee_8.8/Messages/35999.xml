@@ -1,0 +1,38 @@
+<?xml version='1.0' encoding='utf-8'?>
+<Protocol>
+	<Message Key="35999" Name="Sensors BIT Status" NumberOfBytes="16" Protocol="Generic">
+		<Field LogicalId="0" StartByte="0" NumberOfBytes="1" StartBit="0" NumberOfBits="1" Type="BIT" Name="DTV Comm Fail" Description="Day Time Sensor Communication Error" />
+		<Field LogicalId="1" StartByte="0" NumberOfBytes="1" StartBit="1" NumberOfBits="1" Type="BIT" Name="DTV INIT Fail" Description="Day Time Sensor Initialization Error" />
+		<Field LogicalId="2" StartByte="0" NumberOfBytes="1" StartBit="2" NumberOfBits="1" Type="BIT" Name="DTV Video Fail" Description="" />
+		<Field LogicalId="3" StartByte="0" NumberOfBytes="1" StartBit="3" NumberOfBits="1" Type="BIT" Name="DTV Focus Fail" Description="Day Time Sensor Focus Error" />	
+		<Field LogicalId="4" StartByte="0" NumberOfBytes="1" StartBit="4" NumberOfBits="1" Type="BIT" Name="DTV Zoom Fail" Description="Day Time Sensor Zoom Error" />
+		<Field LogicalId="5" StartByte="2" NumberOfBytes="1" StartBit="0" NumberOfBits="1" Type="BIT" Name="TI Comm Fail" Description="Thermal Image Sensor Communication Error" />
+		<Field LogicalId="6" StartByte="2" NumberOfBytes="1" StartBit="1" NumberOfBits="1" Type="BIT" Name="TI Zoom Fail" Description="Thermal Image Sensor Zoom Error" />
+		<Field LogicalId="7" StartByte="2" NumberOfBytes="1" StartBit="2" NumberOfBits="1" Type="BIT" Name="TI Focus Fail" Description="Thermal Image Sensor Focus Error" />
+		<Field LogicalId="8" StartByte="2" NumberOfBytes="1" StartBit="3" NumberOfBits="1" Type="BIT" Name="TI NUC Fail" Description="Thermal Image Sensor NUC Error" />
+		<Field LogicalId="9" StartByte="2" NumberOfBytes="1" StartBit="4" NumberOfBits="1" Type="BIT" Name="TI Flag Fail" Description="Thermal Image Sensor Flag Error" />
+		<Field LogicalId="10" StartByte="2" NumberOfBytes="1" StartBit="5" NumberOfBits="1" Type="BIT" Name="TI Video Fail" Description="Thermal Image Sensor Video Error" />
+		<Field LogicalId="11" StartByte="2" NumberOfBytes="1" StartBit="6" NumberOfBits="1" Type="BIT" Name="TI Tables Fail" Description="Thermal Image Sensor Tables Error" />
+		<Field LogicalId="12" StartByte="2" NumberOfBytes="1" StartBit="7" NumberOfBits="1" Type="BIT" Name="TI Detector Hot" Description="Thermal Image Sensor Communication Temperature Warning" />
+		<Field LogicalId="13" StartByte="15" NumberOfBytes="1" StartBit="6" NumberOfBits="1" Type="BIT" Name="uVSP Int PWR Fail" Description="uVSP Internal Power Error" />
+		<Field LogicalId="14" StartByte="15" NumberOfBytes="1" StartBit="7" NumberOfBits="1" Type="BIT" Name="uVSP Comm Fail" Description="uVSP Communication Error" />
+	</Message>
+	
+	<Message Key="35999" Name="Cameras BIT Status" NumberOfBytes="8" Protocol="Microcom">
+		<Field LogicalId="0" StartByte="0" NumberOfBytes="1" StartBit="0" NumberOfBits="1" Type="BIT" Name="DTV Narrow Active Error" Description="Gets DTV Narrow Active Error BIT" />
+		<Field LogicalId="1" StartByte="0" NumberOfBytes="1" StartBit="1" NumberOfBits="1" Type="BIT" Name="DTV Narrow Sticky Error" Description="Gets DTV Narrow Sticky Error BIT" />
+		<Field LogicalId="2" StartByte="0" NumberOfBytes="1" StartBit="2" NumberOfBits="1" Type="BIT" Name="DTV Narrow Init Error" Description="Gets DTV Narrow Init Error BIT" />
+		<Field LogicalId="3" StartByte="1" NumberOfBytes="1" StartBit="0" NumberOfBits="8" Type="UCHAR" Name="DTV Narrow Video Errors Counter" Description="Gets DTV Narrow Video Errors Counter BIT" />
+		<Field LogicalId="4" StartByte="2" NumberOfBytes="1" StartBit="0" NumberOfBits="1" Type="BIT" Name="DTV Wide Active Error" Description="Gets DTV Wide Active Error BIT" />
+		<Field LogicalId="5" StartByte="2" NumberOfBytes="1" StartBit="1" NumberOfBits="1" Type="BIT" Name="DTV Wide Sticky Error" Description="Gets DTV Wide Sticky Error BIT" />
+		<Field LogicalId="6" StartByte="2" NumberOfBytes="1" StartBit="2" NumberOfBits="1" Type="BIT" Name="DTV Wide Init Error" Description="Gets DTV Wide Init Error BIT" />
+		<Field LogicalId="7" StartByte="3" NumberOfBytes="1" StartBit="0" NumberOfBits="8" Type="UCHAR" Name="DTV Wide Video Errors Counter" Description="Gets DTV Wide Video Errors Counter BIT" />
+		<Field LogicalId="8" StartByte="4" NumberOfBytes="1" StartBit="0" NumberOfBits="1" Type="BIT" Name="TI Active Error" Description="Gets TI Active Error BIT" />
+		<Field LogicalId="9" StartByte="4" NumberOfBytes="1" StartBit="1" NumberOfBits="1" Type="BIT" Name="TI Sticky Error" Description="Gets TI Sticky Error BIT" />
+		<Field LogicalId="11" StartByte="4" NumberOfBytes="1" StartBit="2" NumberOfBits="1" Type="BIT" Name="TI Init Error" Description="Gets TI Init Error BIT" />
+		<Field LogicalId="12" StartByte="5" NumberOfBytes="1" StartBit="0" NumberOfBits="8" Type="UCHAR" Name="TI Video Errors Counter" Description="Gets TI Video Errors Counter BIT" />
+		<Field LogicalId="13" StartByte="6" NumberOfBytes="1" StartBit="0" NumberOfBits="1" Type="BIT" Name="USB Hub Active Error" Description="Gets USB Hub Active Error BIT" />
+		<Field LogicalId="14" StartByte="6" NumberOfBytes="1" StartBit="1" NumberOfBits="1" Type="BIT" Name="USB Hub Sticky Error" Description="Gets USB Hub Sticky Error BIT" />
+		<Field LogicalId="15" StartByte="6" NumberOfBytes="1" StartBit="2" NumberOfBits="1" Type="BIT" Name="USB Hub Init Error" Description="Gets USB Hub Init Error BIT" />	
+	</Message>
+</Protocol>

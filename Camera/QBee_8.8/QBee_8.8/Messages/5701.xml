@@ -1,0 +1,10 @@
+<?xml version='1.0' encoding='utf-8'?>
+<Protocol>
+	<Message Key="5701" Name="TI Camera Set FOV" NumberOfBytes="4" Protocol="Microcom">
+		<Field LogicalId="0" StartByte="0" NumberOfBytes="4" StartBit="0" NumberOfBits="16" Type="FLOAT" Name="Set FOV Command" Description="Sets TI Field Of View" />
+			</Message>
+</Protocol>
+
+
+		
+

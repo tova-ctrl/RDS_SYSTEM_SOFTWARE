@@ -1,0 +1,5 @@
+<?xml version='1.0' encoding='utf-8'?>
+<Message Key="35990" Name="?" NumberOfBytes="16">
+	<Field LogicalId="0" StartByte="0" NumberOfBytes="1" StartBit="0" NumberOfBits="4" Type="UINT" Name="Primary Video Channel Sensor" ConvertType="Camera" Description="" />
+	<Field LogicalId="1" StartByte="11" NumberOfBytes="1" StartBit="0" NumberOfBits="1" Type="BIT" Name="FOV Synchronization mode" Description="" />
+</Message>

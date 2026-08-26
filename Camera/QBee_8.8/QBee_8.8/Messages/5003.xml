@@ -1,0 +1,21 @@
+<?xml version='1.0' encoding='utf-8'?>
+<Protocol>
+	<Message Key="5003" Name="Thermal Camera Control #1 Command" NumberOfBytes="16" Protocol="Generic">
+		<Field LogicalId="0" StartByte="0" NumberOfBytes="1" StartBit="0" NumberOfBits="1" Type="BIT" Name="Auto Sensitivity Table" DefaultValue="1" Description="" />
+		<Field LogicalId="1" StartByte="0" NumberOfBytes="1" StartBit="1" NumberOfBits="3" Type="UINT" Name="Sensitivity" PermittedValue="[ 0 ÷ 2 ]" Description="" />
+		<Field LogicalId="2" StartByte="0" NumberOfBytes="1" StartBit="4" NumberOfBits="1" Type="BIT" Name="NUC Bypass" Description="" />
+		<Field LogicalId="3" StartByte="0" NumberOfBytes="1" StartBit="5" NumberOfBits="1" Type="BIT" Name="BPR Bypass" Description="" />
+		<Field LogicalId="4" StartByte="0" NumberOfBytes="1" StartBit="6" NumberOfBits="1" Type="BIT" Name="BPR Table Enable" Description="" />
+		<Field LogicalId="5" StartByte="0" NumberOfBytes="1" StartBit="7" NumberOfBits="1" Type="BIT" Name="Dynamic BPR Bypass" Description="" />
+		
+		<Field LogicalId="6" StartByte="1" NumberOfBytes="1" StartBit="1" NumberOfBits="1" Type="BIT" Name="FLAG Position Control" Description="" />
+		<Field LogicalId="7" StartByte="1" NumberOfBytes="1" StartBit="2" NumberOfBits="1" Type="BIT" Name="Cooler StandBy" Description="" />
+		<Field LogicalId="8" StartByte="1" NumberOfBytes="1" StartBit="3" NumberOfBits="1" Type="BIT" Name="Cooler Inhibit" Description="" />
+		<Field LogicalId="9" StartByte="1" NumberOfBytes="1" StartBit="4" NumberOfBits="2" Type="BIT" Name="Scenery Calib Type" Description="" />
+		
+		<Field LogicalId="10" StartByte="4" NumberOfBytes="1" StartBit="0" NumberOfBits="2" Type="UINT" Name="Calibration Type" ConvertType="CalibrationType" Description="" />
+		<Field LogicalId="11" StartByte="4" NumberOfBytes="1" StartBit="2" NumberOfBits="2" Type="UINT" Name="Calibration Algorithm" ConvertType="CalibrationAlgorithm" Description="" />
+		<Field LogicalId="12" StartByte="4" NumberOfBytes="1" StartBit="4" NumberOfBits="1" Type="BIT" Name="External Black Body Status" Description="" />
+		<Field LogicalId="13" StartByte="4" NumberOfBytes="1" StartBit="6" NumberOfBits="2" Type="UINT" Name="Calibration Cycle" ConvertType="CyclicCalib" Description="" />
+	</Message>
+</Protocol>

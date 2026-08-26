@@ -1,0 +1,8 @@
+<?xml version='1.0' encoding='utf-8'?>
+<Protocol>
+	<Message Key="1000" Name="System Init" NumberOfBytes="0" Protocol="Microcom" Description="Initialize the system - Gimbals and Sensors. This process takes few seconds">
+	</Message>
+	
+	<Message Key="1000" Name="INIT" NumberOfBytes="0" Description="Initialize Device" Protocol="Generic">
+	</Message>
+</Protocol>

@@ -1,0 +1,11 @@
+<?xml version='1.0' encoding='utf-8'?>
+<Protocol>
+	<Message Key="35104" Name="Day Camera Lens Control #1 Report" NumberOfBytes="16" Protocol="Generic">
+		<Field LogicalId="0" StartByte="0" NumberOfBytes="1" StartBit="0" NumberOfBits="2" Type="UINT" Name="Zoom Change" ConvertType="ZoomChange" Description="" />
+		<Field LogicalId="1" StartByte="0" NumberOfBytes="1" StartBit="2" NumberOfBits="2" Type="UINT" Name="Discrete FOV" ConvertType="DiscreteFOV" Description="" />
+		<Field LogicalId="2" StartByte="2" NumberOfBytes="2" StartBit="0" NumberOfBits="16" Type="USHORT" Name="FOV" ConvertType="@Fov" Description="" />
+		<Field LogicalId="3" StartByte="12" NumberOfBytes="1" StartBit="0" NumberOfBits="8" Type="UCHAR" Name="Displayed FOV Percent" Description="" />
+		<Field LogicalId="4" StartByte="1" NumberOfBytes="1" StartBit="6" NumberOfBits="2" Type="UINT" Name="Iris Mode" ConvertType="IrisMode" Description="" />
+		<Field LogicalId="5" StartByte="1" NumberOfBytes="1" StartBit="4" NumberOfBits="2" Type="UINT" Name="Focus Mode" ConvertType="FocusMode" Description="" />
+	</Message>
+</Protocol>

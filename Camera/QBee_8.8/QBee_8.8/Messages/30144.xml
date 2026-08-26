@@ -1,0 +1,8 @@
+<?xml version='1.0' encoding='utf-8'?>
+<Message Key="30144" Name="Set/Get DATA Report" NumberOfBytes="16">
+	<Field LogicalId="0" StartByte="0" NumberOfBytes="4" StartBit="0" NumberOfBits="32" Type="ULONG" Name="Module ID" ConvertType="ModuleID" Description="" />
+	<Field LogicalId="1" StartByte="4" NumberOfBytes="1" StartBit="0" NumberOfBits="1" Type="BIT" Name="Set Data" Description="" />
+	<Field LogicalId="2" StartByte="5" NumberOfBytes="1" StartBit="0" NumberOfBits="8" Type="UCHAR" Name="Dail Data Type" ConvertType="DialDataType" Description="" />
+	<Field LogicalId="3" StartByte="6" NumberOfBytes="2" StartBit="0" NumberOfBits="16" Type="USHORT" Name="Dail Address" PermittedValue="[ 0 ÷ 65535 ]" Description="" />
+	<Field LogicalId="4" StartByte="8" NumberOfBytes="4" StartBit="0" NumberOfBits="32" Type="ULONG" Name="Dail Data" PermittedValue="[ 0 ÷ 4294967295 ]" Description="" />
+</Message>

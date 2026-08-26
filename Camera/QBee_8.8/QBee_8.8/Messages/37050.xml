@@ -1,0 +1,14 @@
+<?xml version='1.0' encoding='utf-8'?>
+<Protocol>
+	<Message Key="37050" Name="Navigation IMU Data" NumberOfBytes="35" Protocol="Microcom">
+		<Field LogicalId="0" StartByte="0" NumberOfBytes="8" StartBit="0" NumberOfBits="64" Type="LONGLONG" Name="IMU TimeTag" Description="Gets IMU Time Tag [GPS TOW uSec]" />
+		<Field LogicalId="0" StartByte="8" NumberOfBytes="4" StartBit="0" NumberOfBits="32" Type="LONG" Name="IMU X Rate" Description="Gets IMU X Rate [LSB:1urad/sec]" />
+		<Field LogicalId="0" StartByte="12" NumberOfBytes="4" StartBit="0" NumberOfBits="32" Type="LONG" Name="IMU Y Rate" Description="Gets IMU Y Rate [LSB:1urad/sec]" />
+		<Field LogicalId="0" StartByte="16" NumberOfBytes="4" StartBit="0" NumberOfBits="32" Type="LONG" Name="IMU Z Rate" Description="Gets IMU Z Rate [LSB:1urad/sec]" />
+		<Field LogicalId="0" StartByte="20" NumberOfBytes="4" StartBit="0" NumberOfBits="32" Type="LONG" Name="IMU X Acc" Description="Gets IMU X Acc [LSB:1uG]" />
+		<Field LogicalId="0" StartByte="24" NumberOfBytes="4" StartBit="0" NumberOfBits="32" Type="LONG" Name="IMU Y Acc" Description="Gets IMU Y Acc [LSB:1uG]" />
+		<Field LogicalId="0" StartByte="28" NumberOfBytes="4" StartBit="0" NumberOfBits="32" Type="LONG" Name="IMU Z Acc" Description="Gets IMU Z Acc [LSB:1uG]" />
+		<Field LogicalId="0" StartByte="32" NumberOfBytes="1" StartBit="0" NumberOfBits="8" Type="CHAR" Name="IMU Temperature" Description="Gets IMU Temperature [LSB:°C]" />
+		<Field LogicalId="0" StartByte="33" NumberOfBytes="2" StartBit="0" NumberOfBits="16" Type="SHORT" Name="IMU Status" Description="Gets IMU Status" />		
+	</Message>
+</Protocol>

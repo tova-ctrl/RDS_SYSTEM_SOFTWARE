@@ -1,0 +1,22 @@
+<?xml version='1.0' encoding='utf-8'?>
+<Protocol>
+	<Message Key="5015" Name="Thermal Camera Minimum Control Command" NumberOfBytes="16" Protocol="Generic">
+		<Field LogicalId="0" StartByte="0" NumberOfBytes="1" StartBit="0" NumberOfBits="4" Type="UINT" Name="Camera" ConvertType="Camera" DefaultValue="1" Description="" />
+		<Field LogicalId="1" StartByte="1" NumberOfBytes="1" StartBit="0" NumberOfBits="8" Type="UCHAR" Name="Mode" ConvertType="TThermalCameraModes" Description="" />
+		<Field LogicalId="2" StartByte="0" NumberOfBytes="1" StartBit="4" NumberOfBits="1" Type="BIT" Name="Cooler Inhibit" Description="" />	
+		<Field LogicalId="3" StartByte="2" NumberOfBytes="1" StartBit="0" NumberOfBits="2" Type="UINT" Name="Sensitivity Mode Selection" ConvertType="SensitivityModeSelection" Description="" />	
+		<Field LogicalId="4" StartByte="2" NumberOfBytes="1" StartBit="4" NumberOfBits="4" Type="UINT" Name="Sensitivity Table" ConvertType="SensitivityTable" Description="" />
+		<Field LogicalId="5" StartByte="3" NumberOfBytes="1" StartBit="0" NumberOfBits="2" Type="BIT" Name="AGC Mode" DefaultValue="1" Description="" />
+		<Field LogicalId="6" StartByte="3" NumberOfBytes="1" StartBit="2" NumberOfBits="3" Type="UINT" Name="AGC ROI" ConvertType="AGCROI" DefaultValue="7" Description="" />
+		<Field LogicalId="7" StartByte="4" NumberOfBytes="1" StartBit="0" NumberOfBits="2" Type="TIncDecButton" Name="Gain Change" Description="" />
+		<Field LogicalId="8" StartByte="4" NumberOfBytes="1" StartBit="2" NumberOfBits="2" Type="TIncDecButton" Name="Level Change" Description="" />
+		<Field LogicalId="9" StartByte="4" NumberOfBytes="1" StartBit="4" NumberOfBits="1" Type="BIT" Name="Polarity" DefaultValue="1" Description="" />
+		<Field LogicalId="10" StartByte="4" NumberOfBytes="1" StartBit="5" NumberOfBits="1" Type="BIT" Name="Freeze Image" Description="" />
+		<Field LogicalId="11" StartByte="4" NumberOfBytes="1" StartBit="6" NumberOfBits="2" Type="UINT" Name="Cyclic Calib" ConvertType="CyclicCalib" Description="" />
+		<Field LogicalId="12" StartByte="5" NumberOfBytes="1" StartBit="0" NumberOfBits="8" Type="UCHAR" Name="Image Type" ConvertType="ImageType" Description="" />
+		<Field LogicalId="13" StartByte="6" NumberOfBytes="2" StartBit="0" NumberOfBits="16" Type="UINT" Name="Calibration Type" ConvertType="CalibrationType" Description="" />
+		<Field LogicalId="14" StartByte="8" NumberOfBytes="2" StartBit="0" NumberOfBits="16" Type="UINT" Name="Calibration Algorithm" ConvertType="CalibrationAlgorithm" Description="" />
+		<Field LogicalId="15" StartByte="0" NumberOfBytes="1" StartBit="5" NumberOfBits="1" Type="BIT" Name="Color Video" Description="" />	
+		<Field LogicalId="16" StartByte="2" NumberOfBytes="1" StartBit="2" NumberOfBits="2" Type="UINT" Name="Sharpness" DefaultValue="1" ConvertType="GenericSharpness" Description="" />	
+	</Message>
+</Protocol>

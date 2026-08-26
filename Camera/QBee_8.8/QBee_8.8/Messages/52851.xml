@@ -1,0 +1,13 @@
+<?xml version='1.0' encoding='utf-8'?>
+<Protocol>
+	<Message Key="52851" Name="Video Channel Report" NumberOfBytes="4" Protocol="Microcom">
+		<Field LogicalId="0" StartByte="0" NumberOfBytes="1" StartBit="0" NumberOfBits="8" Type="UCHAR" Name="Primary Video Channel" ConvertType="Camera" DefaultValue="0" Description="Selecet primary sensors DTV/TI" />	
+		<Field LogicalId="1" StartByte="1" NumberOfBytes="1" StartBit="0" NumberOfBits="1" Type="BIT" Name="FOV Synchronization Mode" DefaultValue="0" Description="Enables/Disables sensors sync - secondary sensor changes its FOV according primary's FOV" />
+		<Field LogicalId="2" StartByte="1" NumberOfBytes="1" StartBit="1" NumberOfBits="1" Type="BIT" Name="Image Stabilization Enable" Description="Enables/Disables Image Stabilization" />
+		<Field LogicalId="3" StartByte="1" NumberOfBytes="1" StartBit="2" NumberOfBits="1" Type="BIT" Name="Image Stabilization Method" Description="Sets image stabilization method. 0 - Image based. 1 - IMU Based" />
+		<Field LogicalId="4" StartByte="2" NumberOfBytes="1" StartBit="0" NumberOfBits="1" Type="BIT" Name="OSD Disabled" Description="Disables/Enables OSD layer (Set '1' to disable)" />
+		<Field LogicalId="5" StartByte="2" NumberOfBytes="1" StartBit="1" NumberOfBits="1" Type="BIT" Name="PIP Enable" Description="Enables/Disables streaming secondary sensor as Picture-In-Picture on video stream" />
+		<Field LogicalId="6" StartByte="2" NumberOfBytes="1" StartBit="3" NumberOfBits="1" Type="BIT" Name="Histogram Enable" Description="Gets Enables/Disables Histogram on video stream" />
+		<Field LogicalId="7" StartByte="3" NumberOfBytes="1" StartBit="0" NumberOfBits="8" Type="CHAR" Name="Font Color" ConvertType="FontColor" Description="Sets OSD font color" />
+	</Message>
+</Protocol>

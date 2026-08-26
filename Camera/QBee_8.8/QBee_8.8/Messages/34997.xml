@@ -1,0 +1,26 @@
+<?xml version='1.0' encoding='utf-8'?>
+<Protocol>
+	<Message Key="34997" Name="GCU Measurements" NumberOfBytes="16" Protocol="Microcom">
+		<Field LogicalId="0" StartByte="0" NumberOfBytes="2" StartBit="0" NumberOfBits="16" Type="INT" Name="IMU Temperature" Description="" />
+		<Field LogicalId="1" StartByte="2" NumberOfBytes="1" StartBit="0" NumberOfBits="8" Type="UCHAR" Name="IMU Status" Description="" />
+		<Field LogicalId="2" StartByte="3" NumberOfBytes="4" StartBit="0" NumberOfBits="32" Type="LONG" Name="MPL115A Pressure" Description="" />
+		<Field LogicalId="3" StartByte="7" NumberOfBytes="2" StartBit="0" NumberOfBits="16" Type="SHORT" Name="MPL115A Temperature" Description="" />
+		<Field LogicalId="4" StartByte="9" NumberOfBytes="1" StartBit="0" NumberOfBits="8" Type="UCHAR" Name="SHT12S Humitiy" Description="" />
+		<Field LogicalId="5" StartByte="10" NumberOfBytes="2" StartBit="0" NumberOfBits="16" Type="SHORT" Name="SHT12S Temperature" Description="" />
+		<Field LogicalId="6" StartByte="12" NumberOfBytes="1" StartBit="0" NumberOfBits="8" Type="CHAR" Name="NX Temperature" Description="" />
+		<Field LogicalId="7" StartByte="13" NumberOfBytes="1" StartBit="0" NumberOfBits="8" Type="CHAR" Name="Azimuth Motor Temp" Description="" />
+		<Field LogicalId="8" StartByte="14" NumberOfBytes="1" StartBit="0" NumberOfBits="8" Type="CHAR" Name="Elevation Motor Temp" Description="" />
+	</Message>
+	
+	<Message Key="34997" Name="GCU Measurements" NumberOfBytes="16" Protocol="Generic">
+		<Field LogicalId="0" StartByte="0" NumberOfBytes="2" StartBit="0" NumberOfBits="16" Type="INT" Name="IMU Temperature" Description="" />
+		<Field LogicalId="1" StartByte="2" NumberOfBytes="1" StartBit="0" NumberOfBits="8" Type="UCHAR" Name="IMU Status" Description="" />
+		<Field LogicalId="2" StartByte="3" NumberOfBytes="4" StartBit="0" NumberOfBits="32" Type="LONG" Name="MPL115A Pressure" Description="" />
+		<Field LogicalId="3" StartByte="7" NumberOfBytes="2" StartBit="0" NumberOfBits="16" Type="SHORT" Name="MPL115A Temperature" Description="" />
+		<Field LogicalId="4" StartByte="9" NumberOfBytes="1" StartBit="0" NumberOfBits="8" Type="UCHAR" Name="SHT12S Humitiy" Description="" />
+		<Field LogicalId="5" StartByte="10" NumberOfBytes="2" StartBit="0" NumberOfBits="16" Type="SHORT" Name="SHT12S Temperature" Description="" />
+		<Field LogicalId="6" StartByte="12" NumberOfBytes="1" StartBit="0" NumberOfBits="8" Type="CHAR" Name="NX Temperature" Description="" />
+		<Field LogicalId="7" StartByte="13" NumberOfBytes="1" StartBit="0" NumberOfBits="8" Type="INT" Name="Azimuth Motor Temp" Description="" />
+		<Field LogicalId="8" StartByte="14" NumberOfBytes="1" StartBit="0" NumberOfBits="8" Type="INT" Name="Elevation Motor Temp" Description="" />
+	</Message>
+</Protocol>

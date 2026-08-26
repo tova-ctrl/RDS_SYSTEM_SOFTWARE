@@ -1,0 +1,18 @@
+<?xml version='1.0' encoding='utf-8'?>
+<Protocol>
+	<Message Key="1290" Name="Gimbal StartUp Params Command" NumberOfBytes="8" Protocol="Microcom">
+		<SubMessage SubMsg="0" Name="None">
+		</SubMessage>
+		<SubMessage SubMsg="1" Name="Gimbal Lost Comm">
+			<Field LogicalId="0" StartByte="0" NumberOfBytes="4" StartBit="0" NumberOfBits="32" Type="TLowRes2DAngles" Name="LOS Angles" Description="Set Line Of Sight in case of communication lost, in angels [°]" />
+		</SubMessage>
+		<SubMessage SubMsg="2" Name="Day Frame Size">
+			<Field LogicalId="1" StartByte="0" NumberOfBytes="2" StartBit="0" NumberOfBits="16" Type="INT" Name="Screen Wide [Pixles]" Description="Set Screen Wide [Pixles]" />
+			<Field LogicalId="2" StartByte="2" NumberOfBytes="2" StartBit="0" NumberOfBits="16" Type="INT" Name="Screen Hieght [Pixles]" Description="Set Screen Hieght [Pixles]" />		
+		</SubMessage>
+		<SubMessage SubMsg="3" Name="TI Frame Size">
+			<Field LogicalId="1" StartByte="0" NumberOfBytes="2" StartBit="0" NumberOfBits="16" Type="INT" Name="Screen Wide [Pixles]" Description="Set Screen Wide [Pixles]" />
+			<Field LogicalId="2" StartByte="2" NumberOfBytes="2" StartBit="0" NumberOfBits="16" Type="INT" Name="Screen Hieght [Pixles]" Description="Set Screen Hieght [Pixles]" />		
+		</SubMessage>
+	</Message>
+</Protocol>

@@ -1,0 +1,11 @@
+<?xml version='1.0' encoding='utf-8'?>
+<Protocol>
+	<Message Key="35005" Name="Thermal Camera Lens Control #2 Report" NumberOfBytes="16" Protocol="Generic">
+		<Field LogicalId="0" StartByte="0" NumberOfBytes="4" StartBit="0" NumberOfBits="32" Type="UINT" Name="Zoom Position" Description="" />
+		<Field LogicalId="1" StartByte="4" NumberOfBytes="4" StartBit="0" NumberOfBits="32" Type="INT" Name="Focus Position" Description="" />
+		<Field LogicalId="2" StartByte="8" NumberOfBytes="1" StartBit="0" NumberOfBits="2" Type="UINT" Name="Ballance Change" Description="" />
+		<Field LogicalId="3" StartByte="8" NumberOfBytes="1" StartBit="2" NumberOfBits="2" Type="UINT" Name="Ballance Manual" Description="" />
+		<Field LogicalId="4" StartByte="10" NumberOfBytes="2" StartBit="0" NumberOfBits="16" Type="UINT" Name="Ballance" Description="" />	
+		<Field LogicalId="5" StartByte="12" NumberOfBytes="4" StartBit="0" NumberOfBits="32" Type="UINT" Name="Focus Quality" Description="" />
+	</Message>
+</Protocol>

@@ -1,0 +1,6 @@
+<?xml version='1.0' encoding='utf-8'?>
+<Protocol>
+	<Message Key="7017" Name="Navigation Record" NumberOfBytes="1" Protocol="Microcom">
+		<Field LogicalId="0" StartByte="0" NumberOfBytes="1" StartBit="0" NumberOfBits="8" Type="CHAR" Name="Record Level" CovertType="NavRecordLevel" Description="Enables navigation record and level" />
+	</Message>	
+</Protocol>

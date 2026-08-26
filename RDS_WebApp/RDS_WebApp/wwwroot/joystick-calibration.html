@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<title>RWS JOYSTICK CALIBRATION</title>
+<style>
+  :root {
+    --bg: #0a0c10; --panel: #14171c; --line: #232830;
+    --ink: #e7ecf1; --ink-dim: #7b8794;
+    --amber: #d1b06a; --amber-dim: #8a7647;
+    --green: #4ade80; --red: #ef4444;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    background: var(--bg); color: var(--ink);
+    font-family: 'Cascadia Code', Consolas, 'SF Mono', ui-monospace, monospace;
+    min-height: 100vh; display: flex; flex-direction: column;
+  }
+
+  .statusbar {
+    display: flex; align-items: center; gap: 10px;
+    padding: 10px 16px; background: var(--panel); border-bottom: 1px solid var(--line);
+    font-size: 12px; letter-spacing: 0.06em; color: var(--ink-dim); flex-wrap: wrap;
+  }
+  .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--red); box-shadow: 0 0 6px var(--red); flex-shrink: 0; }
+  .dot.on { background: var(--green); box-shadow: 0 0 6px var(--green); }
+  .statusbar .title { color: var(--ink); font-weight: 700; }
+  .statusbar .sep { opacity: 0.4; }
+  .statusbar .spacer { flex: 1; }
+
+  main { flex: 1; padding: 18px; display: flex; flex-direction: column; gap: 18px; max-width: 980px; margin: 0 auto; width: 100%; }
+
+  .howto {
+    font-size: 12px; line-height: 1.6; color: var(--ink-dim);
+    border: 1px solid var(--line); background: var(--panel); padding: 12px 16px;
+  }
+  .howto b { color: var(--amber); }
+
+  .log {
+    border: 1px solid var(--line); background: var(--panel);
+    padding: 10px 14px; font-size: 13px; min-height: 2.4em;
+    color: var(--green);
+  }
+  .log .idle { color: var(--ink-dim); }
+
+  section h2 {
+    font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--amber); margin: 0 0 8px;
+    border-bottom: 1px solid var(--line); padding-bottom: 6px;
+  }
+
+  .btn-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(84px, 1fr)); gap: 8px;
+  }
+  .btn-cell {
+    border: 1px solid var(--line); background: var(--bg);
+    padding: 8px 6px; text-align: center; position: relative; overflow: hidden;
+  }
+  .btn-cell.pressed { border-color: var(--amber); background: rgba(209,176,106,0.14); }
+  .btn-cell .idx { font-size: 10px; color: var(--ink-dim); }
+  .btn-cell .val { font-size: 15px; font-weight: 700; font-variant-numeric: tabular-nums; }
+  .btn-cell .bar { position: absolute; left: 0; bottom: 0; height: 3px; background: var(--amber); width: 0%; }
+
+  .axis-grid { display: grid; grid-template-columns: 1fr; gap: 10px; }
+  .axis-row { display: flex; align-items: center; gap: 10px; font-size: 12px; }
+  .axis-row .idx { width: 60px; color: var(--ink-dim); flex-shrink: 0; }
+  .axis-track {
+    flex: 1; height: 14px; background: var(--bg); border: 1px solid var(--line);
+    position: relative;
+  }
+  .axis-track .zero { position: absolute; left: 50%; top: 0; bottom: 0; width: 1px; background: var(--line); }
+  .axis-track .fill { position: absolute; top: 1px; bottom: 1px; background: var(--amber); }
+  .axis-row .val { width: 56px; text-align: right; font-variant-numeric: tabular-nums; color: var(--ink); flex-shrink: 0; }
+</style>
+</head>
+<body>
+
+<div class="statusbar">
+  <span class="dot" id="statusDot"></span>
+  <span class="title">JOYSTICK CALIBRATION</span>
+  <span class="sep">|</span>
+  <span id="statusLabel">NO GAMEPAD DETECTED</span>
+  <span class="spacer"></span>
+  <span id="gpId" style="max-width:50%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;"></span>
+</div>
+
+<main>
+  <div class="howto">
+    לחצי על כל כפתור/ידית בזה אחר זה. השורה למטה תראה מיד איזה <b>אינדקס</b> הופעל —
+    זה מה שנשתמש בו כדי למפות כל כפתור פיזי לתפקיד שלו (T1, B3, B4, S3, T2, B2, B5, B6)
+    ואת שני ה-sticks ל-J1/J2. אם המשחק לא מזהה את הג'ויסטיק, לחצי על כל כפתור אחת כדי
+    "להעיר" את הדפדפן (ה-Gamepad API דורש אינטראקציה ראשונה).
+  </div>
+
+  <div class="log"><span id="lastEvent" class="idle">ממתין ללחיצה ראשונה...</span></div>
+
+  <section>
+    <h2>Buttons</h2>
+    <div class="btn-grid" id="btnGrid"></div>
+  </section>
+
+  <section>
+    <h2>Axes (sticks / analog triggers / D-pad-as-axis)</h2>
+    <div class="axis-grid" id="axisGrid"></div>
+  </section>
+</main>
+
+<script>
+  (function () {
+    var statusDot = document.getElementById('statusDot');
+    var statusLabel = document.getElementById('statusLabel');
+    var gpIdEl = document.getElementById('gpId');
+    var lastEventEl = document.getElementById('lastEvent');
+    var btnGrid = document.getElementById('btnGrid');
+    var axisGrid = document.getElementById('axisGrid');
+
+    var btnCells = [];
+    var axisRows = [];
+    var prevPressed = [];
+    var connected = false;
+
+    window.addEventListener('gamepadconnected', function (e) {
+      connected = true;
+      statusDot.classList.add('on');
+      statusLabel.textContent = 'CONNECTED';
+      gpIdEl.textContent = e.gamepad.id;
+    });
+    window.addEventListener('gamepaddisconnected', function () {
+      connected = false;
+      statusDot.classList.remove('on');
+      statusLabel.textContent = 'NO GAMEPAD DETECTED';
+      gpIdEl.textContent = '';
+    });
+
+    function ensureCells(count, container, cells, factory) {
+      while (cells.length < count) {
+        var el = factory(cells.length);
+        container.appendChild(el.root);
+        cells.push(el);
+      }
+    }
+
+    function buttonCellFactory(i) {
+      var root = document.createElement('div');
+      root.className = 'btn-cell';
+      root.innerHTML = '<div class="idx">#' + i + '</div><div class="val">0</div><div class="bar"></div>';
+      return { root: root, val: root.querySelector('.val'), bar: root.querySelector('.bar') };
+    }
+
+    function axisRowFactory(i) {
+      var root = document.createElement('div');
+      root.className = 'axis-row';
+      root.innerHTML =
+        '<div class="idx">#' + i + '</div>' +
+        '<div class="axis-track"><div class="zero"></div><div class="fill"></div></div>' +
+        '<div class="val">0.00</div>';
+      return { root: root, fill: root.querySelector('.fill'), val: root.querySelector('.val') };
+    }
+
+    function tick() {
+      var pads = navigator.getGamepads ? navigator.getGamepads() : [];
+      var gp = null;
+      for (var i = 0; i < pads.length; i++) { if (pads[i]) { gp = pads[i]; break; } }
+
+      if (gp) {
+        if (!connected) {
+          connected = true;
+          statusDot.classList.add('on');
+          statusLabel.textContent = 'CONNECTED';
+          gpIdEl.textContent = gp.id;
+        }
+
+        ensureCells(gp.buttons.length, btnGrid, btnCells, buttonCellFactory);
+        for (var b = 0; b < gp.buttons.length; b++) {
+          var btn = gp.buttons[b];
+          var cell = btnCells[b];
+          var pressed = btn.pressed || btn.value > 0.05;
+          cell.root.classList.toggle('pressed', pressed);
+          cell.val.textContent = btn.value.toFixed(2);
+          cell.bar.style.width = (btn.value * 100).toFixed(0) + '%';
+
+          if (pressed && !prevPressed[b]) {
+            lastEventEl.classList.remove('idle');
+            lastEventEl.textContent = '>> BUTTON #' + b + ' PRESSED';
+          }
+          prevPressed[b] = pressed;
+        }
+
+        ensureCells(gp.axes.length, axisGrid, axisRows, axisRowFactory);
+        for (var a = 0; a < gp.axes.length; a++) {
+          var v = gp.axes[a];
+          var row = axisRows[a];
+          row.val.textContent = v.toFixed(2);
+          var pct = Math.abs(v) * 50;
+          row.fill.style.width = pct.toFixed(1) + '%';
+          row.fill.style.left = (v < 0 ? (50 - pct) : 50).toFixed(1) + '%';
+        }
+      }
+
+      requestAnimationFrame(tick);
+    }
+
+    requestAnimationFrame(tick);
+  })();
+</script>
+</body>
+</html>

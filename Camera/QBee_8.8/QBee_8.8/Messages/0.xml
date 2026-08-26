@@ -1,0 +1,8 @@
+<?xml version='1.0' encoding='utf-8'?>
+<Protocol>
+	<Message Key="0" Name="Keep Alive" NumberOfBytes="0" Protocol="Microcom" Description="Keep Alive signal. Need to send to system every ~500 mSec">
+	</Message>
+	
+	<Message Key="0" Name="Keep Alive" NumberOfBytes="0" Protocol="Generic">
+	</Message>
+</Protocol>

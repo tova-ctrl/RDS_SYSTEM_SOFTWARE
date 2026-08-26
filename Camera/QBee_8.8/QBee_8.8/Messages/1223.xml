@@ -1,0 +1,5 @@
+<?xml version='1.0' encoding='utf-8'?>
+<Protocol>
+	<Message Key="1223" Name="STOW" NumberOfBytes="0" Description="Enter STOW Mode" Protocol="Generic">
+	</Message>
+</Protocol>

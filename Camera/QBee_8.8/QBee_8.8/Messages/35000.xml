@@ -1,0 +1,21 @@
+<?xml version='1.0' encoding='utf-8'?>
+<Protocol>
+	<Message Key="35000" Name="Thermal Camera Status #1 Report" NumberOfBytes="16" Protocol="Generic">
+		<Field LogicalId="0" StartByte="0" NumberOfBytes="1" StartBit="4" NumberOfBits="1" Type="BIT" Name="Status Busy" Description="" />
+		<Field LogicalId="1" StartByte="1" NumberOfBytes="1" StartBit="0" NumberOfBits="1" Type="BIT" Name="Elec. Control" Description="" />
+		<Field LogicalId="2" StartByte="1" NumberOfBytes="1" StartBit="1" NumberOfBits="1" Type="BIT" Name="Elec. SW Fail" Description="" />
+		<Field LogicalId="3" StartByte="1" NumberOfBytes="1" StartBit="2" NumberOfBits="1" Type="BIT" Name="Elec. Memory Fail" Description="" />
+		<Field LogicalId="4" StartByte="1" NumberOfBytes="1" StartBit="3" NumberOfBits="1" Type="BIT" Name="Elec. internal Fail" Description="" />
+		<Field LogicalId="5" StartByte="1" NumberOfBytes="1" StartBit="4" NumberOfBits="1" Type="BIT" Name="Elec. Temperature Fail" Description="" />
+		<Field LogicalId="6" StartByte="1" NumberOfBytes="1" StartBit="5" NumberOfBits="1" Type="BIT" Name="Elec. Voltage Fail" Description="" />
+		<Field LogicalId="7" StartByte="1" NumberOfBytes="1" StartBit="6" NumberOfBits="1" Type="BIT" Name="Elec. Internal Comm. Fail" Description="" />
+		<Field LogicalId="8" StartByte="1" NumberOfBytes="1" StartBit="7" NumberOfBits="1" Type="BIT" Name="Elec. Spare Fail" Description="" />
+		<Field LogicalId="9" StartByte="2" NumberOfBytes="1" StartBit="0" NumberOfBits="1" Type="BIT" Name="Detector Hot" Description="" />
+		<Field LogicalId="10" StartByte="2" NumberOfBytes="1" StartBit="1" NumberOfBits="1" Type="BIT" Name="Fail Zoom" Description="" />
+		<Field LogicalId="11" StartByte="2" NumberOfBytes="1" StartBit="2" NumberOfBits="1" Type="BIT" Name="Fail Focus" Description="" />
+		<Field LogicalId="12" StartByte="2" NumberOfBytes="1" StartBit="3" NumberOfBits="1" Type="BIT" Name="Fail NUC" Description="" />
+		<Field LogicalId="13" StartByte="2" NumberOfBytes="1" StartBit="5" NumberOfBits="1" Type="BIT" Name="Fail Flash" Description="" />
+		<Field LogicalId="14" StartByte="2" NumberOfBytes="1" StartBit="6" NumberOfBits="1" Type="BIT" Name="Fail Flag" Description="" />
+		<Field LogicalId="15" StartByte="2" NumberOfBytes="1" StartBit="7" NumberOfBits="1" Type="BIT" Name="Fail Detector Communication" Description="" />
+	</Message>
+</Protocol>

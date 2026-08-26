@@ -1,0 +1,59 @@
+<?xml version='1.0' encoding='utf-8'?>
+<Protocol>
+	
+	<Message Key="34999" Name="Gimbal BIT Status" NumberOfBytes="4" Protocol="Generic">
+		<Field LogicalId="0" StartByte="0" NumberOfBytes="1" StartBit="0" NumberOfBits="1" Type="BIT" Name="Busy Flag" Description="Busy Flag Mode" />
+		<Field LogicalId="1" StartByte="0" NumberOfBytes="1" StartBit="1" NumberOfBits="1" Type="BIT" Name="Gimbal Operation Type" Description="Gimbal Operation Type" />
+		<Field LogicalId="2" StartByte="0" NumberOfBytes="1" StartBit="2" NumberOfBits="1" Type="BIT" Name="Gimbal Internal Power Fault" Description="Gimabl Power Fault" />
+		<Field LogicalId="3" StartByte="0" NumberOfBytes="1" StartBit="3" NumberOfBits="1" Type="BIT" Name="Az Encoder Fail" Description="Azimuth Encoder Communication Error" />
+		<Field LogicalId="4" StartByte="0" NumberOfBytes="1" StartBit="4" NumberOfBits="1" Type="BIT" Name="El Encoder Fail" Description="Elevation Encoder Communication Error" />
+		<Field LogicalId="5" StartByte="0" NumberOfBytes="1" StartBit="5" NumberOfBits="1" Type="BIT" Name="Az Motor Over Temperature" Description="Azimuth Encoder Ober Temperature Error" />
+		<Field LogicalId="6" StartByte="0" NumberOfBytes="1" StartBit="6" NumberOfBits="1" Type="BIT" Name="El Motor Over Temperature" Description="Elevation Encoder Ober Temperature Error" />
+		<Field LogicalId="7" StartByte="0" NumberOfBytes="1" StartBit="7" NumberOfBits="1" Type="BIT" Name="Control Loop Functionality" Description="Control Loop Functionality" />	
+		<Field LogicalId="8" StartByte="1" NumberOfBytes="1" StartBit="0" NumberOfBits="1" Type="BIT" Name="Gimbal Communication Fail" Description="Failed To Communicate With Gimabl" />
+		<Field LogicalId="9" StartByte="1" NumberOfBytes="1" StartBit="3" NumberOfBits="1" Type="BIT" Name="Az Motor Fail" Description="Azimuth Motor Error" />	
+		<Field LogicalId="10" StartByte="1" NumberOfBytes="1" StartBit="4" NumberOfBits="1" Type="BIT" Name="El Motor Fail" Description="Elevation Motor Error" />
+		<Field LogicalId="11" StartByte="1" NumberOfBytes="1" StartBit="5" NumberOfBits="1" Type="BIT" Name="Core 1 Validity" Description="Control Unit Core 1 Status" />
+		<Field LogicalId="12" StartByte="1" NumberOfBytes="1" StartBit="7" NumberOfBits="1" Type="BIT" Name="IMU Failure" Description="Inertial Measurement Unit Error" />
+		<Field LogicalId="13" StartByte="2" NumberOfBytes="1" StartBit="0" NumberOfBits="2" Type="BIT" Name="Init UnSuccessful" Description="Control Unit Initialization Error" />
+		<Field LogicalId="14" StartByte="2" NumberOfBytes="1" StartBit="2" NumberOfBits="1" Type="BIT" Name="Init Timeouted" Description="Control Unit Initialization TimeOut" />
+		<Field LogicalId="15" StartByte="2" NumberOfBytes="1" StartBit="3" NumberOfBits="1" Type="BIT" Name="Gimbal Barriers Fail" Description="Gimbal Barries Failure" />
+		<Field LogicalId="16" StartByte="2" NumberOfBytes="1" StartBit="4" NumberOfBits="1" Type="BIT" Name="Gimbal Limits Validity" Description="Gimbal Limits Status" />
+		<Field LogicalId="17" StartByte="2" NumberOfBytes="1" StartBit="5" NumberOfBits="1" Type="BIT" Name="Encoders Fail" Description="" />
+		<Field LogicalId="18" StartByte="3" NumberOfBytes="1" StartBit="7" NumberOfBits="1" Type="BIT" Name="System not calibrated" Description="System Not Calibrated REport" />
+	</Message>
+	<Message Key="34999" Name="Gimbal BIT Status" NumberOfBytes="4" Protocol="Microcom">
+		<Field LogicalId="0" StartByte="0" NumberOfBytes="1" StartBit="0" NumberOfBits="1" Type="BIT" Name="System busy" Description="Gets Busy Flag Mode" />
+		<Field LogicalId="1" StartByte="0" NumberOfBytes="1" StartBit="1" NumberOfBits="1" Type="BIT" Name="Relative rate warning" Description="Gets Gimbal Operation Type" />
+		<Field LogicalId="2" StartByte="0" NumberOfBytes="1" StartBit="2" NumberOfBits="1" Type="BIT" Name="Motors voltage Low" Description="Gets Gimabl Power Fault BIT" />
+		<Field LogicalId="3" StartByte="0" NumberOfBytes="1" StartBit="3" NumberOfBits="1" Type="BIT" Name="Az Encoder Fail" Description="Gets Azimuth Encoder Communication Error BIT" />
+		<Field LogicalId="4" StartByte="0" NumberOfBytes="1" StartBit="4" NumberOfBits="1" Type="BIT" Name="El Encoder Fail" Description="Gets Elevation Encoder Communication Error BIT" />
+		<Field LogicalId="5" StartByte="0" NumberOfBytes="1" StartBit="5" NumberOfBits="1" Type="BIT" Name="High temperature warning" Description="Gets Payload IMU over Temperature Error BIT" />
+		<Field LogicalId="6" StartByte="0" NumberOfBytes="1" StartBit="6" NumberOfBits="1" Type="BIT" Name="Low temperature warning" Description="Gets Base IMU over Temperature Error BIT" />
+		<Field LogicalId="7" StartByte="0" NumberOfBytes="1" StartBit="7" NumberOfBits="1" Type="BIT" Name="Inertial control loop failure" Description="Gets Control Loop Functionality BIT" />	
+		<Field LogicalId="8" StartByte="1" NumberOfBytes="1" StartBit="0" NumberOfBits="1" Type="BIT" Name="Base IMU Motion Detection" Description="Base IMU Motion Detection" />
+		<Field LogicalId="9" StartByte="1" NumberOfBytes="1" StartBit="1" NumberOfBits="1" Type="BIT" Name="No LOS IMU data " Description="No Payload IMU" />	
+		<Field LogicalId="10" StartByte="1" NumberOfBytes="1" StartBit="2" NumberOfBits="1" Type="BIT" Name="No base IMU data" Description="No Base IMU" />
+		<Field LogicalId="11" StartByte="1" NumberOfBytes="1" StartBit="3" NumberOfBits="1" Type="BIT" Name="Azimuth gimbal fail" Description="Azimuth Gimbal Status Bit" />
+		<Field LogicalId="12" StartByte="1" NumberOfBytes="1" StartBit="4" NumberOfBits="1" Type="BIT" Name="Elevation gimbal fail" Description="Elevation Gimbal Status Bit" />
+		<Field LogicalId="13" StartByte="1" NumberOfBytes="1" StartBit="5" NumberOfBits="1" Type="BIT" Name="DSP Core 1 Vitality" Description="Core 1 Vitality" />
+		<Field LogicalId="14" StartByte="1" NumberOfBytes="1" StartBit="6" NumberOfBits="1" Type="BIT" Name="Hybrid Mode Enabled" Description="Hybrid Mode Enabled" />
+		<Field LogicalId="15" StartByte="1" NumberOfBytes="1" StartBit="7" NumberOfBits="1" Type="BIT" Name="IMU data invalid " Description="Gyro Failure" />
+		<Field LogicalId="16" StartByte="2" NumberOfBytes="1" StartBit="0" NumberOfBits="1" Type="BIT" Name="Gimbal init fail" Description="Init Failure" />
+		<Field LogicalId="17" StartByte="2" NumberOfBytes="1" StartBit="1" NumberOfBits="1" Type="BIT" Name="Gimbal not initiated" Description="Init not Initiated" />
+		<Field LogicalId="18" StartByte="2" NumberOfBytes="1" StartBit="2" NumberOfBits="1" Type="BIT" Name="Gimbal init Timeout" Description="Init Timeout" />
+		<Field LogicalId="19" StartByte="2" NumberOfBytes="1" StartBit="3" NumberOfBits="1" Type="BIT" Name="Gimbal barriers calib fail" Description="Gimbal Span Validity Failure" />
+		<Field LogicalId="20" StartByte="2" NumberOfBytes="1" StartBit="4" NumberOfBits="1" Type="BIT" Name="Gimbal motion span fail" Description="Init Limit Failure" />
+		<Field LogicalId="21" StartByte="2" NumberOfBytes="1" StartBit="5" NumberOfBits="1" Type="BIT" Name="Gimbal Encoder spike" Description="General Encoder Spike" />
+		<Field LogicalId="22" StartByte="2" NumberOfBytes="1" StartBit="6" NumberOfBits="1" Type="BIT" Name="NO LOS IMU 1 data" Description="Payload IMU 1 Vitality" />
+		<Field LogicalId="23" StartByte="2" NumberOfBytes="1" StartBit="7" NumberOfBits="1" Type="BIT" Name="NO LOS IMU 2 data" Description="Payload IMU 2 Vitality" />
+		<Field LogicalId="24" StartByte="3" NumberOfBytes="1" StartBit="0" NumberOfBits="1" Type="BIT" Name="NO base IMU 1 data" Description="Base IMU 1 Vitality" />
+		<Field LogicalId="25" StartByte="3" NumberOfBytes="1" StartBit="1" NumberOfBits="1" Type="BIT" Name="NO base IMU 2 data" Description="Base IMU 2 Vitality" />
+		<Field LogicalId="26" StartByte="3" NumberOfBytes="1" StartBit="2" NumberOfBits="1" Type="BIT" Name="Host comm Rx fail" Description="BeeKeeper RX Not Recieved" />
+		<Field LogicalId="27" StartByte="3" NumberOfBytes="1" StartBit="3" NumberOfBits="1" Type="BIT" Name="LOS roll gyro bias high" Description="Payload Roll Gyro Bias Err" />
+		<Field LogicalId="28" StartByte="3" NumberOfBytes="1" StartBit="4" NumberOfBits="1" Type="BIT" Name="LOS elevation gyro bias high" Description="Payload Elevation Gyro Bias Err" />
+		<Field LogicalId="29" StartByte="3" NumberOfBytes="1" StartBit="5" NumberOfBits="1" Type="BIT" Name="LOS azimuth gyro bias high" Description="Payload Azimuth Gyro Bias Err" />
+		<Field LogicalId="30" StartByte="3" NumberOfBytes="1" StartBit="6" NumberOfBits="1" Type="BIT" Name="High Current Protection" Description="High Current Protection" />
+		<Field LogicalId="31" StartByte="3" NumberOfBytes="1" StartBit="7" NumberOfBits="1" Type="BIT" Name="Gimbal factory calib fail" Description="System Not Calibrated Report" />
+	</Message>
+</Protocol>

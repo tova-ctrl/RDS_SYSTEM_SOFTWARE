@@ -1,0 +1,12 @@
+<?xml version='1.0' encoding='utf-8'?>
+<Protocol>
+	<Message Key="35502" Name="Channel Report" NumberOfBytes="24" Protocol="Generic">
+		<Field LogicalId="0" StartByte="0" NumberOfBytes="1" StartBit="0" NumberOfBits="8" Type="UCHAR" Name="Channel (Sensor)" ConvertType="Camera" Description="" />
+		<Field LogicalId="1" StartByte="2" NumberOfBytes="2" StartBit="0" NumberOfBits="16" Type="USHORT" Name="FOV" ConvertType="@Fov" Description="" />
+		<Field LogicalId="2" StartByte="6" NumberOfBytes="2" StartBit="0" NumberOfBits="16" Type="SHORT" Name="Laser Spot Boresight X axis" Description="" />
+		<Field LogicalId="3" StartByte="8" NumberOfBytes="2" StartBit="0" NumberOfBits="16" Type="SHORT" Name="Laser Spot Boresight Y axis" Description="" />
+		<Field LogicalId="4" StartByte="10" NumberOfBytes="2" StartBit="0" NumberOfBits="16" Type="SHORT" Name="X axis offset" ConvertType="@Angle" Description="" />
+		<Field LogicalId="5" StartByte="12" NumberOfBytes="2" StartBit="0" NumberOfBits="16" Type="SHORT" Name="Y axis offset" ConvertType="@Angle" Description="" />
+		<Field LogicalId="6" StartByte="14" NumberOfBytes="2" StartBit="0" NumberOfBits="16" Type="SHORT" Name="Z axis offset" ConvertType="@Angle" Description="" />
+	</Message>
+</Protocol>

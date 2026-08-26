@@ -1,0 +1,431 @@
+/* ── Status Bar ─────────────────────────────────────────────────────── */
+.status-bar {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    background: #0a0c10;
+    border-bottom: 2px none #1e293b;
+    padding: 20px 16px 1px 16px;
+    font-size: 0.75rem;
+    font-family: 'Consolas', monospace;
+    color: #94a3b8;
+    flex-shrink: 0;
+
+    background: #0f1011;
+    box-shadow: inset 0 -1px 0 0 rgba(255, 255, 255, 0.03); /* תאורה פנימית דקה */
+}
+.status-dot { width: 8px; height: 8px; border-radius: 50%; animation: blink 1.5s infinite; }
+.dot-active { background: #22c55e; box-shadow: 0 0 6px #22c55e; }
+.dot-fault  { background: #ef4444; box-shadow: 0 0 6px #ef4444; }
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.4} }
+.status-bar-title { color: #22c55e; font-weight: 700; letter-spacing: 0.08em; }
+.status-bar-sep   { color: #334155; }
+.status-bar-item  { color: #64748b; }
+.status-val       { color: #e2e8f0; font-weight: 600; }
+.status-bar-time  { margin-left: auto; color: #94a3b8; font-weight: 600; }
+.val-warn         { color: #f59e0b !important; }
+
+/* ── Root wrapper — fills exact viewport, no scroll ─────────────────── */
+    .tac-root {
+        display: flex;
+        flex-direction: column;
+        height: 100dvh;
+        overflow: hidden;
+        background: #0a0c10;
+        font-family: 'Segoe UI', system-ui, sans-serif;
+        color: #e2e8f0;
+    }
+    /* ── Main Layout ─────────────────────────────────────────────────────── */
+    .tactical-layout {
+        display: flex;
+        flex: 1;
+        gap: 6px;
+        padding: 6px;
+        min-height: 0;
+        overflow: hidden;
+        background: #0a0c10;
+    }
+    /* ── Video Panel ─────────────────────────────────────────────────────── */
+    .video-panel {
+        flex: 0 0 76%;
+        min-width: 0;
+        min-height: 0;
+        align-self: stretch;
+        position: relative;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .video-feed {
+        flex: 1;
+        min-height: 0;
+        background: #060a06;
+        border: 1px solid #1e3a1e;
+        border-radius: 8px;
+        position: relative;
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .ir-bg {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .video-overlay-tl, .video-overlay-tr,
+    .video-overlay-bl, .video-overlay-br, .video-overlay-tr {
+        position: absolute;
+        background: rgba(0,0,0,0.55);
+        color: #4ade80;
+        font-size: 0.7rem;
+        font-family: 'Consolas', monospace;
+        padding: 2px 7px;
+        border-radius: 4px;
+        border: 1px solid #1e4a1e;
+        z-index: 5;
+    }
+
+    .video-overlay-tl { top: 10px;    left: 10px;  }
+    .video-overlay-tr { top: 10px;    right: 10px; }
+    .video-overlay-bl { bottom: 46px; left: 10px;  }
+    .video-overlay-br { bottom: 46px; right: 10px; }
+    .video-overlay-tr { top: 10px; right: 10px; z-index: 6; }
+
+    .target-reticle {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%,-50%);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 4px;
+    }
+
+    .reticle-box {
+        width: 56px;
+        height: 56px;
+        border: 2px solid #4ade80;
+        box-shadow: 0 0 10px rgba(74,222,128,0.4);
+    }
+
+    .reticle-delta {
+        color: #4ade80;
+        font-size: 0.7rem;
+        font-family: 'Consolas', monospace;
+    }
+    /* ── State Bar — overlaid at bottom of video ─────────────────────────── */
+    .state-bar {
+        position: absolute;
+        bottom: 8px;
+        left: 8px;
+        right: 8px;
+        display: flex;
+        gap: 4px;
+        background: rgba(10,12,16,0.88);
+        border: 1px solid #1e293b;
+        border-radius: 5px;
+        padding: 4px 8px;
+        align-items: center;
+        backdrop-filter: blur(4px);
+        z-index: 10;
+    }
+
+    .state-item {
+        font-size: 0.68rem;
+        font-family: 'Consolas', monospace;
+        color: #334155;
+        padding: 2px 8px;
+        border: 1px solid #1e293b;
+        border-radius: 3px;
+        letter-spacing: 0.06em;
+    }
+
+        .state-item.state-active {
+            color: #f8fafc;
+            background: #1e3a5f;
+            border-color: #3b82f6;
+            box-shadow: 0 0 6px rgba(59,130,246,0.3);
+        }
+    /* ── Right Panels ────────────────────────────────────────────────────── */
+    .right-panels {
+        flex: 1;
+        min-width: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+        min-height: 0;
+        align-self: stretch;
+        overflow-y: auto;
+        overflow-x: hidden;
+        scrollbar-width: thin;
+        scrollbar-color: #1e293b #0a0c10;
+    }
+
+    .tac-panel {
+        background: #0d111a;
+        border: 1px solid #1e293b;
+        border-radius: 4px;
+        padding: 3px 7px;
+        flex-shrink: 0;
+    }
+
+    .tac-panel-title {
+        font-size: 0.6rem;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: #475569;
+        margin-bottom: 3px;
+        border-bottom: 1px solid #1e293b;
+        padding-bottom: 2px;
+    }
+    /* ── PAN-TILT ─────────────────────────────────────────────────────────── */
+    .pt-values {
+        display: flex;
+        gap: 8px;
+        margin-bottom: 2px;
+    }
+
+    .pt-axis {
+        display: flex;
+        align-items: baseline;
+        gap: 2px;
+    }
+
+    .pt-label {
+        font-size: 0.62rem;
+        color: #64748b;
+        font-family: 'Consolas', monospace;
+    }
+
+    .pt-value {
+        font-size: 0.9rem;
+        font-weight: 700;
+        color: #e2e8f0;
+        font-family: 'Consolas', monospace;
+    }
+
+    .pt-status-label {
+        font-size: 0.58rem;
+        color: #f59e0b;
+        letter-spacing: 0.06em;
+        margin-bottom: 2px;
+    }
+
+    .pt-bar-row {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        margin-bottom: 2px;
+    }
+
+    .pt-bar-label {
+        font-size: 0.62rem;
+        color: #475569;
+        width: 22px;
+        font-family: 'Consolas', monospace;
+    }
+
+    .pt-bar-track {
+        flex: 1;
+        height: 3px;
+        background: #1e293b;
+        border-radius: 2px;
+        overflow: hidden;
+    }
+
+    .pt-bar-fill {
+        height: 100%;
+        background: linear-gradient(90deg, #3b82f6, #f59e0b);
+        border-radius: 2px;
+        transition: width 0.3s;
+    }
+
+    .pt-bar-val {
+        font-size: 0.6rem;
+        color: #475569;
+        font-family: 'Consolas', monospace;
+        width: 52px;
+    }
+    /* ── IMU compact ─────────────────────────────────────────────────────── */
+    .tac-panel-compact {
+        display: flex;
+        align-items: center;
+        padding: 4px 10px;
+        flex-shrink: 0;
+    }
+
+    .imu-state {
+        font-weight: 700;
+        letter-spacing: 0.06em;
+        font-size: 0.8rem;
+        margin-left: 8px;
+    }
+
+    .imu-active {
+        color: #22c55e;
+    }
+
+    .imu-standby {
+        color: #475569;
+    }
+    /* ── WEAPON STATUS ────────────────────────────────────────────────────── */
+    .weapon-state {
+        font-size: 0.9rem;
+        font-weight: 800;
+        text-align: center;
+        letter-spacing: 0.1em;
+        padding: 2px;
+        border-radius: 4px;
+        margin-bottom: 3px;
+    }
+
+    .weapon-safe {
+        color: #22c55e;
+        background: rgba(34,197,94,0.08);
+        border: 1px solid rgba(34,197,94,0.2);
+    }
+
+    .weapon-standby {
+        color: #f59e0b;
+        background: rgba(245,158,11,0.08);
+        border: 1px solid rgba(245,158,11,0.2);
+    }
+
+    .weapon-armed {
+        color: #f97316;
+        background: rgba(249,115,22,0.1);
+        border: 1px solid rgba(249,115,22,0.3);
+        box-shadow: 0 0 14px rgba(249,115,22,0.2);
+    }
+
+    .weapon-firing {
+        color: #ef4444;
+        background: rgba(239,68,68,0.15);
+        border: 1px solid rgba(239,68,68,0.4);
+        box-shadow: 0 0 18px rgba(239,68,68,0.3);
+        animation: pulse-fire 0.5s infinite;
+    }
+
+    .weapon-fault {
+        color: #ef4444;
+        background: rgba(239,68,68,0.1);
+        border: 1px solid rgba(239,68,68,0.3);
+    }
+
+    @keyframes pulse-fire {
+        0%,100% {
+            opacity: 1
+        }
+
+        50% {
+            opacity: 0.6
+        }
+    }
+
+    .weapon-buttons {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr 1fr;
+        gap: 2px;
+        margin-bottom: 3px;
+    }
+
+    .wpn-btn {
+        padding: 2px 2px;
+        font-size: 0.58rem;
+        font-weight: 700;
+        background: #0d111a;
+        color: #475569;
+        border: 1px solid #1e293b;
+        border-radius: 3px;
+        cursor: pointer;
+        transition: all 0.15s;
+    }
+
+        .wpn-btn:hover {
+            background: #1e293b;
+            color: #94a3b8;
+        }
+
+        .wpn-btn.wpn-active {
+            background: #1e3a5f;
+            color: #93c5fd;
+            border-color: #3b82f6;
+        }
+
+        .wpn-btn.wpn-fire {
+            border-color: #7f1d1d;
+            color: #ef4444;
+        }
+
+            .wpn-btn.wpn-fire.wpn-active {
+                background: #7f1d1d;
+                color: #fca5a5;
+            }
+
+    .sensor-row {
+        display: flex;
+        gap: 6px;
+        flex-wrap: wrap;
+    }
+
+    .sensor-item {
+        font-size: 0.62rem;
+        color: #475569;
+    }
+
+    .val-ok {
+        color: #22c55e;
+        font-weight: 600;
+    }
+
+    .val-fault {
+        color: #ef4444;
+        font-weight: 600;
+    }
+
+    .val-stby {
+        color: #94a3b8;
+        font-weight: 600;
+    }
+    /* ── SYSTEM HEALTH ────────────────────────────────────────────────────── */
+    .health-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1px 4px;
+    }
+
+    .health-item {
+        font-size: 0.58rem;
+        color: #475569;
+        font-family: 'Consolas', monospace;
+    }
+    /* ── EVENT LOG ────────────────────────────────────────────────────────── */
+    .tac-panel-log {
+        flex-shrink: 0;
+    }
+
+    .event-log-tac {
+        display: flex;
+        flex-direction: column;
+        gap: 1px;
+        max-height: 52px;
+        overflow-y: auto;
+    }
+
+    .log-line {
+        font-size: 0.58rem;
+        font-family: 'Consolas', monospace;
+        color: #4ade80;
+        padding: 1px 0;
+        border-bottom: 1px solid #0d111a;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }

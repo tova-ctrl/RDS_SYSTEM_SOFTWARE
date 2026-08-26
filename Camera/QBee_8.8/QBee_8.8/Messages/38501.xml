@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<Protocol>
+	<Message Key="38501" Name="Illuminator" NumberOfBytes="4" Protocol="Microcom">
+		<Field LogicalId="0" StartByte="0" NumberOfBytes="1" StartBit="0" NumberOfBits="4" Type="CHAR" Name="Mode" Convert="IlluminatorMode" Description="Sets Illuminator Mode" />
+		<Field LogicalId="1" StartByte="0" NumberOfBytes="1" StartBit="4" NumberOfBits="1" Type="BIT" Name="Fire" Description="Sets Illuminator Fire. 0 - Fire Off. 1 - Fire On" />
+	</Message>
+</Protocol>

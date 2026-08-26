@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<Protocol>
+	<Message Key="6514" Name="Tracker Offset Controls" NumberOfBytes="9" Protocol="Microcom" Compact="True">
+		<Field LogicalId="0" StartByte="0" NumberOfBytes="1" StartBit="0" NumberOfBits="1" Type="BIT" Name="Offset Enable" Description="Enables/Disables Offset function. This function Offset the tracker gate position." />
+		<Field LogicalId="1" StartByte="1" NumberOfBytes="4" StartBit="0" NumberOfBits="32" Type="TSecondJoystick" Name="Movement command" Description="Sets the values how much to Offset the tracker gate, in units of pixels, for both axis X, Y. Positive direction is Right, Down." />
+	</Message>	
+</Protocol>

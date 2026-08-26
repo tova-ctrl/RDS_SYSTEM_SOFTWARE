@@ -1,0 +1,9 @@
+<?xml version='1.0' encoding='utf-8'?>
+<Protocol>
+	<Message Key="31211" Name="Gyro Raw Report" NumberOfBytes="20" Protocol="Microcom">	
+		<Field LogicalId="0" StartByte="0" NumberOfBytes="8" StartBit="0" NumberOfBits="64" Type="ULONGLONG" Name="Control Gyro TimeTag" Description="Gets Control Gyro Message Time Tag" />
+		<Field LogicalId="1" StartByte="8" NumberOfBytes="4" StartBit="0" NumberOfBits="32" Type="FLOAT" Name="Gyro Yaw" Description="Gets Gyro Yaw Value" />
+		<Field LogicalId="2" StartByte="12" NumberOfBytes="4" StartBit="0" NumberOfBits="32" Type="FLOAT" Name="Gyro Pitch" Description="Gets Gyro Pitch Value" />
+		<Field LogicalId="3" StartByte="16" NumberOfBytes="4" StartBit="0" NumberOfBits="32" Type="FLOAT" Name="Gyro Roll" Description="Gets Gyro Roll Value" />
+	</Message>
+</Protocol>

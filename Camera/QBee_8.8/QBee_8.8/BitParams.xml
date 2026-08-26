@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Bit>
+  <BitCPU>
+    <MaxRamMemory>80</MaxRamMemory>
+    <MaxFlashMemory>10</MaxFlashMemory>
+    <MaxTemperature>85</MaxTemperature>
+    <MaxCpuUsage>50</MaxCpuUsage>
+  </BitCPU>
+  <GimbalBit>
+    <Mask>3217031167</Mask>
+    <!-- 0 - Send only with Internal Use. 1 - send all the time -->
+  </GimbalBit>
+</Bit>

@@ -1,0 +1,46 @@
+# 1. יצירת סקריפט ההגדרה בתוך הלינוקס החדש
+cat << 'EOF' >> ~/.bashrc
+
+# Auto-start Virtual CAN interface
+if ! ip link show vcan0 > /dev/null 2>&1; then
+    sudo modprobe vcan 2>/dev/null
+    sudo ip link add dev vcan0 type vcan 2>/dev/null
+    sudo ip link set up vcan0 2>/dev/null
+fi
+EOF
+
+# 2. טעינה מחדש של ההגדרות כדי שהשינוי ייכנס לתוקף מייד
+source ~/.bashrc
+
+echo "הסקריפט הורץ בהצלחה! מנגנון ה-vcan הוגדר אוטומטית בכל הפעלה."
+
+
+קמפול
+cd build
+rm -rf *
+cmake ..
+make -j$(nproc)
+
+הרצה בJSTON
+sudo ./fcc_app can1 192.168.55.2 5000
+
+
+ssh aleppo@192.168.55.1
+
+STM32 SISMA:h9*z+8c5smfhUMf
+
+COPY COMMAND from Linux to PC:
+pscp aleppo@192.168.55.1:/home/aleppo/projects/rds_system/FCC_App/src/main.cpp C:\Projects\TESTS\
+pscp aleppo@192.168.55.1:/home/aleppo/projects/rds_system/FCC_App/CMakeLists.txt C:\Projects\TESTS\
+
+
+scp /mnt/c/Projects/RDS_SYSTEM_SOFTWARE/FCC_App/CMakeLists.txt aleppo@192.168.55.1:~/projects/rds_system/FCC_App/
+scp /mnt/c/Projects/RDS_SYSTEM_SOFTWARE/FCC_App/src/main.cpp aleppo@192.168.55.1:~/projects/rds_system/FCC_App/src/
+scp /mnt/c/Projects/RDS_SYSTEM_SOFTWARE/FCC_App/src/EthCanBus.cpp aleppo@192.168.55.1:~/projects/rds_system/FCC_App/src/
+scp /mnt/c/Projects/RDS_SYSTEM_SOFTWARE/FCC_App/src/FccController.cpp aleppo@192.168.55.1:~/projects/rds_system/FCC_App/src/
+scp /mnt/c/Projects/RDS_SYSTEM_SOFTWARE/FCC_App/src/EthernetServer.cpp aleppo@192.168.55.1:~/projects/rds_system/FCC_App/src/
+scp /mnt/c/Projects/RDS_SYSTEM_SOFTWARE/FCC_App/include/ICanBus.h aleppo@192.168.55.1:~/projects/rds_system/FCC_App/include/
+scp /mnt/c/Projects/RDS_SYSTEM_SOFTWARE/FCC_App/include/EthCanBus.h aleppo@192.168.55.1:~/projects/rds_system/FCC_App/include/
+scp /mnt/c/Projects/RDS_SYSTEM_SOFTWARE/FCC_App/include/CanBus.h aleppo@192.168.55.1:~/projects/rds_system/FCC_App/include/
+scp /mnt/c/Projects/RDS_SYSTEM_SOFTWARE/FCC_App/include/FccController.h aleppo@192.168.55.1:~/projects/rds_system/FCC_App/include/
+scp /mnt/c/Projects/RDS_SYSTEM_SOFTWARE/FCC_App/include/IsmProtocol.h aleppo@192.168.55.1:~/projects/rds_system/FCC_App/include/

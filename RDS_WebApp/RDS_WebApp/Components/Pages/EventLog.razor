@@ -1,0 +1,116 @@
+@page "/eventlog"
+@rendermode InteractiveServer
+@inject RDS_WebApp.Services.SystemControlService svc
+@inject RDS_WebApp.Services.EthernetService eth
+@using RDS_WebApp.Services
+@implements IDisposable
+
+<div style="
+    background-color: #212529;
+    padding: 20px;
+    border-radius: 16px;
+    box-shadow: inset 0 0 20px #000, 0 10px 30px rgba(0,0,0,0.7);
+    border: 4px solid #15181b;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-height: 0;
+    box-sizing: border-box;">
+
+    <div style="font-size:1rem;font-weight:700;color:#d1b06a;font-family:Consolas,monospace;letter-spacing:0.1em;margin-bottom:12px;">
+        EVENT LOGS
+    </div>
+
+    <!-- Tabs -->
+    <div style="display:flex;gap:4px;margin-bottom:8px;">
+        <button @onclick='() => activeTab = "ism"'
+                style="padding:4px 16px;font-size:0.75rem;font-weight:700;font-family:Consolas,monospace;
+                       border-radius:4px 4px 0 0;border:1px solid #1e293b;cursor:pointer;
+                       background:@(activeTab=="ism" ? "#1e293b" : "#0a0c10");
+                       color:@(activeTab=="ism" ? "#d1b06a" : "#475569");">
+            ISM EVENT LOG
+        </button>
+        <button @onclick='() => activeTab = "fcc"'
+                style="padding:4px 16px;font-size:0.75rem;font-weight:700;font-family:Consolas,monospace;
+                       border-radius:4px 4px 0 0;border:1px solid #1e293b;cursor:pointer;
+                       background:@(activeTab=="fcc" ? "#1e293b" : "#0a0c10");
+                       color:@(activeTab=="fcc" ? "#4ade80" : "#475569");">
+            FCC EVENT LOG
+        </button>
+    </div>
+
+    <!-- Refresh button for FCC tab -->
+    @if (activeTab == "fcc")
+    {
+        <div style="margin-bottom:6px;">
+            <button @onclick="RefreshFccLogs"
+                    style="padding:3px 12px;font-size:0.72rem;font-weight:700;font-family:Consolas,monospace;
+                           background:#1e293b;color:#38bdf8;border:1px solid #38bdf8;border-radius:4px;cursor:pointer;">
+                ↻ REFRESH
+            </button>
+            @if (fccLoading)
+            {
+                <span style="font-size:0.7rem;color:#475569;font-family:Consolas,monospace;margin-left:8px;">loading...</span>
+            }
+        </div>
+    }
+
+    <!-- Log content -->
+    <div style="flex:1;min-height:0;background:#0a0c10;border:1px solid #1e293b;border-radius:0 4px 4px 4px;padding:10px;overflow-y:auto;">
+        @if (activeTab == "ism")
+        {
+            @if (svc.Logs.Count == 0)
+            {
+                <div style="color:#334155;font-size:0.75rem;font-family:Consolas,monospace;">— אין אירועים —</div>
+            }
+            @foreach (var log in svc.Logs)
+            {
+                <div style="font-size:0.75rem;font-family:Consolas,monospace;color:#4ade80;
+                            padding:2px 0;border-bottom:1px solid #0d111a;">@log</div>
+            }
+        }
+        else
+        {
+            @if (fccLogs.Count == 0)
+            {
+                <div style="color:#334155;font-size:0.75rem;font-family:Consolas,monospace;">— אין אירועים —</div>
+            }
+            @foreach (var log in fccLogs)
+            {
+                <div style="font-size:0.75rem;font-family:Consolas,monospace;color:#38bdf8;
+                            padding:2px 0;border-bottom:1px solid #0d111a;">@log</div>
+            }
+        }
+    </div>
+</div>
+
+@code {
+    private string activeTab = "ism";
+    private List<string> fccLogs = new();
+    private bool fccLoading = false;
+
+    protected override void OnInitialized()
+    {
+        svc.OnChange += Refresh;
+        eth.OnChange += Refresh;
+    }
+
+    private async Task RefreshFccLogs()
+    {
+        if (eth.Status != EthernetStatus.Connected) return;
+        fccLoading = true;
+        StateHasChanged();
+        var logs = await eth.GetLogsAsync();
+        fccLogs = logs;
+        fccLoading = false;
+        StateHasChanged();
+    }
+
+    private void Refresh() => InvokeAsync(StateHasChanged);
+
+    public void Dispose()
+    {
+        svc.OnChange -= Refresh;
+        eth.OnChange -= Refresh;
+    }
+}

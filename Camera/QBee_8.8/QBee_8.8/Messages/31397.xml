@@ -1,0 +1,4 @@
+<?xml version='1.0' encoding='utf-8'?>
+<Message Key="31397" Name="GCU Debug" NumberOfBytes="16">
+	<Field LogicalId="0" StartByte="0" NumberOfBytes="1" StartBit="0" NumberOfBits="8" Type="UCHAR" Name="Long Cycle Counter" Description="" />
+</Message>

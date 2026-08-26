@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<Protocol>
+	<Message Key="36525" Name="Tracker Error Report" NumberOfBytes="4" Protocol="Generic">
+		<Field LogicalId="0" StartByte="0" NumberOfBytes="2" StartBit="0" NumberOfBits="16" Type="SHORT" Name="X Error" PermittedValue="[ -10000 ÷ + 10000 ]" Description="" />
+		<Field LogicalId="1" StartByte="2" NumberOfBytes="2" StartBit="0" NumberOfBits="16" Type="SHORT" Name="Y Error" PermittedValue="[ -10000 ÷ + 10000 ]" Description="" />
+	</Message>
+</Protocol>

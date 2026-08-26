@@ -1,0 +1,17 @@
+<?xml version='1.0' encoding='utf-8'?>
+<Protocol>
+	<Message Key="37011" Name="Platform Navigation Data" NumberOfBytes="42" Protocol="Microcom">
+		<Field LogicalId="0" StartByte="0" NumberOfBytes="4" StartBit="0" NumberOfBits="32" Type="LONG" Name="Time Tag" Description="Gets platform Time Tag [GPS TOW uSec, cyclic data]" />
+		<Field LogicalId="1" StartByte="4" NumberOfBytes="4" StartBit="0" NumberOfBits="32" Type="FLOAT" Name="Platform Longitude" Description="Gets platform longitude [rad, cyclic data]" />
+		<Field LogicalId="2" StartByte="8" NumberOfBytes="4" StartBit="0" NumberOfBits="32" Type="FLOAT" Name="Platform Latitude" Description="Gets platform Latitude [rad, cyclic data]" />
+		<Field LogicalId="3" StartByte="12" NumberOfBytes="4" StartBit="0" NumberOfBits="32" Type="FLOAT" Name="Platform Altitude" Description="Gets platform Altitude [rad, cyclic data]" />
+		<Field LogicalId="4" StartByte="16" NumberOfBytes="4" StartBit="0" NumberOfBits="32" Type="FLOAT" Name="LOS Azimuth" Description="Gets LOS Azimuth [rad, cyclic data]" />
+		<Field LogicalId="5" StartByte="20" NumberOfBytes="4" StartBit="0" NumberOfBits="32" Type="FLOAT" Name="LOS Pitch" Description="Gets LOS Pitch [rad, cyclic data]" />
+		<Field LogicalId="6" StartByte="24" NumberOfBytes="4" StartBit="0" NumberOfBits="32" Type="FLOAT" Name="LOS Roll" Description="Gets LOS Roll [rad, cyclic data]" />
+		<Field LogicalId="7" StartByte="28" NumberOfBytes="4" StartBit="0" NumberOfBits="32" Type="FLOAT" Name="Target Longitude" Description="Gets LOS Azimuth [rad, cyclic data]" />
+		<Field LogicalId="8" StartByte="32" NumberOfBytes="4" StartBit="0" NumberOfBits="32" Type="FLOAT" Name="Target Latitude" Description="Gets LOS Pitch [rad, cyclic data]" />
+		<Field LogicalId="9" StartByte="36" NumberOfBytes="4" StartBit="0" NumberOfBits="32" Type="FLOAT" Name="Target Altitude" Description="Gets LOS Roll [rad, cyclic data]" />
+		<Field LogicalId="10" StartByte="40" NumberOfBytes="1" StartBit="0" NumberOfBits="8" Type="CHAR" Name="Ground Speed" Description="Gets platform ground speed [1cm/sec, cyclic data]" />
+		<Field LogicalId="11" StartByte="41" NumberOfBytes="1" StartBit="0" NumberOfBits="8" Type="CHAR" Name="Rate of Climb" Description="Gets platform rate of climb [1cm/sec, cyclic data]" />		
+	</Message>
+</Protocol>

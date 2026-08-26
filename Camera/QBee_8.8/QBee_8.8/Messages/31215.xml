@@ -1,0 +1,8 @@
+<?xml version='1.0' encoding='utf-8'?>
+<Protocol>
+	<Message Key="31215" Name="LOS Relative Orientation Report" NumberOfBytes="8" Protocol="Generic">
+		<Field LogicalId="0" StartByte="2" NumberOfBytes="2" StartBit="0" NumberOfBits="16" Type="SHORT" Name="Azimuth / Heading" Description="Orientation ReadBack - Azimuth" />
+		<Field LogicalId="1" StartByte="4" NumberOfBytes="2" StartBit="0" NumberOfBits="16" Type="SHORT" Name="Pitch" Description="Orientation ReadBack - Pitch" />
+		<Field LogicalId="2" StartByte="6" NumberOfBytes="2" StartBit="0" NumberOfBits="16" Type="SHORT" Name="Roll" Description="Orientation ReadBack - Roll" />
+	</Message>
+</Protocol>

@@ -1,0 +1,10 @@
+<?xml version='1.0' encoding='utf-8'?>
+<Protocol>
+	<Message Key="38450" Name="Designator Status" NumberOfBytes="4" Protocol="Microcom">
+		<Field LogicalId="0" StartByte="0" NumberOfBytes="1" StartBit="0" NumberOfBits="1" Type="BIT" Name="Power" Description="Gets Designator Power 0 - Off. 1 - On" />
+		<Field LogicalId="1" StartByte="0" NumberOfBytes="1" StartBit="1" NumberOfBits="1" Type="BIT" Name="Arm" Description="Gets Designator Arm 0 - Off. 1 - On" />
+		<Field LogicalId="3" StartByte="0" NumberOfBytes="1" StartBit="5" NumberOfBits="1" Type="BIT" Name="Ready" Description="Gets Designator Ready 0 - Not Ready for fire. 1 - Ready for fire" />
+		<Field LogicalId="4" StartByte="0" NumberOfBytes="1" StartBit="6" NumberOfBits="1" Type="BIT" Name="Safety Switch" Description="Gets Designator Safety Switch 0 - Off (Fire Disabled). 1 - On (Fire Enabled)" />
+		<Field LogicalId="5" StartByte="0" NumberOfBytes="1" StartBit="7" NumberOfBits="1" Type="BIT" Name="Enable" Description="Gets Designator HW Input status 0 - Off (Designator Disabled). 1 - On (Designator Enabled)" />		
+	</Message>
+</Protocol>

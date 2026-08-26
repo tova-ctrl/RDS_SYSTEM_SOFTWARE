@@ -1,0 +1,26 @@
+<?xml version='1.0' encoding='utf-8'?>
+<Protocol>
+	<Message Key="50904" Name="Servo Failure and Warnings Report" NumberOfBytes="4" Protocol="Generic">
+		<Field LogicalId="0" StartByte="0" NumberOfBytes="1" StartBit="0" NumberOfBits="1" Type="BIT" Name="Communication Fail" Description="" />
+		<Field LogicalId="1" StartByte="0" NumberOfBytes="1" StartBit="1" NumberOfBits="1" Type="BIT" Name="SW Fail" Description="" />
+		<Field LogicalId="2" StartByte="0" NumberOfBytes="1" StartBit="2" NumberOfBits="1" Type="BIT" Name="Parameters Fail" Description="" />
+		<Field LogicalId="3" StartByte="0" NumberOfBytes="1" StartBit="3" NumberOfBits="1" Type="BIT" Name="Temperature Warning" Description="" />
+		<Field LogicalId="4" StartByte="0" NumberOfBytes="1" StartBit="5" NumberOfBits="1" Type="BIT" Name="IMU / Gyro" Description="" />
+		<Field LogicalId="5" StartByte="0" NumberOfBytes="1" StartBit="6" NumberOfBits="1" Type="BIT" Name="Control Loop Failure" Description="" />
+		<Field LogicalId="6" StartByte="0" NumberOfBytes="1" StartBit="7" NumberOfBits="1" Type="BIT" Name="Fatal Error" Description="" />
+		<Field LogicalId="7" StartByte="1" NumberOfBytes="1" StartBit="0" NumberOfBits="1" Type="BIT" Name="Az Controller Comm. Fail" Description="" />
+		<Field LogicalId="8" StartByte="1" NumberOfBytes="1" StartBit="1" NumberOfBits="1" Type="BIT" Name="Az SW Fail" Description="" />
+		<Field LogicalId="9" StartByte="1" NumberOfBytes="1" StartBit="2" NumberOfBits="1" Type="BIT" Name="Az Parameters Fail" Description="" />
+		<Field LogicalId="10" StartByte="1" NumberOfBytes="1" StartBit="3" NumberOfBits="1" Type="BIT" Name="Az Temperature Warning" Description="" />
+		<Field LogicalId="11" StartByte="1" NumberOfBytes="1" StartBit="5" NumberOfBits="1" Type="BIT" Name="Az Encoder Fail" Description="" />
+		<Field LogicalId="12" StartByte="1" NumberOfBytes="1" StartBit="6" NumberOfBits="1" Type="BIT" Name="Az Motor Loop Failure" Description="" />
+		<Field LogicalId="13" StartByte="1" NumberOfBytes="1" StartBit="7" NumberOfBits="1" Type="BIT" Name="Az Fatal Error" Description="" />
+		<Field LogicalId="14" StartByte="2" NumberOfBytes="1" StartBit="0" NumberOfBits="1" Type="BIT" Name="El Controller Comm. Fail" Description="" />
+		<Field LogicalId="15" StartByte="2" NumberOfBytes="1" StartBit="1" NumberOfBits="1" Type="BIT" Name="El SW Fail" Description="" />
+		<Field LogicalId="16" StartByte="2" NumberOfBytes="1" StartBit="2" NumberOfBits="1" Type="BIT" Name="El Parameters Fail" Description="" />
+		<Field LogicalId="17" StartByte="2" NumberOfBytes="1" StartBit="3" NumberOfBits="1" Type="BIT" Name="El Temperature Warning" Description="" />
+		<Field LogicalId="18" StartByte="2" NumberOfBytes="1" StartBit="5" NumberOfBits="1" Type="BIT" Name="El Encoder Fail" Description="" />
+		<Field LogicalId="19" StartByte="2" NumberOfBytes="1" StartBit="6" NumberOfBits="1" Type="BIT" Name="El Motor Loop Failure" Description="" />
+		<Field LogicalId="20" StartByte="2" NumberOfBytes="1" StartBit="7" NumberOfBits="1" Type="BIT" Name="El Fatal Error" Description="" />
+	</Message>
+</Protocol>

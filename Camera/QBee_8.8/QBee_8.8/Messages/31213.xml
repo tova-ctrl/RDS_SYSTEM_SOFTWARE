@@ -1,0 +1,10 @@
+<?xml version='1.0' encoding='utf-8'?>
+<Protocol>
+	<Message Key="31213" Name="Position Report" NumberOfBytes="4" Protocol="Microcom">
+		<Field LogicalId="0" StartByte="0" NumberOfBytes="4" StartBit="0" NumberOfBits="32" Type="TLowRes2DAngles" Name="Relative Gimbal Angles" Description="Gets Line Of Sight in angels, in units [°]" />
+	</Message>
+	
+	<Message Key="31213" Name="Low-res Relative Gimbal Angles Report" NumberOfBytes="4" Protocol="Generic">
+		<Field LogicalId="0" StartByte="0" NumberOfBytes="4" StartBit="0" NumberOfBits="32" Type="TLowRes2DAngles" Name="Relative Gimbal Angles" Description="Line Of Sight in angels" />
+	</Message>
+</Protocol>

@@ -1,0 +1,12 @@
+<?xml version='1.0' encoding='utf-8'?>
+<Protocol>
+	<Message Key="37010" Name="Navigation BIT" NumberOfBytes="1" Protocol="Microcom">
+		<Field LogicalId="0" StartByte="0" NumberOfBytes="1" StartBit="0" NumberOfBits="1" Type="BIT" Name="Navigation accuracy Warning" Description="Gets Navigation accuracy Warning Flag" />
+		<Field LogicalId="0" StartByte="0" NumberOfBytes="1" StartBit="1" NumberOfBits="1" Type="BIT" Name="GPS Comm Fail" Description="Gets GPS Comm Fail" />
+		<Field LogicalId="0" StartByte="0" NumberOfBytes="1" StartBit="2" NumberOfBits="1" Type="BIT" Name="GPS precision Fail" Description="Gets GPS precision Fail" />
+		<Field LogicalId="0" StartByte="0" NumberOfBytes="1" StartBit="3" NumberOfBits="1" Type="BIT" Name="GPS antenna Fail" Description="Gets GPS antenna Fail" />
+		<Field LogicalId="0" StartByte="0" NumberOfBytes="1" StartBit="4" NumberOfBits="1" Type="BIT" Name="IMU Fail" Description="Gets IMU Fail" />
+		<Field LogicalId="0" StartByte="0" NumberOfBytes="1" StartBit="5" NumberOfBits="1" Type="BIT" Name="PPS Fail" Description="Gets PPS Fail" />
+		<Field LogicalId="0" StartByte="0" NumberOfBytes="1" StartBit="6" NumberOfBits="1" Type="BIT" Name="Calibration Fail" Description="Gets Calibration Fail" />
+	</Message>
+</Protocol>

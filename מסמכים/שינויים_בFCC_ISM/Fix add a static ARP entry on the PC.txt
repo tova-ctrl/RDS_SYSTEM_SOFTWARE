@@ -1,0 +1,26 @@
+Fix: add a static ARP entry on the PC so it never needs to re-resolve the STM32's MAC. Run these two commands on the PC (once — they persist across reboots):
+
+Step 1 — static ARP (PC always knows STM32 MAC without asking):
+
+
+netsh interface ipv4 add neighbors "Ethernet 2" 192.168.55.3 00-80-E1-00-00-03 store=persistent
+Step 2 — verify the /32 host route for .3 is still there (may have been lost on reboot):
+
+
+route print 192.168.55.3
+If the route is missing, re-add it persistently:
+
+
+route add 192.168.55.3 mask 255.255.255.255 192.168.55.5 -p
+After these commands, ping 192.168.55.3 from the PC should work indefinitely — no more dependency on ARP expiry or the STM32 resetting to refresh the PC's cache.
+
+are these commands reverable?
+Yes, completely reversible:
+
+Remove static ARP:
+
+netsh interface ipv4 delete neighbors "Ethernet 2" 192.168.55.3
+Remove persistent route:
+
+
+route delete 192.168.55.3

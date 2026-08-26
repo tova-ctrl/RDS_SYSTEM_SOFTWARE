@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<Protocol>
+	<Message Key="50903" Name="TimeTag Report" NumberOfBytes="16" Protocol="Microcom">
+		<Field LogicalId="0" StartByte="0" NumberOfBytes="8" StartBit="0" NumberOfBits="64" Type="ULONGLONG" Name="System TimeTag" Description="Gets System Message Time Tag" />
+		<Field LogicalId="1" StartByte="8" NumberOfBytes="8" StartBit="0" NumberOfBits="64" Type="ULONGLONG" Name="Control TimeTag" Description="Gets Latest Control Message Time Tag" />
+	</Message>
+</Protocol>

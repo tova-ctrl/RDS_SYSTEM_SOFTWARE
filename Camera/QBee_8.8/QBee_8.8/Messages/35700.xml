@@ -1,0 +1,15 @@
+<?xml version='1.0' encoding='utf-8'?>
+<Protocol>
+	<Message Key="35700" Name="Thermal Camera Report" NumberOfBytes="40" Protocol="Microcom">
+		<Field LogicalId="0" StartByte="0" NumberOfBytes="4" StartBit="0" NumberOfBits="32" Type="LONG" Name="Gain Mode" ConvertType="ThermalCameraGainMode" Description="Gets Thermal Camera Gain Mode" />
+		<Field LogicalId="1" StartByte="4" NumberOfBytes="4" StartBit="0" NumberOfBits="32" Type="LONG" Name="Sync Mode" ConvertType="ThermalCameraSyncMode" Description="Gets Thermal Camera Sync Mode" />
+		<Field LogicalId="2" StartByte="8" NumberOfBytes="4" StartBit="0" NumberOfBits="32" Type="Float" Name="Linear Percent" Description="Gets Thermal Camera Linear Percent" />
+		<Field LogicalId="3" StartByte="12" NumberOfBytes="4" StartBit="0" NumberOfBits="32" Type="Float" Name="ACE Value" Description="Gets Thermal Camera Gamma Corective Value (ACE)" />
+		<Field LogicalId="4" StartByte="16" NumberOfBytes="4" StartBit="0" NumberOfBits="32" Type="Float" Name="DDE Value" Description="Gets Thermal Camera Headroom Detail (DDE)" />
+		<Field LogicalId="5" StartByte="20" NumberOfBytes="4" StartBit="0" NumberOfBits="32" Type="LONG" Name="Color Palette" ConvertType="ThermalCameraColorPalleteMode" Description="Gets Thermal Camera Color Palette Mode" />
+		<Field LogicalId="6" StartByte="24" NumberOfBytes="4" StartBit="0" NumberOfBits="32" Type="LONG" Name="NUC Mode" ConvertType="NUCMode" Description="Gets Noc Enable Mode" />
+		<Field LogicalId="7" StartByte="28" NumberOfBytes="4" StartBit="0" NumberOfBits="32" Type="Float" Name="FOV" Description="Gets Thermal Camera Field Of View" />		
+		<Field LogicalId="8" StartByte="32" NumberOfBytes="4" StartBit="0" NumberOfBits="32" Type="LONG" Name="Gain Value"  Description="Gets Thremal Camera Gain Value" />
+		<Field LogicalId="9" StartByte="36" NumberOfBytes="4" StartBit="0" NumberOfBits="32" Type="LONG" Name="Level Value" Description="Gets Thremal Camera Level Value" />
+	</Message>
+</Protocol>

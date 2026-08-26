@@ -1,0 +1,60 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <BlazorDisableThrowNavigationException>true</BlazorDisableThrowNavigationException>
+    <!-- Required for FFmpeg.AutoGen's pointer-based native interop (live camera video decode) -->
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="IronSoftware.System.Drawing" Version="2026.4.1" />
+    <PackageReference Include="Microsoft.ML.OnnxRuntime" Version="1.27.0" />
+    <PackageReference Include="SixLabors.ImageSharp.Drawing" Version="2.1.7" />
+    <PackageReference Include="FFmpeg.AutoGen" Version="6.0.0" />
+  </ItemGroup>
+
+  <!-- Native FFmpeg DLLs (avcodec-60/avformat-60/avutil-58/etc, matching FFmpeg.AutoGen 6.x's ABI)
+       copied from the vendor's own QBee VideoPlayer — proven working against this exact camera stream.
+       Using an explicit Copy task (not <None CopyToOutputDirectory>) — the SDK's implicit item globbing
+       silently swallowed that approach and the DLLs never actually reached bin\. -->
+  <Target Name="CopyFFmpegNativeDlls" AfterTargets="Build;Publish">
+    <ItemGroup>
+      <FFmpegNativeDlls Include="$(MSBuildProjectDirectory)\ffmpeg_native\*.dll" />
+    </ItemGroup>
+    <Copy SourceFiles="@(FFmpegNativeDlls)" DestinationFolder="$(OutDir)" SkipUnchangedFiles="true" />
+  </Target>
+
+  <!-- stkapi_native.dll — vendor's stkAPI.c/h (native_stkapi\, byte-for-byte copy of
+       FCC_App's own copy) compiled to a Windows DLL via MSVC (see StkDirectCameraService.cs
+       for why: talks to the camera's control port directly from the PC, bypassing the FCC
+       relay, for diagnosing/testing camera control independent of the FCC). Pre-built, not
+       compiled by this MSBuild step — same "just copy it" pattern as CopyFFmpegNativeDlls. -->
+  <Target Name="CopyStkApiNativeDll" AfterTargets="Build;Publish">
+    <Copy SourceFiles="$(MSBuildProjectDirectory)\native_stkapi\stkapi_native.dll" DestinationFolder="$(OutDir)" SkipUnchangedFiles="true" Condition="Exists('$(MSBuildProjectDirectory)\native_stkapi\stkapi_native.dll')" />
+  </Target>
+
+  <!-- Smart App Control blocks unsigned local dev builds from loading (WDAC "VerifiedAndReputableDesktop").
+       Sign the built assembly with the local "RDS Dev Code Signing" cert so it can load.
+       Requires the one-time cert setup: see New-SelfSignedCertificate steps in project notes.
+
+       Also signs stkapi_native.dll (see [[wdac-smart-app-control]] memory, 2026-08-10 entry) — an
+       unsigned native DLL loaded into the process can drag SAC's trust of the WHOLE app down, not
+       just itself. THIS EXACT LINE WAS LOST ONCE ALREADY (2026-08-10) when an older csproj from a
+       backup got copied back over it — if this recurs, it's very likely the same thing happening
+       again, not a new bug. Check this target is still here first. -->
+  <PropertyGroup>
+    <SignToolPath>C:\Program Files (x86)\Windows Kits\10\bin\10.0.26100.0\x64\signtool.exe</SignToolPath>
+  </PropertyGroup>
+
+  <Target Name="SignBuildOutput" AfterTargets="Build" DependsOnTargets="CopyStkApiNativeDll" Condition="Exists('$(SignToolPath)')">
+    <Exec Command="&quot;$(SignToolPath)&quot; sign /n &quot;RDS Dev Code Signing&quot; /fd SHA256 &quot;$(TargetPath)&quot;" ContinueOnError="WarnAndContinue" />
+    <Exec Command="&quot;$(SignToolPath)&quot; sign /n &quot;RDS Dev Code Signing&quot; /fd SHA256 &quot;$(OutDir)stkapi_native.dll&quot;" ContinueOnError="WarnAndContinue" Condition="Exists('$(OutDir)stkapi_native.dll')" />
+    <!-- $(TargetPath) is the .dll; VS/F5 actually launches the apphost .exe, which is a
+         separate file MSBuild generates and does NOT inherit the .dll's signature. -->
+    <Exec Command="&quot;$(SignToolPath)&quot; sign /n &quot;RDS Dev Code Signing&quot; /fd SHA256 &quot;$(OutDir)$(TargetName).exe&quot;" ContinueOnError="WarnAndContinue" Condition="Exists('$(OutDir)$(TargetName).exe')" />
+  </Target>
+
+</Project>

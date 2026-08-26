@@ -1,0 +1,8 @@
+<?xml version='1.0' encoding='utf-8'?>
+<Protocol>
+	<Message Key="50500" Name="Camera Power Report" NumberOfBytes="1" Protocol="Microcom">
+		<Field LogicalId="0" StartByte="0" NumberOfBytes="1" StartBit="0" NumberOfBits="1" Type="BIT" Name="Wide DTV State" ConvertType = "PowerStatesReport" Description="Gets Enabled/Disabled Wide DTV" />
+		<Field LogicalId="1" StartByte="0" NumberOfBytes="1" StartBit="1" NumberOfBits="1" Type="BIT" Name="Narrow DTV State" ConvertType = "PowerStatesReport" Description="Gets Enabled/Disabled Narrow DTV" />
+		<Field LogicalId="2" StartByte="0" NumberOfBytes="1" StartBit="2" NumberOfBits="1" Type="BIT" Name="TI State State" ConvertType = "PowerStatesReport" Description="Gets Enabled/Disabled TI" />
+	</Message>
+</Protocol>

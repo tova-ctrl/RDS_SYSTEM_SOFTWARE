@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<Protocol>
+	<Message Key="36500" Name="Tracker Status Comprehensive Report" NumberOfBytes="4" Protocol="Generic">
+		<Field LogicalId="0" StartByte="0" NumberOfBytes="2" StartBit="0" NumberOfBits="16" Type="SHORT" Name="Target X Coordinate" PermittedValue="[-10k,-4.5k÷4.5,10k,20k]" Description="" />
+		<Field LogicalId="1" StartByte="2" NumberOfBytes="2" StartBit="0" NumberOfBits="16" Type="SHORT" Name="Target Y Coordinate" PermittedValue="[-10k,-4.5k÷4.5,10k]" Description="" />
+	</Message>
+</Protocol>

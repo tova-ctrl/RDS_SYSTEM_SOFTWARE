@@ -1,0 +1,13 @@
+<?xml version='1.0' encoding='utf-8'?>
+<Protocol>
+	<Message Key="20751" Name="General Command" NumberOfBytes="16" Protocol="Generic">
+		<Field LogicalId="0" StartByte="0" NumberOfBytes="1" StartBit="0" NumberOfBits="8" Type="INT" Name="DATA_8" Description="" />
+		<Field LogicalId="1" StartByte="1" NumberOfBytes="1" StartBit="0" NumberOfBits="8" Type="INT" Name="DATA_8" Description="" />
+		<Field LogicalId="2" StartByte="2" NumberOfBytes="1" StartBit="0" NumberOfBits="8" Type="INT" Name="DATA_8" Description="" />
+		<Field LogicalId="3" StartByte="3" NumberOfBytes="1" StartBit="0" NumberOfBits="8" Type="INT" Name="DATA_8" Description="" />
+		<Field LogicalId="4" StartByte="4" NumberOfBytes="2" StartBit="0" NumberOfBits="16" Type="SHORT" Name="DATA_16" Description="" />
+		<Field LogicalId="5" StartByte="6" NumberOfBytes="2" StartBit="0" NumberOfBits="16" Type="SHORT" Name="MsgId" Description="" />
+		<Field LogicalId="6" StartByte="8" NumberOfBytes="4" StartBit="0" NumberOfBits="32" Type="LONG" Name="DATA_32" Description="" />
+		<Field LogicalId="7" StartByte="12" NumberOfBytes="4" StartBit="0" NumberOfBits="32" Type="TLowRes2DAngles" Name="Angle" Description="" />
+	</Message>
+</Protocol>

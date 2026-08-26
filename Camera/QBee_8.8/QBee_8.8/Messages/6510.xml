@@ -1,0 +1,15 @@
+<?xml version='1.0' encoding='utf-8'?>
+<Protocol>
+	<Message Key="6510" Name="Tracker Parameters" NumberOfBytes="8" Protocol="Generic">
+		<Field LogicalId="0" StartByte="0" NumberOfBytes="1" StartBit="0" NumberOfBits="8" Type="UCHAR" Name="Tracker Type" ConvertType="TrackerType_Generic" DefaultValue="0" Description="" />
+		<Field LogicalId="1" StartByte="2" NumberOfBytes="2" StartBit="0" NumberOfBits="16" Type="USHORT" Name="Gate X Size" DefaultValue="0" PermittedValue="[ 0 ÷ 65535 ]" Description="" />
+		<Field LogicalId="2" StartByte="4" NumberOfBytes="2" StartBit="0" NumberOfBits="16" Type="USHORT" Name="Gate Y Size" DefaultValue="0" PermittedValue="[ 0 ÷ 65535 ]" Description="" />
+		<Field LogicalId="3" StartByte="6" NumberOfBytes="1" StartBit="0" NumberOfBits="1" Type="BIT" Name="Gate Size Enable" DefaultValue="0" Description="" />
+	</Message>
+	<Message Key="6510" Name="Tracker Parameters" NumberOfBytes="8" Protocol="Microcom">
+		<Field LogicalId="0" StartByte="0" NumberOfBytes="1" StartBit="0" NumberOfBits="8" Type="UCHAR" Name="Tracker Type" ConvertType="TrackerType" DefaultValue="0" Description="Sets target type accoording to TargetType Table. This field sets automatically the gate size." />
+		<Field LogicalId="1" StartByte="2" NumberOfBytes="2" StartBit="0" NumberOfBits="16" Type="USHORT" Name="Gate X Size" DefaultValue="0" PermittedValue="[ 0 ÷ 65535 ]" Description="Sets gate width in case of manual gate size. The value range [5 ÷ (screen width / 2)]" />
+		<Field LogicalId="2" StartByte="4" NumberOfBytes="2" StartBit="0" NumberOfBits="16" Type="USHORT" Name="Gate Y Size" DefaultValue="0" PermittedValue="[ 0 ÷ 65535 ]" Description="Sets gate heigh in case of manual gate size. The value range [5 ÷ (screen heigh / 2)]" />
+		<Field LogicalId="3" StartByte="6" NumberOfBytes="1" StartBit="0" NumberOfBits="1" Type="BIT" Name="Gate Size Enable" DefaultValue="0" Description="Enables/Disables manual gate size according proviided X, Y sizes. When disabled, gate size will be accodring to TargetType" />
+	</Message>	
+</Protocol>

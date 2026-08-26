@@ -1,0 +1,29 @@
+האם קודם אפשר לבדוק את השינו על הLAPTOP ?
+כלומר עם 2 WSL ?
+כמו שעשינו כל בזמן עם הCAN  הוירטואלי ועכשיו נעשה עם הETHERNET?
+וכן הכתובת של הFCC היא 192.168.55.2
+כן, בדיוק כמו vcan0 — רק במקום CAN וירטואלי, UDP על loopback.
+
+קודם make clean && make בשני הפרויקטים ב-WSL, אחר כך:
+
+Terminal 1 — ISM:
+
+
+cd /mnt/c/Projects/RDS_SYSTEM_SOFTWARE/ISM_Firmware
+./build/ism_sim eth 127.0.0.1 5202
+Terminal 2 — FCC:
+
+
+cd /mnt/c/Projects/RDS_SYSTEM_SOFTWARE/FCC_App
+./build/fcc_app eth:127.0.0.1 127.0.0.1 5200
+כשיעבוד על הלפטופ — לשנות ל-Jetson פשוט מאוד:
+
+Terminal 1 (לפטופ/ISM):
+
+
+./build/ism_sim eth 192.168.55.2 5202
+#                   ↑ כתובת הJetson (FCC ישלח משם)
+Jetson (FCC):
+
+
+./build/fcc_app eth:<laptop_ip> <laptop_ip> 5200

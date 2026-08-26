@@ -1,0 +1,6 @@
+<?xml version='1.0' encoding='utf-8'?>
+<Protocol>
+	<Message Key="38455" Name="Designator NATO" NumberOfBytes="2" Protocol="Microcom">
+		<Field LogicalId="0" StartByte="6" NumberOfBytes="2" StartBit="0" NumberOfBits="16" Type="USHORT" Name="Code Value" Description="Sets fire frequency. Set the value -50,000 [uSec]" />
+	</Message>
+</Protocol>

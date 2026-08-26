@@ -1,0 +1,9 @@
+C:\Project\MicroFamily\Utilities\APIGenerator\API_Demo_WIN\STK300cpp\x64\Debug\STK300cpp.vcxproj.AssemblyReference.cache
+C:\Project\MicroFamily\Utilities\APIGenerator\API_Demo_WIN\STK300cpp\x64\Debug\STK300cpp.vcxproj.SuggestedBindingRedirects.cache
+C:\Project\MicroFamily\Utilities\APIGenerator\API_Demo_WIN\STK300cpp\x64\Debug\STK300cpp.msgBoxForm.resources
+C:\Project\MicroFamily\Utilities\APIGenerator\API_Demo_WIN\STK300cpp\x64\Debug\STK300cpp.MyForm.resources
+C:\Project\MicroFamily\Utilities\APIGenerator\API_Demo_WIN\STK300cpp\x64\Debug\STK300cpp.vcxproj.GenerateResource.cache
+C:\Projects\RDS_SYSTEM_SOFTWARE\Camera\SDK_11.4\API_Demo_WIN\STK300cpp\x64\Debug\STK300cpp.vcxproj.AssemblyReference.cache
+C:\Projects\RDS_SYSTEM_SOFTWARE\Camera\SDK_11.4\API_Demo_WIN\STK300cpp\x64\Debug\STK300cpp.msgBoxForm.resources
+C:\Projects\RDS_SYSTEM_SOFTWARE\Camera\SDK_11.4\API_Demo_WIN\STK300cpp\x64\Debug\STK300cpp.MyForm.resources
+C:\Projects\RDS_SYSTEM_SOFTWARE\Camera\SDK_11.4\API_Demo_WIN\STK300cpp\x64\Debug\STK300cpp.vcxproj.GenerateResource.cache

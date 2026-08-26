@@ -1,0 +1,7 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(//c/Projects/RDS_SYSTEM_SOFTWARE/RDS_WebApp/RDS_WebApp/Components/Layout/**)"
+    ]
+  }
+}

@@ -1,0 +1,14 @@
+<?xml version='1.0' encoding='utf-8'?>
+<Protocol>
+	<Message Key="36550" Name="VMD Report" NumberOfBytes="16" Protocol="Generic">
+		<Field LogicalId="0" StartByte="0" NumberOfBytes="2" StartBit="0" NumberOfBits="16" Type="USHORT" Name="Quantity of Detections" PermittedValue="[ 0 ÷ 65000 ]" Description="" />
+		<Field LogicalId="1" StartByte="2" NumberOfBytes="2" StartBit="0" NumberOfBits="16" Type="USHORT" Name="Detection Number" PermittedValue="[ 0 ÷ 65000 ]" Description="" />
+		<Field LogicalId="2" StartByte="4" NumberOfBytes="2" StartBit="0" NumberOfBits="16" Type="USHORT" Name="Detection ID" PermittedValue="[ 0 ÷ 65000 ]" Description="" />
+		<Field LogicalId="3" StartByte="6" NumberOfBytes="1" StartBit="0" NumberOfBits="8" Type="UCHAR" Name="Detection Classification" PermittedValue="[ 0 ÷ 255 ]" Description="" />
+		<Field LogicalId="4" StartByte="7" NumberOfBytes="1" StartBit="0" NumberOfBits="8" Type="UCHAR" Name="Detection Quality" PermittedValue="[ 0 ÷ 255 ]" Description="" />
+		<Field LogicalId="5" StartByte="8" NumberOfBytes="2" StartBit="0" NumberOfBits="16" Type="SHORT" Name="Detection Coordinate X" PermittedValue="[ -10000 ÷ +10000 ]" Description="" />
+		<Field LogicalId="6" StartByte="10" NumberOfBytes="2" StartBit="0" NumberOfBits="16" Type="SHORT" Name="Detection Coordinate Y" PermittedValue="[ -10000 ÷ +10000 ]" Description="" />
+		<Field LogicalId="7" StartByte="12" NumberOfBytes="2" StartBit="0" NumberOfBits="16" Type="SHORT" Name="Detection Size X" PermittedValue="[ -10000 ÷ +10000 ]" Description="" />
+		<Field LogicalId="8" StartByte="14" NumberOfBytes="2" StartBit="0" NumberOfBits="16" Type="SHORT" Name="Detection Size Y" PermittedValue="[ -10000 ÷ +10000 ]" Description="" />
+	</Message>
+</Protocol>

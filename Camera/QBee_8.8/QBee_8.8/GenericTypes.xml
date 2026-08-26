@@ -1,0 +1,605 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<GenericTypes>
+	<EnumType Id="ModuleID">
+		<EnumValue Key="0" Name="Manager"></EnumValue>
+		<EnumValue Key="1" Name="Thermal Camera Dial"></EnumValue>
+		<EnumValue Key="2" Name="DTV Camera Dial"></EnumValue>
+	</EnumType>
+	<EnumType Id="DialDataType">
+		<EnumValue Key="0" Name="Undefined"></EnumValue>
+		<EnumValue Key="1" Name="Signed char"></EnumValue>
+		<EnumValue Key="2" Name="Unsigned char"></EnumValue>
+		<EnumValue Key="3" Name="Short"></EnumValue>
+		<EnumValue Key="4" Name="Unsigned short"></EnumValue>
+		<EnumValue Key="5" Name="Long"></EnumValue>
+		<EnumValue Key="6" Name="Unsigned Long"></EnumValue>
+		<EnumValue Key="7" Name="Float"></EnumValue>
+		<EnumValue Key="8" Name="ASCII string"></EnumValue>
+	</EnumType>
+	<EnumType Id="FOVDependency">
+		<EnumValue Key="0" Name="FOV Depended Rate"></EnumValue>
+		<EnumValue Key="1" Name="FOV Undepended Rate"></EnumValue>
+	</EnumType>
+	<EnumType Id="Camera">
+		<EnumValue Key="1" Name="TI"></EnumValue>
+		<EnumValue Key="2" Name="DTV"></EnumValue>
+		<EnumValue Key="4" Name="SeeSpot"></EnumValue>
+	</EnumType>
+	<EnumType Id="PIP">
+		<EnumValue Key="1" Name="On"></EnumValue>
+		<EnumValue Key="2" Name="Off"></EnumValue>
+	</EnumType>
+		<EnumType Id="FOV Synchronization Mode">
+		<EnumValue Key="0" Name="No Synchronization"></EnumValue>
+		<EnumValue Key="1" Name="Synchronized to the primary"></EnumValue>
+	</EnumType>
+	<EnumType Id="SensorChannel">
+		<EnumValue Key="0" Name="LRF"></EnumValue>
+		<EnumValue Key="1" Name="Pointer"></EnumValue>
+		<EnumValue Key="2" Name="Designator"></EnumValue>
+	</EnumType>
+	<EnumType Id="CoolerControl">
+		<EnumValue Key="0" Name="On"></EnumValue>
+		<EnumValue Key="1" Name="Inhibit"></EnumValue>
+		<EnumValue Key="2" Name="Standby"></EnumValue>
+	</EnumType>
+	<EnumType Id="HeaterControl">
+		<EnumValue Key="0" Name="Auto"></EnumValue>
+		<EnumValue Key="1" Name="On"></EnumValue>
+		<EnumValue Key="2" Name="Off"></EnumValue>
+	</EnumType>
+	<EnumType Id="SensitivityModeSelection">
+		<EnumValue Key="0" Name="Automatic"></EnumValue>
+		<EnumValue Key="1" Name="Manual"></EnumValue>
+	</EnumType>
+	<EnumType Id="SensitivityTable">
+		<EnumValue Key="0" Name="Table 0"></EnumValue>
+		<EnumValue Key="1" Name="Table 1"></EnumValue>
+		<EnumValue Key="2" Name="Table 2"></EnumValue>
+		<EnumValue Key="3" Name="Table 3"></EnumValue>
+	</EnumType>
+	<EnumType Id="TIAGCMode">
+		<EnumValue Key="0" Name="Manual"></EnumValue>
+		<EnumValue Key="1" Name="Auto"></EnumValue>
+	</EnumType>
+	<EnumType Id="DTVAGCMode">
+		<EnumValue Key="0" Name="Full Auto"></EnumValue>
+		<EnumValue Key="1" Name="Shutter Priority"></EnumValue>
+		<EnumValue Key="2" Name="Iris Priority"></EnumValue>
+	</EnumType>
+	<EnumType Id="ImageStabType">
+		<EnumValue Key="0" Name="Image Based Stab"></EnumValue>
+		<EnumValue Key="1" Name="IMU Based Stab"></EnumValue>
+	</EnumType>
+	<EnumType Id="AGCROI">
+		<EnumValue Key="0" Name="whole image"></EnumValue>
+		<EnumValue Key="1" Name="central 1/4 area"></EnumValue>
+		<EnumValue Key="2" Name="central 1/16 area"></EnumValue>
+		<EnumValue Key="3" Name="Reserved"></EnumValue>
+		<EnumValue Key="4" Name="Reserved"></EnumValue>
+		<EnumValue Key="5" Name="Reserved"></EnumValue>
+		<EnumValue Key="6" Name="semi local"></EnumValue>
+		<EnumValue Key="7" Name="local"></EnumValue>
+	</EnumType>
+	<EnumType Id="GenericMedian">
+		<EnumValue Key="0" Name="No Median"></EnumValue>
+		<EnumValue Key="1" Name="Level 1"></EnumValue>
+		<EnumValue Key="2" Name="Level 2"></EnumValue>
+		<EnumValue Key="3" Name="Level 3"></EnumValue>
+		<EnumValue Key="4" Name="Level 4"></EnumValue>
+		<EnumValue Key="5" Name="Level 5"></EnumValue>
+		<EnumValue Key="6" Name="Level 6"></EnumValue>
+		<EnumValue Key="7" Name="Max Median"></EnumValue>
+	</EnumType>
+	<EnumType Id="GenericSharpness">
+		<EnumValue Key="0" Name="No Sharpness"></EnumValue>
+		<EnumValue Key="1" Name="Low Sharpness"></EnumValue>
+		<EnumValue Key="2" Name="Mid Sharpness"></EnumValue>
+		<EnumValue Key="3" Name="Max Sharpness"></EnumValue>
+	</EnumType>
+	<EnumType Id="TIGainChange">
+		<EnumValue Key="0" Name="no change"></EnumValue>
+		<EnumValue Key="1" Name="decrease contrast"></EnumValue>
+		<EnumValue Key="2" Name="increase contrast"></EnumValue>
+		<EnumValue Key="3" Name="set absolute (or default) gain value"></EnumValue>
+	</EnumType>
+	<EnumType Id="DTVGainChange">
+		<EnumValue Key="0" Name="no change"></EnumValue>
+		<EnumValue Key="1" Name="decrease contrast"></EnumValue>
+		<EnumValue Key="2" Name="increase contrast"></EnumValue>
+	</EnumType>
+	<EnumType Id="TILevelChange">
+		<EnumValue Key="0" Name="no change"></EnumValue>
+		<EnumValue Key="1" Name="decrease brightness"></EnumValue>
+		<EnumValue Key="2" Name="increase brightness"></EnumValue>
+		<EnumValue Key="3" Name="set absolute (or default) level value"></EnumValue>
+	</EnumType>
+	<EnumType Id="DTVLevelChange">
+		<EnumValue Key="0" Name="no change"></EnumValue>
+		<EnumValue Key="1" Name="decrease brightness"></EnumValue>
+		<EnumValue Key="2" Name="increase brightness"></EnumValue>
+	</EnumType>
+	<EnumType Id="ImageType">
+		<EnumValue Key="0" Name="real scenery image"></EnumValue>
+		<EnumValue Key="1" Name="electronics pattern1"></EnumValue>
+		<EnumValue Key="2" Name="electronics pattern2"></EnumValue>
+		<EnumValue Key="3" Name="electronics pattern3"></EnumValue>
+		<EnumValue Key="4" Name="electronics pattern4"></EnumValue>
+		<EnumValue Key="5" Name="electronics pattern5"></EnumValue>
+		<EnumValue Key="6" Name="electronics pattern6"></EnumValue>
+		<EnumValue Key="7" Name="electronics pattern7"></EnumValue>
+		<EnumValue Key="8" Name="electronics pattern8"></EnumValue>
+		<EnumValue Key="9" Name="electronics pattern9"></EnumValue>
+		<EnumValue Key="10" Name="electronics pattern10"></EnumValue>
+		<EnumValue Key="99" Name="BPR Map"></EnumValue>
+		<EnumValue Key="100" Name="detector pattern1"></EnumValue>
+		<EnumValue Key="101" Name="detector pattern2"></EnumValue>
+		<EnumValue Key="102" Name="detector pattern3"></EnumValue>
+		<EnumValue Key="103" Name="detector pattern4"></EnumValue>
+	</EnumType>
+	<EnumType Id="TErrorCode">
+		<EnumValue Key="0" Name="Message"></EnumValue>
+		<EnumValue Key="1" Name="Data"></EnumValue>
+	</EnumType>
+	<EnumType Id="TErrorDataContainer">
+		<EnumValue Key="0" Name="TErrorCodeMessage"></EnumValue>
+		<EnumValue Key="1" Name="TErrorCodeMessageData"></EnumValue>
+	</EnumType>
+	<EnumType Id="TErrorCodeMessage">
+		<EnumValue Key="0" Name="Header"></EnumValue>
+		<EnumValue Key="1" Name="Checksum"></EnumValue>
+		<EnumValue Key="2" Name="Message not supported"></EnumValue>
+		<EnumValue Key="3" Name="Message length wrong"></EnumValue>
+	</EnumType>
+	<EnumType Id="TErrorCodeMessageData">
+		<EnumValue Key="0" Name="Out of range"></EnumValue>
+		<EnumValue Key="1" Name="TBD"></EnumValue>
+		<EnumValue Key="2" Name="TBD"></EnumValue>
+	</EnumType>
+	<EnumType Id="TThermalCameraModes">
+		<EnumValue Key="0" Name="Observation"></EnumValue>
+		<EnumValue Key="1" Name="Reserved"></EnumValue>
+		<EnumValue Key="2" Name="NUC_Calib"></EnumValue>
+		<EnumValue Key="3" Name="LensCalib"></EnumValue>
+		<EnumValue Key="4" Name="FlagCheck"></EnumValue>
+		<EnumValue Key="5" Name="LensCheck"></EnumValue>
+		<EnumValue Key="7" Name="BIT"></EnumValue>
+		<EnumValue Key="9" Name="CommandLoss"></EnumValue>
+		<EnumValue Key="10" Name="Manual_BPR"></EnumValue>
+		<EnumValue Key="11" Name="Reset_NUC"></EnumValue>
+		<EnumValue Key="12" Name="FlashFormat"></EnumValue>
+		<EnumValue Key="14" Name="RAM_CHECK"></EnumValue>
+		<EnumValue Key="15" Name="Flash_NUC_write"></EnumValue>
+		<EnumValue Key="16" Name="Flash_NUC_read"></EnumValue>
+		<EnumValue Key="21" Name="Disable Calibration"></EnumValue>
+	</EnumType>
+	<EnumType Id="TDayCameraModes">
+		<EnumValue Key="0" Name="Observation"></EnumValue>
+		<EnumValue Key="7" Name="BIT"></EnumValue>
+		<EnumValue Key="8" Name="Stand-By"></EnumValue>
+		<EnumValue Key="9" Name="Command Loss"></EnumValue>
+		<EnumValue Key="10" Name="Reserved"></EnumValue>
+		<EnumValue Key="14" Name="RAM_CHECK"></EnumValue>
+		<EnumValue Key="15" Name="External Boresight"></EnumValue>
+		<EnumValue Key="16" Name="Boresight Calibration"> </EnumValue>
+		<EnumValue Key="18" Name="Flash Video Param Write"></EnumValue>
+		<EnumValue Key="31" Name="Reserved"></EnumValue>
+	</EnumType>
+	<EnumType Id="TOperationMode_Generic">
+		<EnumValue Key="0" Name="IDLE"></EnumValue>
+		<EnumValue Key="1" Name="INIT"></EnumValue>
+		<EnumValue Key="2" Name="Rate"></EnumValue>
+		<EnumValue Key="3" Name="Position – Relative Angles"></EnumValue>
+		<EnumValue Key="4" Name="Drift Calibration"></EnumValue>
+		<EnumValue Key="5" Name="BIT"></EnumValue>
+		<EnumValue Key="6" Name="CAGE"></EnumValue>
+		<EnumValue Key="7" Name="PILOT WINDOW"></EnumValue>
+		<EnumValue Key="8" Name="Launch"></EnumValue>		
+		<EnumValue Key="9" Name="STOW"></EnumValue>
+		<EnumValue Key="10" Name="Track"></EnumValue>
+		<EnumValue Key="11" Name="Gimbal Calibration"></EnumValue>
+		<EnumValue Key="12" Name="System Loading"></EnumValue>
+		<EnumValue Key="13" Name="User Nuc"></EnumValue>
+	</EnumType>
+	<EnumType Id="TOperationMode_Micro">
+		<EnumValue Key="0" Name="IDLE"></EnumValue>
+		<EnumValue Key="1" Name="Init"></EnumValue>
+		<EnumValue Key="2" Name="Rate"></EnumValue>
+		<EnumValue Key="3" Name="Position – Relative Angles"></EnumValue>
+		<EnumValue Key="4" Name="Drift Calibration"></EnumValue>
+		<EnumValue Key="5" Name="BIT"></EnumValue>
+		<EnumValue Key="6" Name="Safe"></EnumValue>
+		<EnumValue Key="7" Name="Center"></EnumValue>
+		<EnumValue Key="10" Name="Track"></EnumValue>
+		<EnumValue Key="11" Name="Gimbal Calibration"></EnumValue>
+		<EnumValue Key="12" Name="Rate-Pos"></EnumValue>
+		<EnumValue Key="13" Name="System Loading"></EnumValue>
+	</EnumType>
+	<EnumType Id="GPSDataSource">
+		<EnumValue Key="0" Name="position and velocity from payload GPS"></EnumValue>
+		<EnumValue Key="1" Name="Position and velocity from vehicle"></EnumValue>
+		<EnumValue Key="2" Name="Position and velocity are not available"></EnumValue>
+		<EnumValue Key="3" Name="Reserved"></EnumValue>
+	</EnumType>
+	<EnumType Id="EulerAngleOrder">
+		<EnumValue Key="0" Name="312"></EnumValue>
+		<EnumValue Key="1" Name="321"></EnumValue>
+		<EnumValue Key="2" Name="-323"></EnumValue>
+	</EnumType>
+	<EnumType Id="LOSAxis">
+		<EnumValue Key="0" Name="LOS oriented with Z axis"></EnumValue>
+		<EnumValue Key="1" Name="LOS oriented with X axis"></EnumValue>
+		<EnumValue Key="2" Name="NA"></EnumValue>
+		<EnumValue Key="3" Name="NA"></EnumValue>
+	</EnumType>
+	<EnumType Id="NavigationType">
+		<EnumValue Key="0" Name="Inertial navigation"></EnumValue>
+		<EnumValue Key="1" Name="Vertical Gyro"></EnumValue>
+		<EnumValue Key="2" Name="Add gimbal angles to external INS data"></EnumValue>
+		<EnumValue Key="7" Name="No navigation"></EnumValue>
+	</EnumType>
+	<EnumType Id="AltitudeType">
+		<EnumValue Key="0" Name="Sea Level"></EnumValue>
+		<EnumValue Key="1" Name="Ellipsoid"></EnumValue>
+	</EnumType>
+	<EnumType Id="PlatformDataSource">
+		<EnumValue Key="0" Name="Position and velocity are available from vehicle"></EnumValue>
+		<EnumValue Key="1" Name="Position and velocity are not available from vehicle"></EnumValue>
+	</EnumType>
+	<EnumType Id="FOVControlType">
+		<EnumValue Key="0" Name="Zoom Change(continuous)"></EnumValue>
+		<EnumValue Key="1" Name="Discrete FOV (Go To Presetting)"></EnumValue>
+		<EnumValue Key="2" Name="Zoom Change Control Discrete jump"></EnumValue>
+		<EnumValue Key="3" Name="Set Absolute HFOV Value"></EnumValue>
+	</EnumType>	
+	<EnumType Id="EZoomOperation">
+		<EnumValue Key="0" Name="Combined with Optical"></EnumValue>
+		<EnumValue Key="1" Name="Disabled"></EnumValue>
+	</EnumType>
+	<EnumType Id="ZoomChange">
+		<EnumValue Key="0" Name="No change"></EnumValue>
+		<EnumValue Key="1" Name="Zoom out"></EnumValue>
+		<EnumValue Key="2" Name="Zoom in"></EnumValue>
+	</EnumType>
+	<EnumType Id="DiscreteFOV">
+		<EnumValue Key="0" Name="WFOV"></EnumValue>
+		<EnumValue Key="1" Name="MFOV"></EnumValue>
+		<EnumValue Key="2" Name="NFOV"></EnumValue>
+		<EnumValue Key="3" Name="TBD"></EnumValue>
+	</EnumType>
+	<EnumType Id="FocusControlType">
+		<EnumValue Key="0" Name="Focus Change (continuous)- Normal"></EnumValue>
+		<EnumValue Key="1" Name="Set Focus to Infinity"></EnumValue>
+		<EnumValue Key="2" Name="AutoFocus (OneShot)"></EnumValue>
+		<EnumValue Key="3" Name="AutoFocus (Continuos)"></EnumValue>
+		<EnumValue Key="4" Name="AutoFocus (Zoom-Triggered)"></EnumValue>
+		<EnumValue Key="5" Name="Set Focus to Range"></EnumValue>
+	</EnumType>
+	<EnumType Id="FocusMode">
+		<EnumValue Key="0" Name="normal (Focus Change)"></EnumValue>
+		<EnumValue Key="1" Name="Infinity"></EnumValue>
+		<EnumValue Key="2" Name="Auto (OneShot)"></EnumValue>
+		<EnumValue Key="3" Name="Auto (Continuos)"></EnumValue>
+	</EnumType>
+	<EnumType Id="FocusChange">
+		<EnumValue Key="0" Name="No change"></EnumValue>
+		<EnumValue Key="1" Name="Closer Range"></EnumValue>
+		<EnumValue Key="2" Name="Further Range"></EnumValue>
+		<EnumValue Key="3" Name="set focus to according Direct Focus Control"></EnumValue>
+	</EnumType>
+	<EnumType Id="IrisMode">
+		<EnumValue Key="0" Name="normal (Iris Change)"></EnumValue>
+		<EnumValue Key="1" Name="optimal"></EnumValue>
+		<EnumValue Key="2" Name="open"></EnumValue>
+		<EnumValue Key="3" Name="Auto (Continuos)"></EnumValue>
+	</EnumType>
+	<EnumType Id="IrisControlType">
+		<EnumValue Key="0" Name="Auto Iris"></EnumValue>
+		<EnumValue Key="1" Name="Iris Change (continuous)- Normal"></EnumValue>
+		<EnumValue Key="2" Name="set absolute aperture value"></EnumValue>
+	</EnumType>
+	<EnumType Id="IrisChange">
+		<EnumValue Key="0" Name="No change"></EnumValue>
+		<EnumValue Key="1" Name="Iris Close"></EnumValue>
+		<EnumValue Key="2" Name="Iris Open"></EnumValue>
+	</EnumType>
+	<EnumType Id="OpticalFilter">
+		<EnumValue Key="0" Name="Auto Filter Control"></EnumValue>
+		<EnumValue Key="1" Name="ICR In"></EnumValue>
+		<EnumValue Key="2" Name="ICR Out"></EnumValue>
+	</EnumType>
+	<EnumType Id="TrackerType_Generic">
+		<EnumValue Key="0" Name="Dynamic"></EnumValue>
+		<EnumValue Key="1" Name="Structure Small"></EnumValue>
+		<EnumValue Key="2" Name="Structure Medium"></EnumValue>
+		<EnumValue Key="3" Name="Structure Large"></EnumValue>
+	</EnumType>
+	<EnumType Id="TrackerType">
+		<EnumValue Key="0" Name="Auto gate size (20 pix)"></EnumValue>
+		<EnumValue Key="1" Name="Structure Small"></EnumValue>
+		<EnumValue Key="2" Name="Structure Medium"></EnumValue>
+		<EnumValue Key="3" Name="Structure Large"></EnumValue>
+		<EnumValue Key="4" Name="Human"></EnumValue>
+		<EnumValue Key="5" Name="Vehicle"></EnumValue>
+		<EnumValue Key="6" Name="Truck"></EnumValue>
+	</EnumType>
+	<EnumType Id="TrackerType_Micro">
+		<EnumValue Key="0" Name="Dynamic"></EnumValue>
+		<EnumValue Key="1" Name="Static"></EnumValue>
+	</EnumType>	
+	<EnumType Id="TrackerGateMode">
+		<EnumValue Key="0" Name="Adaptive"></EnumValue>
+		<EnumValue Key="1" Name="Manual"></EnumValue>
+		<EnumValue Key="2" Name="Semi"></EnumValue>
+	</EnumType>
+	<EnumType Id="TrackerStatus">
+		<EnumValue Key="0" Name="No Track"></EnumValue>
+		<EnumValue Key="1" Name="Tracker OK"></EnumValue>
+		<EnumValue Key="2" Name="Prediction"></EnumValue>
+		<EnumValue Key="3" Name="TrackLoss"></EnumValue>
+	</EnumType>
+	<EnumType Id="TrackingQuality">
+		<EnumValue Key="0" Name="0 - Poor quality"></EnumValue>
+		<EnumValue Key="1" Name="1"></EnumValue>
+		<EnumValue Key="2" Name="2"></EnumValue>
+		<EnumValue Key="3" Name="3"></EnumValue>
+		<EnumValue Key="4" Name="4"></EnumValue>
+		<EnumValue Key="5" Name="5"></EnumValue>
+		<EnumValue Key="6" Name="6"></EnumValue>
+		<EnumValue Key="7" Name="7 - High quality"></EnumValue>
+	</EnumType>
+	<EnumType Id="AutoTrackMode">
+		<EnumValue Key="0" Name="Not Enabled"></EnumValue>
+		<EnumValue Key="1" Name="Enabled"></EnumValue>
+	</EnumType>
+	<EnumType Id="TrackerGateType">
+		<EnumValue Key="0" Name="Automatic"></EnumValue>
+		<EnumValue Key="1" Name="Manual (X,Y Size)"></EnumValue>
+		<EnumValue Key="2" Name="Manual (Size Change)"></EnumValue>
+	</EnumType>
+	<EnumType Id="TrackerSizeChange">
+		<EnumValue Key="0" Name="No change"></EnumValue>
+		<EnumValue Key="1" Name="Smaller"></EnumValue>
+		<EnumValue Key="2" Name="Larger"></EnumValue>
+		<EnumValue Key="3" Name="Reset to default"></EnumValue>
+	</EnumType>
+	<EnumType Id="MovementControlFunction">
+		<EnumValue Key="0" Name="Use according Enabled function"></EnumValue>
+		<EnumValue Key="1" Name="Adjust"></EnumValue>
+		<EnumValue Key="2" Name="Offset"></EnumValue>
+		<EnumValue Key="3" Name="Target Acquisition (TBR)"></EnumValue>
+		<EnumValue Key="4" Name="Search"></EnumValue>
+		<EnumValue Key="5" Name="Inertial Offset"></EnumValue>
+	</EnumType>
+	<EnumType Id="LRFMode">
+		<EnumValue Key="0" Name="Idle"></EnumValue>
+		<EnumValue Key="1" Name="Single Shot"></EnumValue>
+		<EnumValue Key="2" Name="Continuous"></EnumValue>
+	</EnumType>
+	<EnumType Id="PointerMode">
+		<EnumValue Key="0" Name="Fire off"></EnumValue>
+		<EnumValue Key="1" Name="Fire continuous"></EnumValue>
+		<EnumValue Key="2" Name="Fire Blinking"></EnumValue>
+	</EnumType>
+	<EnumType Id="DesignatorMode">
+		<EnumValue Key="0" Name="standby"></EnumValue>
+		<EnumValue Key="1" Name="BIT"></EnumValue>
+		<EnumValue Key="2" Name="external trigger synced operated"></EnumValue>
+		<EnumValue Key="3" Name="internal code operated"></EnumValue>
+		<EnumValue Key="4" Name="Boresight"></EnumValue>
+	</EnumType>
+	<EnumType Id="CodeFormat">
+		<EnumValue Key="0" Name="in time format"></EnumValue>
+		<EnumValue Key="1" Name="in frequency format"></EnumValue>
+	</EnumType>
+	<EnumType Id="PixelStatus">
+		<EnumValue Key="0" Name="No Data"></EnumValue>
+		<EnumValue Key="1" Name="Bad Pixel"></EnumValue>
+		<EnumValue Key="2" Name="Normal Pixel"></EnumValue>
+	</EnumType>
+	<EnumType Id="CalibrationType">
+		<EnumValue Key="0" Name="Flag"></EnumValue>
+		<EnumValue Key="1" Name="Scenery"></EnumValue>
+		<EnumValue Key="2" Name="External"></EnumValue>
+		<EnumValue Key="3" Name="Custom"></EnumValue>
+	</EnumType>
+	<EnumType Id="CalibrationAlgorithm">
+		<EnumValue Key="0" Name="1 point"></EnumValue>
+		<EnumValue Key="1" Name="2 point"></EnumValue>
+		<EnumValue Key="2" Name="3 point"></EnumValue>
+		<EnumValue Key="3" Name="Multipoint"></EnumValue>
+	</EnumType>
+	<EnumType Id="CalibrationStatus">
+		<EnumValue Key="0" Name="Ready for calibration"></EnumValue>
+		<EnumValue Key="1" Name="Wait for next flag"></EnumValue>
+		<EnumValue Key="2" Name="Reading data"></EnumValue>
+		<EnumValue Key="3" Name="Calculating"></EnumValue>
+		<EnumValue Key="4" Name="Calculating BPR"></EnumValue>
+		<EnumValue Key="5" Name="Programming flash"></EnumValue>
+		<EnumValue Key="6" Name="Calibration failure"></EnumValue>
+		<EnumValue Key="7" Name="Finished"></EnumValue>
+		<EnumValue Key="8" Name="TEC power not sufficient"></EnumValue>
+	</EnumType>
+	<EnumType Id="BoresightCalibrationType">
+		<EnumValue Key="0" Name=" Laser Spot User Calibration"></EnumValue>
+		<EnumValue Key="1" Name="Factory Calibration"></EnumValue>
+		<EnumValue Key="2" Name="Temperature Calibration"></EnumValue>
+		<EnumValue Key="3" Name="DLOS Calibration"></EnumValue>
+	</EnumType>
+	<EnumType Id="AlgoMode">
+		<EnumValue Key="0" Name="Disable"></EnumValue>
+		<EnumValue Key="1" Name="Vehicle"></EnumValue>
+		<EnumValue Key="2" Name="Aerial"></EnumValue>
+		<EnumValue Key="3" Name="Anomaly"></EnumValue>
+		<EnumValue Key="4" Name="Maritime"></EnumValue>
+		<EnumValue Key="5" Name="Drone"></EnumValue>
+		<EnumValue Key="6" Name="Person"></EnumValue>
+		<EnumValue Key="7" Name="Drone Classification"></EnumValue>
+	</EnumType>
+	<EnumType Id="EndGame">
+		<EnumValue Key="0" Name="Normal"></EnumValue>
+		<EnumValue Key="1" Name="End Game Stage"></EnumValue>
+	</EnumType>
+	<EnumType Id="RecordVideoStatus">
+		<EnumValue Key="0" Name="Not Recording"></EnumValue>
+		<EnumValue Key="1" Name="Recording"></EnumValue>
+		<EnumValue Key="2" Name="Low Disk Space"></EnumValue>
+		<EnumValue Key="3" Name="Error Creating File"></EnumValue>
+		<EnumValue Key="4" Name="Record Startup Delay"></EnumValue>
+		<EnumValue Key="5" Name="Delete All records"></EnumValue>
+	</EnumType>
+	<EnumType Id="CyclicCalib">
+		<EnumValue Key="0" Name="Auto"></EnumValue>
+		<EnumValue Key="1" Name="Fast"></EnumValue>
+		<EnumValue Key="2" Name="Slow"></EnumValue>
+		<EnumValue Key="3" Name="Disable"></EnumValue>
+	</EnumType>
+	<EnumType Id="FlirLinesWiperScan">
+		<EnumValue Key="0" Name="Do Nothing"></EnumValue>
+		<EnumValue Key="1" Name="Auto Scan"></EnumValue>
+		<EnumValue Key="2" Name="Manual Search"></EnumValue>
+		<EnumValue Key="3" Name="Manual Select"></EnumValue>
+		<EnumValue Key="4" Name="Remove Line"></EnumValue>
+		<EnumValue Key="5" Name="Show All Lines"></EnumValue>
+	</EnumType>	
+	<EnumType Id="GenericIncDecVal">
+		<EnumValue Key="0" Name="No Change"></EnumValue>
+		<EnumValue Key="1" Name="Decrease Value"></EnumValue>
+		<EnumValue Key="2" Name="Increase Value"></EnumValue>
+	</EnumType>	
+	<EnumType Id="DTVExposureMode">
+		<EnumValue Key="0" Name="Manual Exposure Mode"></EnumValue>
+		<EnumValue Key="9" Name="Automatic Gain Mode"></EnumValue>
+		<EnumValue Key="12" Name="Automatic Exposure Mode"></EnumValue>
+	</EnumType>	
+	<EnumType Id="DTVExposureModeSet">
+		<EnumValue Key="0" Name="Set Automatic Exposure Mode"></EnumValue>
+		<EnumValue Key="1" Name="Set Automatic Gain Mode"></EnumValue>
+		<EnumValue Key="2" Name="Set Manual Exposure Mode"></EnumValue>
+	</EnumType>
+	<EnumType Id="ThermalCameraGainCommand">
+		<EnumValue Key="0" Name="Set Gain Mode NC"></EnumValue>
+		<EnumValue Key="1" Name="Set Gain Mode Auto"></EnumValue>
+		<EnumValue Key="2" Name="Set Gain Mode High"></EnumValue>		
+		<EnumValue Key="3" Name="Set Gain Mode Low"></EnumValue>				
+	</EnumType> 
+	<EnumType Id="ThermalCameraColorPalette">
+		<EnumValue Key="0" Name="Set Color Palette NC"></EnumValue>
+		<EnumValue Key="1" Name="Set Color Palette White Hot"></EnumValue>
+		<EnumValue Key="2" Name="Set Color Palette BlackHot"></EnumValue>
+		<EnumValue Key="3" Name="Set Color Palette Rainbow"></EnumValue>
+		<EnumValue Key="4" Name="Set Color Palette RainbowHC"></EnumValue>
+		<EnumValue Key="5" Name="Set Color Palette IronBow"></EnumValue>				
+	</EnumType>	
+	<EnumType Id="ThermalCameraGainMode">
+		<EnumValue Key="0" Name="Gain Mode NC"></EnumValue>
+		<EnumValue Key="1" Name="Gain Mode High"></EnumValue>
+		<EnumValue Key="2" Name="Gain Mode Low"></EnumValue>			
+		<EnumValue Key="3" Name="Gain Mode Auto"></EnumValue>		
+	</EnumType>
+	<EnumType Id="ThermalCameraSyncMode">
+		<EnumValue Key="0" Name="Sync Mode NC"></EnumValue>
+		<EnumValue Key="1" Name="Sync Mode Disabled"></EnumValue>
+		<EnumValue Key="2" Name="Sync Mode Master"></EnumValue>
+	</EnumType>	
+	<EnumType Id="ThermalCameraColorPalleteMode">
+		<EnumValue Key="0" Name="Color Palette NC"></EnumValue>
+		<EnumValue Key="1" Name="Color Palette White Hot"></EnumValue>
+		<EnumValue Key="2" Name="Color Palette BlackHot"></EnumValue>
+		<EnumValue Key="3" Name="Color Palette Rainbow"></EnumValue>
+		<EnumValue Key="4" Name="Color Palette RainbowHC"></EnumValue>
+		<EnumValue Key="5" Name="Color Palette IronBow"></EnumValue>										
+	</EnumType>
+	<EnumType Id="NUCMode">
+		<EnumValue Key="0" Name="Nuc Mode Manual"></EnumValue>
+		<EnumValue Key="1" Name="Nuc Mode Auto"></EnumValue>
+		<EnumValue Key="2" Name="Nuc Mode External"></EnumValue>
+		<EnumValue Key="3" Name="Nuc Mode Shutter Test"></EnumValue>
+	</EnumType>	
+		<EnumType Id="ThermalCameraFFCMode">
+		<EnumValue Key="0" Name="FFC Mode NC"></EnumValue>
+		<EnumValue Key="1" Name="FFC Mode Manual"></EnumValue>
+		<EnumValue Key="2" Name="FFC Mode Auto"></EnumValue>
+	</EnumType>	
+		<EnumType Id="NUCForceActivate">
+		<EnumValue Key="0" Name="No Force NUC"></EnumValue>
+		<EnumValue Key="1" Name="Set Force Nuc"></EnumValue>
+	</EnumType>	
+	<EnumType Id="PowerStatesRequest">
+		<EnumValue Key="0" Name="Power Request NC"></EnumValue>
+		<EnumValue Key="1" Name="Power Request On"></EnumValue>
+		<EnumValue Key="2" Name="Power Request Off"></EnumValue>		
+	</EnumType>	
+	<EnumType Id="PowerStatesReport">
+		<EnumValue Key="0" Name="Power Report Off"></EnumValue>
+		<EnumValue Key="1" Name="Power Report On"></EnumValue>
+	</EnumType>	
+	<EnumType Id="RetreiveDataType">
+		<EnumValue Key="0" Name="Stop Retreive"></EnumValue>
+		<EnumValue Key="1" Name="Cyclic Retreive"></EnumValue>
+		<EnumValue Key="2" Name="Once Retreive"></EnumValue>
+		<EnumValue Key="4" Name="On Arrival"></EnumValue>
+	</EnumType>	
+	<EnumType Id="FontColor">
+		<EnumValue Key="0" Name="BLACK"></EnumValue>	
+		<EnumValue Key="1" Name="RED"></EnumValue>
+		<EnumValue Key="2" Name="GREEN"></EnumValue>
+		<EnumValue Key="3" Name="YELLOW"></EnumValue>
+		<EnumValue Key="4" Name="BLUE "></EnumValue>
+		<EnumValue Key="5" Name="MAGENTA"></EnumValue>
+		<EnumValue Key="6" Name="CYAN "></EnumValue>
+		<EnumValue Key="7" Name="LIGHT_GREY"></EnumValue>
+		<EnumValue Key="8" Name="GREY "></EnumValue>
+		<EnumValue Key="9" Name="BRIGHT_RED"></EnumValue>
+		<EnumValue Key="10" Name="BRIGHT_GREEN"></EnumValue>
+		<EnumValue Key="11" Name="BRIGHT_YELLOW"></EnumValue>
+		<EnumValue Key="12" Name="BRIGHT_BLUE"></EnumValue>
+		<EnumValue Key="13" Name="BRIGHT_MAGENTA"></EnumValue>
+		<EnumValue Key="14" Name="BRIGHT_CYAN"></EnumValue>
+		<EnumValue Key="15" Name="WHITE"></EnumValue>
+	</EnumType>	
+	<EnumType Id="DTVAutoWhiteBalanceType">
+		<EnumValue Key="0" Name="AWB NC"></EnumValue>
+		<EnumValue Key="1" Name="AWB On"></EnumValue>
+		<EnumValue Key="2" Name="AWB Manual"></EnumValue>
+	</EnumType>		
+	<EnumType Id="NavigationType">
+		<EnumValue Key="0" Name="Payload IMU"></EnumValue>
+		<EnumValue Key="1" Name="Base IMU + Encoders"></EnumValue>
+	</EnumType>		
+	<EnumType Id="NavAltituteType">
+		<EnumValue Key="0" Name="Ellipsoid"></EnumValue>
+		<EnumValue Key="1" Name="Mean sea level"></EnumValue>
+	</EnumType>	
+	<EnumType Id="NavDataAccuracyMeter">
+		<EnumValue Key="0" Name="Not Known"></EnumValue>
+		<EnumValue Key="1" Name="100m"></EnumValue>
+		<EnumValue Key="2" Name="10m"></EnumValue>
+		<EnumValue Key="3" Name="1m"></EnumValue>		
+	</EnumType>	
+	<EnumType Id="NavDataAccuracyMRad">
+		<EnumValue Key="0" Name="Not Known"></EnumValue>
+		<EnumValue Key="1" Name="100mrad"></EnumValue>
+		<EnumValue Key="2" Name="10mrad"></EnumValue>
+		<EnumValue Key="3" Name="1mrad"></EnumValue>		
+	</EnumType>	
+	<EnumType Id="NavDataAccuracyMS">
+		<EnumValue Key="0" Name="Not Known"></EnumValue>
+		<EnumValue Key="1" Name="10m/s"></EnumValue>
+		<EnumValue Key="2" Name="1m/s"></EnumValue>
+		<EnumValue Key="3" Name="0.1m/s"></EnumValue>		
+	</EnumType>	
+	<EnumType Id="NavRecordLevel">
+		<EnumValue Key="0" Name="No Record"></EnumValue>
+		<EnumValue Key="1" Name="Record with Low Level"></EnumValue>
+		<EnumValue Key="2" Name="Record with Medium Level"></EnumValue>
+		<EnumValue Key="3" Name="Record with High Level"></EnumValue>
+	</EnumType>	
+	<EnumType Id="IlluminatorMode">
+		<EnumValue Key="0" Name="Illuminator Off"></EnumValue>
+		<EnumValue Key="1" Name="Continuous"></EnumValue>
+		<EnumValue Key="2" Name="Illuminator outputs sync"></EnumValue>
+		<EnumValue Key="3" Name="Illuminator synced to trigger"></EnumValue>
+	</EnumType>	
+	
+</GenericTypes>

@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<Protocol>
+	<Message Key="35400" Name="SeeSpot Control Command" NumberOfBytes="16" Protocol="Microcom">
+		<Field LogicalId="0" StartByte="0" NumberOfBytes="1" StartBit="0" NumberOfBits="1" Type="BIT" Name="Power" DefaultValue="0" Description="Sets SeeSpot camera 0 - Off. 1 - On" />
+		<Field LogicalId="0" StartByte="0" NumberOfBytes="1" StartBit="1" NumberOfBits="1" Type="BIT" Name="Freeze" DefaultValue="0" Description="Sets video freeze frame 0 - Off. 1 - On" />
+	</Message>
+</Protocol>

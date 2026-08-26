@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<Message Key="1398" Name="Externl Encode Info" NumberOfBytes="16">
+	<Field LogicalId="0" StartByte="0" NumberOfBytes="4" StartBit="0" NumberOfBits="32" Type="FLOAT" Name="Az. Amplitude" Description="" />
+	<Field LogicalId="1" StartByte="4" NumberOfBytes="4" StartBit="0" NumberOfBits="32" Type="FLOAT" Name="Az. Phase" Description="" />
+	<Field LogicalId="2" StartByte="8" NumberOfBytes="4" StartBit="0" NumberOfBits="32" Type="FLOAT" Name="El. Amplitude" Description="" />
+	<Field LogicalId="3" StartByte="12" NumberOfBytes="4" StartBit="0" NumberOfBits="32" Type="FLOAT" Name="El. Phase" Description="" />
+</Message>

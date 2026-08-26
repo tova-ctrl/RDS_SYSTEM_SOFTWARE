@@ -1,0 +1,1248 @@
+@page "/"
+@rendermode InteractiveServer
+@inject RDS_WebApp.Services.SystemControlService svc
+@inject RDS_WebApp.Services.EthernetService eth
+@inject RDS_WebApp.Services.DetectionResultService detection
+@inject RDS_WebApp.Services.CameraApiService cam
+@inject RDS_WebApp.Services.StkDirectCameraService stkDirect
+@inject RDS_WebApp.Services.LiveTrackingService liveTracking
+@inject RDS_WebApp.Services.ConfigPersistenceService cfg
+@inject IJSRuntime JS
+@using System.Text.RegularExpressions
+@using RDS_WebApp.Services
+@implements IDisposable
+
+<div style="
+    background-color: #212529;
+    padding: 8px;
+    border-radius: 24px;
+    box-shadow: inset 0 0 20px #000, 0 10px 30px rgba(0,0,0,0.7);
+    border: 4px solid #15181b;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-height: 0;
+    height: 100%;
+    box-sizing: border-box;">
+<!-- ── Status Bar ──────────────────────────────────────────────────── -->
+<div class="status-bar">
+    <span class="status-dot @(svc.CurrentState is SystemState.FAULT or SystemState.COMM_LOSS ? "dot-fault" : "dot-active")"></span>
+    <span class="status-bar-title">RWS @svc.CurrentState.ToString().ToUpper()</span>
+    <span class="status-bar-sep">|</span>
+        @if (svc.CurrentState == SystemState.ARMED)
+        {
+            <div class="pt-status-label" style="color: ivory; text-align: center; display: block; font-size: 12px; font-weight: bold;">SLAVING IN PROGRESS</div>
+        }
+        else
+        {
+            <div class="pt-status-label" style="color: ivory; text-align: center; display: block; font-size: 12px; font-weight: bold;">STANDBY</div>
+        }
+        <span class="status-bar-item" style="color: #d1b06a; text-align: center; display: block;">LOCK AZ <span class="status-val">@lock_azimuth</span></span>
+        <span class="status-bar-item" style="color: #d1b06a; text-align: center; display: block;">LOCK EL <span class="status-val">@lock_elevation</span></span>
+        <span class="status-bar-item" style="color: ivory; text-align: center; display: block;">RF <span class="status-val">@rfMs ms</span></span>
+        <span class="status-bar-item" style="color: ivory; text-align: center; display: block;">BATT <span class="status-val @(battery < 20 ? "val-warn" : "")">@battery%</span></span>
+        <span class="status-bar-item" style="color: ivory; text-align: center; display: block;">TEMP <span class="status-val">@tempC°C</span></span>
+    <span class="status-bar-time">@currentTime</span>
+</div>
+
+    <!-- ── Main Layout ────────────────────────────────────────────────── -->
+<div class="tactical-layout">
+
+    <!-- ── Video Feed ─────────────────────────────────────────────── -->
+    <div class="video-panel">
+        <div class="video-feed">
+
+            <!-- Live camera video, sourced directly from the camera (not via the FCC —
+                 see [[project-state]] memory; avoids an extra relay hop's latency).
+                 Two elements, only one visible at a time depending on the camera's
+                 current codec (CameraVideoStreamer.cs auto-detects H.264 vs H.265
+                 and tells the client which to use — H.265/HEVC is a genuine hard
+                 requirement of this camera/drone, not just a switchable default, but
+                 browsers can't play it via MediaSource Extensions, so that path is
+                 server-decoded to JPEG and drawn onto the canvas instead). Both sit
+                 behind the SVG so the crosshair/detection overlay keeps rendering on
+                 top of the real picture. -->
+            <video id="liveVideo" autoplay muted playsinline
+                   style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0;background:#000;"></video>
+            <canvas id="liveVideoCanvas"
+                    style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0;background:#000;display:none;"></canvas>
+
+            <!-- IR camera feed — SVG always present so crosshair is always visible -->
+            <svg id="video-svg" class="ir-bg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" preserveAspectRatio="xMidYMid slice"
+                 style="position:relative;z-index:1;">
+                <defs>
+                    <radialGradient id="skyGrad" cx="50%" cy="30%" r="70%">
+                        <stop offset="0%"   stop-color="#1a3a3a"/>
+                        <stop offset="100%" stop-color="#0a1a1a"/>
+                    </radialGradient>
+                    <radialGradient id="groundGrad" cx="50%" cy="50%" r="60%">
+                        <stop offset="0%"   stop-color="#1e4040"/>
+                        <stop offset="100%" stop-color="#0d2020"/>
+                    </radialGradient>
+                    <filter id="blur2"><feGaussianBlur stdDeviation="2"/></filter>
+                    <filter id="blur5"><feGaussianBlur stdDeviation="5"/></filter>
+                    <filter id="glow">
+                        <feGaussianBlur stdDeviation="3" result="blur"/>
+                        <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+                    </filter>
+                </defs>
+
+                @* Previously swapped in a static annotated-JPEG snapshot here whenever
+                   detection.HasTarget was true (LiveTrackingService updates it ~3Hz).
+                   Removed 2026-08-12: decoding/painting that full image client-side lags
+                   behind the crosshair's own near-instant SVG coordinate update, and with
+                   an unstable/jittery detection the two visibly diverged even though the
+                   underlying numbers always matched exactly (confirmed via logging). The
+                   real live video (<video>/<canvas> beneath this SVG) now just keeps
+                   playing smoothly at full frame rate; only the lightweight crosshair
+                   below is drawn on top to indicate the lock. *@
+                @if (!_liveVideoOn)
+                {
+                    <!-- Simulated IR scene — only shown as a fallback when live video isn't active -->
+                    <rect width="800" height="500" fill="url(#skyGrad)"/>
+                    <ellipse cx="400" cy="300" rx="500" ry="40" fill="#2a5a5a" opacity="0.4" filter="url(#blur5)"/>
+                    <rect y="295" width="800" height="205" fill="url(#groundGrad)"/>
+                    <line x1="0" y1="310" x2="800" y2="320" stroke="#1e4545" stroke-width="1" opacity="0.4"/>
+                    <line x1="0" y1="330" x2="800" y2="345" stroke="#1e4545" stroke-width="1" opacity="0.3"/>
+                    <line x1="0" y1="360" x2="800" y2="380" stroke="#1e4545" stroke-width="1" opacity="0.2"/>
+                    <ellipse cx="150" cy="298" rx="30" ry="6" fill="#3a7070" opacity="0.5" filter="url(#blur2)"/>
+                    <ellipse cx="620" cy="296" rx="25" ry="5" fill="#3a7070" opacity="0.4" filter="url(#blur2)"/>
+                    <ellipse cx="720" cy="299" rx="18" ry="4" fill="#4a8080" opacity="0.3" filter="url(#blur2)"/>
+
+                    <!-- Target figure — FIXED in world space -->
+                    <g filter="url(#glow)" transform="translate(512, 187)">
+                        <ellipse cx="18" cy="50" rx="22" ry="55" fill="#5aafaf" opacity="0.25" filter="url(#blur5)"/>
+                        <ellipse cx="18" cy="8" rx="9" ry="10" fill="#a0e8e8"/>
+                        <rect x="15" y="17" width="6" height="5" fill="#90d8d8"/>
+                        <rect x="8" y="22" width="20" height="28" rx="3" fill="#7ac8c8"/>
+                        <rect x="1" y="23" width="7" height="22" rx="3" fill="#70b8b8" transform="rotate(-8,4,23)"/>
+                        <rect x="28" y="23" width="7" height="22" rx="3" fill="#70b8b8" transform="rotate(8,32,23)"/>
+                        <rect x="9" y="49" width="7" height="28" rx="3" fill="#68a8a8"/>
+                        <rect x="19" y="49" width="7" height="28" rx="3" fill="#68a8a8"/>
+                    </g>
+
+                    <!-- Target bounding box — FIXED around figure -->
+                    <g stroke="#e0f0f0" stroke-width="1.5" fill="none" opacity="0.85">
+                        <line x1="508" y1="185" x2="508" y2="197"/><line x1="508" y1="185" x2="520" y2="185"/>
+                        <line x1="552" y1="185" x2="552" y2="197"/><line x1="540" y1="185" x2="552" y2="185"/>
+                        <line x1="508" y1="265" x2="508" y2="253"/><line x1="508" y1="265" x2="520" y2="265"/>
+                        <line x1="552" y1="265" x2="552" y2="253"/><line x1="540" y1="265" x2="552" y2="265"/>
+                    </g>
+                }
+
+                <!-- Delta labels — always visible, top-right corner -->
+                <text x="620" y="20" font-family="Consolas,monospace" font-size="11" fill="#c8e8e8">ΔAZ: @deltaAz.ToString("F1")°</text>
+                <text x="620" y="35" font-family="Consolas,monospace" font-size="11" fill="#c8e8e8">ΔEL: @deltaEl.ToString("F1")°</text>
+
+                <!-- Crosshair — ALWAYS ON TOP, moves toward target as weapon slews.
+                     Turns red while FIRING (confirmed on-screen-indication requirement
+                     for B2, see [[mobilicom-controller-mapping]] memory). -->
+                <g stroke="@(svc.CurrentState == SystemState.FIRING ? "#ff2020" : "#b0d8d8")" stroke-width="1" opacity="0.85">
+                    <line x1="@(CrosshairSvgX-10)" y1="@CrosshairSvgY"      x2="@(CrosshairSvgX+10)" y2="@CrosshairSvgY"/>
+                    <line x1="@CrosshairSvgX"       y1="@(CrosshairSvgY-10)" x2="@CrosshairSvgX"      y2="@(CrosshairSvgY+10)"/>
+                    <circle cx="@CrosshairSvgX" cy="@CrosshairSvgY" r="14" fill="none" stroke-width="0.8"/>
+                </g>
+
+                <!-- Scan lines overlay -->
+                <rect width="800" height="500" fill="url(#scanlines)" opacity="0.08"/>
+            </svg>
+
+            <!-- Click-to-point overlay — captures clicks in CSS pixel coords, above SVG but below HUD labels -->
+            <div id="video-overlay"
+                 style="position:absolute;inset:0;cursor:crosshair;z-index:4;"
+                 @onclick="OnVideoClick"></div>
+
+            <!-- Bottom-left: IR MODE -->
+            <div class="video-overlay-bl">IR MODE</div>
+            <!-- Bottom-right: ZOOM — arrow lights up while the joystick's S3
+                 (D-pad Up/Down) is actively holding zoom in/out, per the
+                 confirmed on-screen-indication requirement for S3 (see
+                 [[mobilicom-controller-mapping]] memory). -->
+            <div class="video-overlay-br">
+                ZOOM: @zoomFactor x
+                @if (_zoomingIn)
+                {
+                    <span style="color:#4ade80;">&nbsp;▲</span>
+                }
+                else if (_zoomingOut)
+                {
+                    <span style="color:#4ade80;">&nbsp;▼</span>
+                }
+            </div>
+            <!-- Top-right: wire-to-glass video latency (server send -> browser paint) —
+                 updated directly by videoStream.js, not through Blazor state, so it can
+                 refresh at frame rate without driving StateHasChanged() (see [[project-state]]
+                 memory on why continuous updates must stay off the Blazor render loop). -->
+            <div id="videoLatencyHud" class="video-overlay-tr">LAT: --</div>
+
+        </div>
+
+        <!-- State Bar — inside video panel, overlaid at bottom -->
+        <div class="state-bar">
+                <span class="state-item @(svc.CurrentState == SystemState.SAFE ? "state-active" : "")" style="color: white;">SYS IDLE</span>
+                <span class="state-item @(svc.CurrentState == SystemState.STANDBY ? "state-active" : "")" style="color: white;">FREE OBS</span>
+                <span class="state-item @(targetLocked ? "state-active" : "")" style="color: white;">LOCKED</span>
+                <span class="state-item @(svc.CurrentState == SystemState.ARMED ? "state-active" : "")" style="color: white;">ARMED</span>
+                <span class="state-item @(svc.CurrentState == SystemState.FIRING ? "state-active" : "")" style="color: white;">FIRING</span>
+        </div>
+    </div>
+
+    <!-- ── Right Panels ───────────────────────────────────────────── -->
+    <div class="right-panels">
+
+        <!-- PAN-TILT -->
+        <div class="tac-panel">
+            <div class="tac-panel-title" style="color: #d1b06a;
+                padding: 1px 10px;
+                font-size: 12px;
+                font-weight: bold;
+                background-color: #3b2b16; 
+                border: 1px solid #4a351a;">
+                PAN-TILT
+            </div>
+            <div class="pt-values">
+                <div class="pt-axis">
+                    <span class="pt-label" style="color: white; font-size: 12px; font-weight: bold;">AZ:</span>
+                    <span class="pt-value" style="color: white; font-size: 12px;">@azimuth.ToString("F1")°</span>
+                </div>
+                <div class="pt-axis">
+                    <span class="pt-label" style="color: white; font-size: 12px; font-weight: bold;">EL:</span>
+                    <span class="pt-value" style="color: white; font-size: 12px;">@elevation.ToString("F1")°</span>
+                </div>
+            </div>
+            @if (svc.CurrentState == SystemState.ARMED)
+            {
+                    <div class="pt-status-label" style="color: #d1b06a; text-align: center; display: block;">SLAVING IN PROGRESS</div>
+            }
+            else
+            {
+                <div class="pt-status-label" style="color: #d1b06a; text-align: center; display: block;">STANDBY</div>
+            }
+            <div class="pt-bar-row">
+                    <span class="pt-bar-label" style="color: white; font-size: 10px;">ΔAZ</span>
+                <div class="pt-bar-track">
+                    <div class="pt-bar-fill" style="width:@(Math.Min(Math.Abs(deltaAz)/180.0*100,100).ToString("F0"))%"></div>
+                </div>
+                    <span class="pt-bar-val" style="color: white; font-size: 10px;">@deltaAz.ToString("F1")°→0</span>
+            </div>
+            <div class="pt-bar-row">
+                    <span class="pt-bar-label" style="color: white; font-size: 10px;">ΔEL</span>
+                <div class="pt-bar-track">
+                    <div class="pt-bar-fill" style="width:@(Math.Min(Math.Abs(deltaEl)/90.0*100,100).ToString("F0"))%"></div>
+                </div>
+                    <span class="pt-bar-val" style="color: white; font-size: 10px;">@deltaEl.ToString("F1")°→0</span>
+            </div>
+        </div>
+
+        <!-- IMU — merged into one compact row -->
+        <div class="tac-panel tac-panel-compact">
+            <span class="tac-panel-title" style="color:#d1b06a;font-size:11px;font-weight:bold;">IMU STABILIZATION</span>
+                <span class="imu-state @(svc.CurrentState == SystemState.ARMED ? "imu-active" : "imu-standby")" style="color:  #d0d0d0;font-size:0.65rem;margin-left:8px;">
+                @(svc.CurrentState == SystemState.ARMED ? "● ACTIVE" : "● STANDBY")
+            </span>
+        </div>
+
+        <!-- WEAPON STATUS -->
+        <div class="tac-panel">
+            <div class="tac-panel-title" style="color:#d1b06a;padding:1px 6px;font-size:11px;font-weight:bold;background-color:#3b2b16;border:1px solid #4a351a;">
+                WEAPON STATUS
+            </div>
+            <div class="weapon-state @weaponStateClass" style="padding:1px 6px;font-size:14px;font-weight:bold;">
+                @svc.CurrentState.ToString().ToUpper()
+            </div>
+            <div class="weapon-buttons">
+                <button class="wpn-btn @(svc.CurrentState == SystemState.SAFE ? "wpn-active" : "")"
+                            @onclick="SetSafe" style="color:  #d0d0d0; font-size: 11px;">
+                        SAF-O
+                    </button>
+                <button class="wpn-btn @(svc.CurrentState == SystemState.STANDBY ? "wpn-active" : "")"
+                            @onclick="SetStandby" style="color:  #d0d0d0; font-size: 11px;">
+                        SAF-C
+                    </button>
+                <button class="wpn-btn @(svc.CurrentState == SystemState.ARMED ? "wpn-active" : "")"
+                            @onclick="ArmSystem" style="color:  #d0d0d0; font-size: 11px;">
+                        ARM
+                    </button>
+                <button class="wpn-btn wpn-fire @(svc.CurrentState == SystemState.FIRING ? "wpn-active" : "")"
+                            @onclick="Fire" style="color:  #d0d0d0; font-size: 11px;">
+                        FIRE
+                    </button>
+            </div>
+            @if (svc.CurrentState is SystemState.FAULT or SystemState.COMM_LOSS)
+            {
+                <button class="wpn-btn wpn-recovery" @onclick="RecoveryReset"
+                        style="width:100%;margin-top:4px;background:#7c2020;color:#ffdddd;font-size:11px;font-weight:bold;letter-spacing:1px;">
+                    ⟳ RECOVERY RESET
+                </button>
+            }
+            <div class="sensor-row">
+                    <span class="sensor-item" style="color:  #d0d0d0;">MECH SENSOR: <span class="val-ok">OK</span></span>
+                    <span class="sensor-item" style="color:  #d0d0d0;">TEMP: <span class="@(tempC > 50 ? "val-warn" : "val-ok")">@tempC°C</span> <span class="val-ok">OK</span></span>
+            </div>
+        </div>
+
+        <!-- SYSTEM HEALTH -->
+        <div class="tac-panel">
+            <div class="tac-panel-title" style="color:#d1b06a;padding:1px 6px;font-size:11px;font-weight:bold;background-color:#3b2b16;border:1px solid #4a351a;">
+                SYSTEM HEALTH
+            </div>
+            <div class="health-grid">
+                    <span class="health-item" style="color: #d0d0d0; font-size: 11px;">JETSON A: <span class="val-ok">OK</span></span>
+                    <span class="health-item" style="color: #d0d0d0; font-size: 11px;">JETSON B: <span class="val-stby">STBY</span></span>
+                    <span class="health-item" style="color: #d0d0d0; font-size: 11px;">IMU: <span class="val-ok">OK</span></span>
+                    <span class="health-item" style="color: #d0d0d0; font-size: 11px;">CAM EO: <span class="val-ok">OK</span></span>
+                    <span class="health-item" style="color: #d0d0d0; font-size: 11px;">CAM IR: <span class="val-ok">OK</span></span>
+                    <span class="health-item" style="color: #d0d0d0; font-size: 11px;">ISM MCU: <span class="@(svc.CurrentState is SystemState.FAULT or SystemState.COMM_LOSS ? "val-fault" : "val-ok")">@(svc.CurrentState == SystemState.FAULT ? "FAULT" : svc.CurrentState == SystemState.COMM_LOSS ? "COMM_LOSS" : "OK")</span></span>
+                    <span class="health-item" style="color: #d0d0d0; font-size: 11px;">LASER RNG: <span class="val-ok">OK</span></span>
+                    <span class="health-item" style="color: #d0d0d0; font-size: 11px;">RF LINK: <span class="val-ok">@rfMs ms</span></span>
+            </div>
+        </div>
+
+            <!-- ETHERNET LINK -->
+            <div class="tac-panel" style="display: flex; align-items: center; justify-content: space-between; gap: 8px; background-color: #3b2b16; border: 1px solid #4a351a; padding: 6px;">
+                <!-- כותרת בצד שמאל ושגיאה במידה וקיימת -->
+                <div style="display: flex; flex-direction: column;">
+                    <div class="tac-panel-title" style="color:#d1b06a; font-size:8px; font-weight:bold;">
+                        @(eth.Status == EthernetStatus.Connected ? "ETHERNET LINK" : "ETHERNET LINK is disconnected")
+                    </div>
+                    @if (eth.Status == EthernetStatus.Error)
+                    {
+                        <span style="font-size:0.7rem; color:#ef4444; font-family:Consolas,monospace;">
+                            ERROR — @eth.LastError
+                        </span>
+                    }
+                </div>
+
+                <!-- הכפתור בצד ימין - משנה צבע רקע וצבע טקסט בסטטוס Connected -->
+                <button class="wpn-btn @(eth.Status == EthernetStatus.Connected ? "wpn-active" : "")"
+                        style="min-width: 90px; padding: 4px 8px; font-size: 11px; font-weight: bold; border-radius: 4px;
+                    color: @(eth.Status == EthernetStatus.Connected ? "#151718" : "#d0d0d0");
+                    @(eth.Status == EthernetStatus.Connected ? "background-color: #22c55e; border: 1px solid #16a34a;" : "")"
+                        @onclick="HandleEthClick">
+                    @(eth.Status == EthernetStatus.Connected ? "CONNECTED" : "CONNECT")
+                </button>
+            </div>
+
+        <!-- GIMBAL POSITION -->
+        <div class="tac-panel">
+            <div class="tac-panel-title" style="color:#d1b06a;padding:1px 6px;font-size:11px;font-weight:bold;background-color:#3b2b16;border:1px solid #4a351a;">
+                GIMBAL POSITION
+            </div>
+
+                <!-- GET — current position from FCC 334155-->
+            <div style="display:flex;gap:6px;align-items:center;padding:4px 0;">
+                <button class="wpn-btn wpn-active" style="flex:1;" @onclick="GetPosition">GET</button>
+                <div style="flex:2;font-family:Consolas,monospace;font-size:0.8rem;">
+                    @if (eth.LastPosition != null)
+                    {
+                        <span style="color:#4ade80;">
+                            AZ: @eth.LastPosition.X.ToString("F1")°
+                        </span>
+                        <span style="color:#64748b;margin:0 4px;">|</span>
+                        <span style="color:#4ade80;">
+                            EL: @eth.LastPosition.Y.ToString("F1")°
+                        </span>
+                    }
+                    else
+                    {
+                        <span style="color:#dddddd;">— לחץ GET —</span>
+                    }
+                </div>
+            </div>
+
+                <!-- SET — send target position to FCC 475569-->
+            <div style="border-top:1px solid #1e293b;margin-top:1px;padding-top:1px;">
+                <div style="display:flex;gap:6px;align-items:center;margin-bottom:3px;">
+                    <span style="font-size:0.65rem;color:#d0d0d0;font-family:Consolas,monospace;width:22px;">AZ</span>
+                    <input type="number" step="0.1" min="-175" max="175" @bind="setAz"
+                           style="flex:1;background:#0a0c10;border:1px solid #1e293b;color:#e2e8f0;font-family:Consolas,monospace;font-size:0.7rem;padding:2px 4px;border-radius:4px;" />
+                        <span style="font-size:0.6rem;color:#d0d0d0;">±175°</span>
+                </div>
+                <div style="display:flex;gap:6px;align-items:center;margin-bottom:4px;">
+                    <span style="font-size:0.65rem;color:#d0d0d0;font-family:Consolas,monospace;width:22px;">EL</span>
+                    <input type="number" step="0.1" min="-140" max="90" @bind="setEl"
+                           style="flex:1;background:#0a0c10;border:1px solid #1e293b;color:#e2e8f0;font-family:Consolas,monospace;font-size:0.7rem;padding:2px 4px;border-radius:4px;" />
+                        <span style="font-size:0.6rem;color:#d0d0d0;">-140/+90°</span>
+                </div>
+                <div style="display:flex;gap:4px;margin-top:-1px;">
+                    <button class="wpn-btn" style="flex:1;color:#e2e8f0;" @onclick="SetPosition">SET POSITION</button>
+                    @if (targetLocked || Math.Abs(deltaAz) > 0.1 || Math.Abs(deltaEl) > 0.1)
+                    {
+                        <button class="wpn-btn wpn-active" style="flex:1;color:white;font-weight:bold;font-size:9.5px;"
+                                @onclick="SlaveToTarget">
+                            ⊕ SLAVE AZ:@lock_azimuth.ToString("F1")° EL:@lock_elevation.ToString("F1")°
+                        </button>
+                    }
+                </div>
+
+                <!-- Gimbal operating modes — QBee reference has these as a
+                     separate "Modes" group; kept compact here since these are
+                     occasional actions, not continuous controls (2026-08-08).
+                     All via stkDirect — same reasoning as the camera panel. -->
+                <div style="display:flex;gap:3px;margin-top:4px;border-top:1px solid #1e293b;padding-top:4px;">
+                    <button style="@ModeBtnStyle" @onclick='() => GimbalMode("CENTER", stkDirect.SetCenterMode)'>Center</button>
+                    <button style="@ModeBtnStyle" @onclick='() => GimbalMode("SAFE MODE", stkDirect.SetSafeMode)'>Safe</button>
+                    <button style="@ModeBtnStyle" @onclick='() => GimbalMode("SYSTEM INIT", stkDirect.SetSystemInit)'>INIT</button>
+                    <button style="@ModeBtnStyle" @onclick='() => GimbalMode("DRIFT CAL", stkDirect.SetDriftCalibration)'>Drift.cl</button>
+                    <button style="@ModeBtnStyle" @onclick='() => GimbalMode("IDLE", stkDirect.SetIDLE)'>IDLE</button>
+                </div>
+                @if (_lastModeCmd != null)
+                {
+                    <div style="font-size:9px;color:#7b8794;margin-top:2px;">@_lastModeCmd</div>
+                }
+            </div>
+        </div>
+
+        <!-- CAMERA — MICRO300 — moved to the bottom of the right panel (was
+             mid-stack) and redesigned as a tabbed VIS/Thermal control panel
+             matching the vendor's own QBee operator app layout (image
+             reference from user, 2026-08-08), instead of forcing the
+             operator to leave this screen and go to SystemConfig mid-op.
+             Every control here goes through StkDirectCameraService (PC ->
+             camera directly) — the FCC-relay equivalent was confirmed
+             silent for Zoom, so the direct path is what's actually used for
+             live operator controls now (see [[mobilicom-controller-mapping]]
+             memory). Sensor-on state and FOV are real telemetry pulled from
+             the camera (STKSyncLocal), not a locally-assumed flag — refresh
+             is manual (⟳) since each sync blocks briefly on a UDP
+             round-trip and must not run on every render. -->
+        <div class="tac-panel">
+            <div class="tac-panel-title" style="color:#d1b06a;padding:1px 6px;font-size:11px;font-weight:bold;background-color:#3b2b16;border:1px solid #4a351a;display:flex;justify-content:space-between;align-items:center;">
+                <span>CAMERA — MICRO300</span>
+                <span style="font-size:9px;font-weight:bold;color:@CamLinkColor;">● LINK @CamLinkText</span>
+            </div>
+
+            <div style="display:flex;gap:4px;margin:5px 0 4px;">
+                <button style="@ChannelTabStyle(false)" @onclick='() => _camThermalTab = false'>VIS CHANNEL</button>
+                <button style="@ChannelTabStyle(true)"  @onclick='() => _camThermalTab = true'>THERMAL CHANNEL</button>
+            </div>
+
+            <!-- Sensor power ON/OFF abandoned (2026-08-10) — user found it doesn't
+                 work reliably even in QBee itself, not just here, so it's a real
+                 camera/SDK limitation, not our bug. Replaced with "Toggle Active
+                 Camera" (SetVideoChannelCommandPrimaryVideoChannel) matching
+                 QBee's own "Video Control Commands" panel — this one QBee's own
+                 tooltip confirms directly, and it's the same command already
+                 proven working (Wireshark-confirmed 2026-08-09 for the power
+                 path; this one's simpler, just a channel switch, no power
+                 cycling). -->
+            <div style="display:flex;align-items:center;gap:6px;margin-bottom:5px;">
+                <button class="wpn-btn" style="flex:1;" @onclick="ToggleActiveCamera">
+                    TOGGLE ACTIVE CAMERA
+                </button>
+                <span style="font-size:0.65rem;color:#d0d0d0;font-family:Consolas,monospace;white-space:nowrap;">
+                    CAM <span style="color:#4ade80;">@ActiveCameraLabel</span>
+                </span>
+                <span style="font-size:0.65rem;color:#d0d0d0;font-family:Consolas,monospace;white-space:nowrap;">
+                    FOV <span style="color:#4ade80;">@(_camFov >= 0 ? _camFov.ToString("F1") : "—")</span>
+                </span>
+                <button title="Refresh from camera" style="@RefreshBtnStyle" @onclick="RefreshCamTelemetry">⟳</button>
+            </div>
+
+            <div style="display:grid;grid-template-columns:64px 26px 26px;gap:3px 5px;align-items:center;">
+                <span style="@CamRowLabel">Zoom</span>
+                <button style="@CamStepBtnStyle" @onmousedown="() => CamZoom(2)" @onmouseup="() => CamZoom(0)">+</button>
+                <button style="@CamStepBtnStyle" @onmousedown="() => CamZoom(1)" @onmouseup="() => CamZoom(0)">−</button>
+
+                <span style="@CamRowLabel">Sharpness</span>
+                <button style="@CamStepBtnStyle" @onmousedown="() => CamSharpness(2)" @onmouseup="() => CamSharpness(0)">+</button>
+                <button style="@CamStepBtnStyle" @onmousedown="() => CamSharpness(1)" @onmouseup="() => CamSharpness(0)">−</button>
+
+                <span style="@CamRowLabel">Level</span>
+                <button style="@CamStepBtnStyle" @onmousedown="() => CamLevel(2)" @onmouseup="() => CamLevel(0)">+</button>
+                <button style="@CamStepBtnStyle" @onmousedown="() => CamLevel(1)" @onmouseup="() => CamLevel(0)">−</button>
+
+                <span style="@CamRowLabel">Gain</span>
+                <button style="@CamStepBtnStyle" @onmousedown="() => CamGain(2)" @onmouseup="() => CamGain(0)">+</button>
+                <button style="@CamStepBtnStyle" @onmousedown="() => CamGain(1)" @onmouseup="() => CamGain(0)">−</button>
+            </div>
+
+            <button class="wpn-btn" style="width:100%;margin-top:5px;color:#e2e8f0;" @onclick="CamRestoreDefault">RESET</button>
+
+            <!-- Camera CONTROL-port freeze recovery (2026-08-16, explicit user request,
+                 overriding the earlier "never automate Save Settings" constraint — see
+                 [[camera-save-settings-constraint]] memory. Re-confirmed with the user
+                 directly before building this; kept here, not auto-triggered by anything,
+                 stays a deliberate operator click. This is a heavy action (full camera
+                 reload per the vendor) — title tooltip says so, button disables while
+                 in flight so it can't be double-fired. -->
+            <button class="wpn-btn" title="Unstick a frozen camera CONTROL link — resubmits the camera's current network settings (full camera reload, several seconds). Use only if camera commands stop responding."
+                    style="width:100%;margin-top:5px;background:#4a2f10;color:#f0c896;border-color:#7a5220;"
+                    disabled="@_cameraRecoveryInProgress"
+                    @onclick="RecoverCameraLink">
+                @(_cameraRecoveryInProgress ? "RECOVERING CAMERA…" : "⟲ RECOVER CAMERA LINK")
+            </button>
+            @if (_cameraRecoveryResult != null)
+            {
+                <div style="font-size:9px;color:#7b8794;margin-top:2px;">@_cameraRecoveryResult</div>
+            }
+
+            <div style="display:flex;gap:10px;margin-top:6px;font-size:0.65rem;color:#d0d0d0;font-family:Consolas,monospace;">
+                <label style="display:flex;align-items:center;gap:3px;cursor:pointer;">
+                    <input type="radio" name="expmode" checked="@(_camExposureMode != 2)" @onchange="() => CamSetExposureMode(0)" />
+                    Auto Exposure
+                </label>
+                <label style="display:flex;align-items:center;gap:3px;cursor:pointer;">
+                    <input type="radio" name="expmode" checked="@(_camExposureMode == 2)" @onchange="() => CamSetExposureMode(2)" />
+                    Manual
+                </label>
+            </div>
+        </div>
+
+    </div>
+</div>
+</div>
+@code {
+    private double azimuth   = 16.2;
+    private double elevation = -4.7;
+    private double deltaAz   = 5.5;
+    private double deltaEl   = 0.6;
+
+    // Crosshair converges to target SVG position as ΔAZ/ΔEL → 0 — that decay
+    // animation (see the ARMED branch in the _timer callback) is for the
+    // manual click-designate flow, where deltaAz is an independent offset from
+    // the weapon's own current azimuth. It does NOT apply while locked.
+    //
+    // 2026-08-12, second fix: while locked, pin the crosshair to the exact
+    // geometric center of the video (SVG viewBox is 800×500, so (400,250))
+    // instead of following LiveTrackingService's YOLO-computed target
+    // position. Confirmed via the camera's own onboard OSD reticle (visible
+    // directly in the video, drawn by the camera itself, and also in QBee)
+    // that it's a fixed boresight marker, not a dynamic tracked position —
+    // panning with J1 moves it together with the whole picture, always
+    // staying at exact frame-center (user confirmed 2026-08-12). It does NOT
+    // reflect TrackerXError/YError telemetry (that stayed at NoTrack/near-
+    // zero throughout testing — the camera's own onboard tracker doesn't
+    // hold a lock, consistent with the earlier Sensor ON/OFF finding). The
+    // operator keeps the actual target under this fixed point using J1/J2;
+    // once locked, the crosshair deliberately stops wandering with YOLO's
+    // own frame-to-frame jitter.
+    private double CrosshairTargetX => detection.HasTarget ? detection.TargetSvgX : 530.0;
+    private double CrosshairTargetY => detection.HasTarget ? detection.TargetSvgY : 225.0;
+    // 2026-08-16: while FIRING, the red crosshair must show the actual
+    // boresight/impact point — same reasoning as targetLocked below, not a
+    // separate rule. Without this, a stale/jittery YOLO-designated point could
+    // sit far from the camera's own centered OSD reticle while the red FIRE
+    // indicator is showing, which is misleading precisely when it matters most.
+    private bool _pinCrosshairToCenter => targetLocked || svc.CurrentState == SystemState.FIRING;
+    private int CrosshairSvgX => (int)Math.Clamp(_pinCrosshairToCenter ? 400.0 : CrosshairTargetX - deltaAz * (800.0 / CAMERA_HFOV), 30, 770);
+    private int CrosshairSvgY => (int)Math.Clamp(_pinCrosshairToCenter ? 250.0 : CrosshairTargetY + deltaEl * (500.0 / CAMERA_VFOV), 30, 470);
+    private bool   targetLocked = false;
+    private float  zoomFactor   = 4.0f;
+    private bool   _liveVideoOn = false;  // optimistic — set once startVideoStream() has been invoked
+    private bool   _zoomingIn   = false;  // S3 (joystick D-pad Up) held
+    private bool   _zoomingOut  = false;  // S3 (joystick D-pad Down) held
+    private DotNetObjectReference<Home>? _joystickRef;
+    private int    battery      = 86;
+    private int    rfMs         = 26;
+    private int    tempC        = 24;
+    private string currentTime  = "";
+    private System.Threading.Timer? _timer;
+    private System.Threading.Timer? _camLinkTimer;
+    private double lock_azimuth = 0;
+    private double lock_elevation = 0;
+    private double setAz = 0;
+    private double setEl = 0;
+
+    // CAMERA — MICRO300 tabbed panel (bottom of right column). All state
+    // here is either real telemetry (pulled on demand via RefreshCamTelemetry,
+    // never on a render tick — see the panel's own comment above) or pending
+    // hold-button state; nothing is assumed.
+    private bool  _camThermalTab     = false; // false = VIS/Day (the channel actually live on this screen)
+    private int   _camPrimaryChannel = -1;    // real telemetry: -1=unknown, 1=TI, 2=DTV (enum Camera)
+    private float _camFov          = -1f;   // -1 = unknown/never synced
+    private int   _camExposureMode = 0;     // 0=Auto Exposure, 1=Auto Gain, 2=Manual (DTVExposureModeSet)
+    private bool? _camLinkOk       = null;  // null = never checked. GimbalMasterBITStatus.Payloadcommfail, inverted.
+    private int   _camLastSyncErr  = 1;     // 0=ok; anything else means the LAST sync attempt got no real reply
+    // at all — every other reading below is stale/default, not trustworthy
+    // (see stk_bridge.c's do_sync — a gap found 2026-08-08: a failed
+    // STKSyncLocal silently leaves old/zero values in place, which reads
+    // exactly like a real "off" state instead of "we don't actually know").
+
+    private string CamLinkText  => _camLastSyncErr != 0 ? "SYNC FAIL" : _camLinkOk switch { true => "OK", false => "FAIL", null => "?" };
+    private string CamLinkColor => _camLastSyncErr != 0 ? "#ef4444" : _camLinkOk switch { true => "#4ade80", false => "#ef4444", null => "#7b8794" };
+    private string ActiveCameraLabel => _camPrimaryChannel switch { 1 => "TI", 2 => "DTV", _ => "—" };
+
+    private string ChannelTabStyle(bool thermal) =>
+        thermal == _camThermalTab
+            ? "flex:1;padding:4px 6px;font-size:10px;font-weight:bold;border-radius:4px;border:1px solid #d1b06a;background:#3b2b16;color:#d1b06a;cursor:pointer;"
+            : "flex:1;padding:4px 6px;font-size:10px;font-weight:bold;border-radius:4px;border:1px solid #2a2d32;background:#0a0c10;color:#7b8794;cursor:pointer;";
+
+    private const string ModeBtnStyle =
+        "flex:1;padding:3px 0;font-size:9px;font-weight:bold;border-radius:4px;border:1px solid #2a2d32;background:#1a1d21;color:#d0d0d0;cursor:pointer;white-space:nowrap;";
+    private const string RefreshBtnStyle =
+        "padding:2px 7px;font-size:11px;border-radius:4px;border:1px solid #2a2d32;background:#0a0c10;color:#d1b06a;cursor:pointer;";
+    private const string CamRowLabel =
+        "font-size:0.68rem;color:#d0d0d0;font-family:Consolas,monospace;";
+    private const string CamStepBtnStyle =
+        "padding:2px 0;font-size:12px;font-weight:bold;border-radius:4px;border:1px solid #4a4f57;background:#3a3f47;color:#f5f7fa;cursor:pointer;";
+
+    // incDec / zoomCommand: 0=Nochange, 1=Decrease/Zoomout, 2=Increase/Zoomin
+    // — same shape stkDirect already uses for zoom (see OnJoystickZoomIn etc).
+    private void CamZoom(int v)
+    {
+        if (v == 2) { _zoomingIn = true; _zoomingOut = false; }
+        else if (v == 1) { _zoomingOut = true; _zoomingIn = false; }
+        else { _zoomingIn = false; _zoomingOut = false; }
+        StateHasChanged();
+        if (_camThermalTab) stkDirect.SetThermalZoom(v); else stkDirect.SetDayZoom(v);
+    }
+
+    private void CamSharpness(int v) { if (_camThermalTab) stkDirect.SetThermalSharpness(v); else stkDirect.SetDaySharpness(v); }
+    private void CamLevel(int v)     { if (_camThermalTab) stkDirect.SetThermalLevel(v);     else stkDirect.SetDayLevel(v); }
+    private void CamGain(int v)      { if (_camThermalTab) stkDirect.SetThermalGain(v);      else stkDirect.SetDayGain(v); }
+
+    private void CamRestoreDefault()
+    {
+        if (_camThermalTab) stkDirect.RestoreThermalDefault(); else stkDirect.RestoreDayDefault();
+    }
+
+    // TODO(temporary): "Save Settings" recovery, automated (2026-08-16) — user's
+    // explicit call, meant to last only until the camera vendor fixes the
+    // underlying CONTROL-port-freeze bug this works around ("המטרה שזה יהיה
+    // זמני עד שיפתרו את בעיות המצלמה" — the goal is for this to be temporary,
+    // until the camera issues are resolved). Remove this button + method (and
+    // the RECOVER CAMERA LINK markup above) once the vendor ships that fix —
+    // see the comment on the button itself and [[camera-save-settings-constraint]]
+    // memory for the full history. This is a plain HTTP action on the camera's own MicroAccess web
+    // server (CameraAdmin.razor's embedded dashboard), completely outside the
+    // UDP stkAPI protocol stkDirect otherwise uses — separate transport, so it
+    // has to be its own HttpClient call, not a stkDirect method.
+    //
+    // Mechanism, taken directly from the camera's own /home page markup
+    // (settingsForm, method=post action=/home, fields host_ip/host_port/
+    // target_ip/target_port): the operator's "Save Settings" button just pops a
+    // JS confirm() dialog showing the CURRENT field values, then — if confirmed
+    // — submits the form completely unchanged. So GET the page, scrape the
+    // CURRENT values straight out of the form (never hardcoded — if the
+    // camera's config ever legitimately differs from the 1.1.1.2/1025/1.1.1.3/
+    // 1024 defaults, this must still echo back whatever is actually there, not
+    // silently overwrite it), then POST those same values straight back. That
+    // resubmit is the entire fix — no field is ever changed. "Auto-confirm"
+    // just means skipping the JS dialog by not going through a browser at all.
+    private static readonly HttpClient _camAdminHttp = new() { Timeout = TimeSpan.FromSeconds(6) };
+    private bool _cameraRecoveryInProgress = false;
+    private string? _cameraRecoveryResult;
+
+    private async Task RecoverCameraLink()
+    {
+        if (_cameraRecoveryInProgress) return;
+        _cameraRecoveryInProgress = true;
+        _cameraRecoveryResult = null;
+        StateHasChanged();
+
+        try
+        {
+            var config = await cfg.LoadAsync();
+            var baseUrl = $"http://{config.CamCtrlIp}:8080";
+
+            string html = await _camAdminHttp.GetStringAsync($"{baseUrl}/home");
+
+            string? Extract(string field) =>
+                Regex.Match(html, $"name=\"{field}\"\\s+value=\"([^\"]*)\"").Groups[1] is { Success: true } g ? g.Value : null;
+
+            var hostIp     = Extract("host_ip");
+            var hostPort   = Extract("host_port");
+            var targetIp   = Extract("target_ip");
+            var targetPort = Extract("target_port");
+
+            if (hostIp == null || hostPort == null || targetIp == null || targetPort == null)
+            {
+                _cameraRecoveryResult = "RECOVER CAMERA LINK — FAILED (could not find settings form; camera page layout may have changed)";
+            }
+            else
+            {
+                var body = new FormUrlEncodedContent(new Dictionary<string, string> {
+                    ["host_ip"]     = hostIp,
+                    ["host_port"]   = hostPort,
+                    ["target_ip"]   = targetIp,
+                    ["target_port"] = targetPort,
+                });
+                var resp = await _camAdminHttp.PostAsync($"{baseUrl}/home", body);
+                _cameraRecoveryResult = resp.IsSuccessStatusCode
+                    ? $"RECOVER CAMERA LINK — settings resubmitted ({hostIp}:{hostPort} ⇄ {targetIp}:{targetPort}), camera reloading"
+                    : $"RECOVER CAMERA LINK — FAILED (HTTP {(int)resp.StatusCode})";
+            }
+        }
+        catch (Exception ex)
+        {
+            _cameraRecoveryResult = $"RECOVER CAMERA LINK — FAILED ({ex.Message})";
+        }
+
+        svc.UpdateState(svc.CurrentState, _cameraRecoveryResult ?? "RECOVER CAMERA LINK — unknown result");
+        _cameraRecoveryInProgress = false;
+        StateHasChanged();
+    }
+
+    private void CamSetExposureMode(int mode)
+    {
+        _camExposureMode = mode;
+        if (!_camThermalTab) stkDirect.SetDayExposureMode(mode); // SDK exposure-mode command is Day-channel only
+    }
+
+    // Sensor power ON/OFF abandoned (2026-08-10) — user confirmed it doesn't
+    // work reliably even in QBee itself, so it's a real camera/SDK
+    // limitation, not something to keep chasing here. This is the simpler,
+    // QBee-confirmed replacement: just switch which sensor is primary/active
+    // (SetVideoChannelCommandPrimaryVideoChannel — QBee's own tooltip on its
+    // "Toggle Active Camera" button names this exact function). camera: 1=TI, 2=DTV.
+    //
+    // How long the camera actually takes to complete the switch varies (not
+    // a fixed, guessable delay), so poll instead of waiting one fixed amount
+    // — check every 500ms, stop the moment telemetry actually confirms the
+    // new channel is active, give up after a ~5s ceiling rather than
+    // guessing a single "safe" wait (user's request, 2026-08-10). Each poll
+    // calls RefreshCamTelemetry, which already does StateHasChanged(), so
+    // the CAM/FOV readout updates live as this runs, not just at the end.
+    [JSInvokable]
+    public async Task ToggleActiveCamera()
+    {
+        int next = _camPrimaryChannel == 2 ? 1 : 2; // default to DTV if unknown
+        stkDirect.SetPrimaryVideoChannel(next);
+
+        const int pollIntervalMs = 500;
+        const int maxAttempts = 10; // ~5s ceiling
+        for (int attempt = 0; attempt < maxAttempts; attempt++)
+        {
+            await Task.Delay(pollIntervalMs);
+            await RefreshCamTelemetry();
+            if (_camPrimaryChannel == next) break;
+        }
+    }
+
+    // B3 (Y) — activate thermal camera. An explicit switch TO thermal
+    // (enum Camera: TI=1), not a toggle — same underlying command and
+    // confirm-via-polling pattern as ToggleActiveCamera above, just a fixed
+    // target instead of flipping. Also flips the VIS/THERMAL UI tab so the
+    // CAMERA — MICRO300 panel (existing CAM/FOV readout) stays in sync as
+    // the on-screen indication for this role.
+    [JSInvokable]
+    public async Task OnJoystickThermalActivate()
+    {
+        _camThermalTab = true;
+        stkDirect.SetPrimaryVideoChannel(1);
+
+        const int pollIntervalMs = 500;
+        const int maxAttempts = 10; // ~5s ceiling
+        for (int attempt = 0; attempt < maxAttempts; attempt++)
+        {
+            await Task.Delay(pollIntervalMs);
+            await RefreshCamTelemetry();
+            if (_camPrimaryChannel == 1) break;
+        }
+    }
+
+    // Blocks briefly (UDP round-trip via STKSyncLocal) — run off the UI
+    // thread so a slow/unreachable camera can't stall rendering. One single
+    // sync + read snapshot (StkDirectCameraService.RefreshTelemetry) —
+    // previously this made 4 separate Sync-then-Get calls, each consuming a
+    // DIFFERENT incoming packet; fixed 2026-08-08 alongside a real process
+    // crash traced to concurrent native calls (see that service's own
+    // THREAD SAFETY note).
+    private async Task RefreshCamTelemetry()
+    {
+        var t = await Task.Run(() => stkDirect.RefreshTelemetry(_camThermalTab));
+
+        _camLastSyncErr = t.SyncError;
+        if (t.SyncError != 0)
+        {
+            // Sync itself failed — don't trust any of the values above, they're
+            // stale/default. Leave _camFov/_camPrimaryChannel as last-known
+            // instead of overwriting with misleading zeros.
+            StateHasChanged();
+            return;
+        }
+
+        _camFov = t.Fov;
+        _camPrimaryChannel = t.PrimaryChannel; // real telemetry: 1=TI, 2=DTV
+        _camLinkOk = t.LinkFail is null ? null : !t.LinkFail.Value;
+        StateHasChanged();
+    }
+
+    private string weaponStateClass => svc.CurrentState switch {
+        SystemState.SAFE      => "weapon-safe",
+        SystemState.STANDBY   => "weapon-standby",
+        SystemState.ARMED     => "weapon-armed",
+        SystemState.FIRING    => "weapon-firing",
+        SystemState.FAULT     => "weapon-fault",
+        SystemState.COMM_LOSS => "weapon-fault",
+        _                     => "weapon-safe"
+    };
+
+    protected override void OnInitialized() {
+        svc.OnChange += OnStateChanged;
+        eth.OnChange += OnStateChanged;
+        detection.OnTargetDetected += OnTargetDetected;
+        _timer = new System.Threading.Timer(_ => {
+            currentTime = DateTime.UtcNow.ToString("HH:mm:ssZ");
+            if (svc.CurrentState == SystemState.ARMED && Math.Abs(deltaAz) > 0.1) {
+                deltaAz   *= 0.82;
+                deltaEl   *= 0.82;
+                azimuth   += deltaAz * 0.05;
+                elevation += deltaEl * 0.05;
+            }
+            lock_azimuth = azimuth + deltaAz;
+            lock_elevation = elevation + deltaEl;
+            InvokeAsync(StateHasChanged);
+        }, null, 0, 100);
+        _ = eth.ConnectAsync();
+
+        // 2026-08-16: the LINK OK/FAIL indicator only ever reflected the last
+        // coincidental RefreshCamTelemetry call (page load, ToggleActiveCamera,
+        // thermal activate) -- it could sit on stale "OK" while the CONTROL
+        // channel was actually frozen (confirmed: user saw LINK OK green while
+        // T1-triggered control freeze was live, see [[mobilicom-controller-mapping]]).
+        // Stk_Sync is a small bounded UDP round-trip (its own timeoutMs caps the
+        // block), not CPU work, so unlike LiveTrackingService's YOLO loop this
+        // is not a COMM_LOSS/CPU-contention risk at a slow 2s cadence.
+        _camLinkTimer = new System.Threading.Timer(_ => {
+            InvokeAsync(RefreshCamTelemetry);
+        }, null, 2000, 2000);
+    }
+
+    private void OnStateChanged() => InvokeAsync(StateHasChanged);
+
+    private void OnTargetDetected()
+    {
+        if (detection.HasTarget)
+        {
+            deltaAz      = detection.TargetDeltaAz;
+            deltaEl      = detection.TargetDeltaEl;
+        }
+        // Reflects both directions now — previously only ever set true, so
+        // LOCKED could never clear itself when a target/track was lost.
+        targetLocked = detection.HasTarget;
+        Console.WriteLine($"[Crosshair] detection.TargetSvg=({detection.TargetSvgX:F1},{detection.TargetSvgY:F1}) CrosshairTarget=({CrosshairTargetX:F1},{CrosshairTargetY:F1}) CrosshairSvg=({CrosshairSvgX},{CrosshairSvgY})");
+        InvokeAsync(StateHasChanged);
+    }
+
+    private async Task SetSafe() {
+        await eth.ConnectAsync();
+        await eth.SendAndReceiveAsync("safe");
+    }
+    // Toggle (2026-08-16, user confirmed): a second press while already FIRING
+    // is a manual cease-fire back to ARMED, same pattern as T1 (lock/unlock)
+    // and T2 (arm/disarm) — otherwise the only way back to ARMED was waiting
+    // out the 20s auto-close window in SystemControlService, with no way to
+    // stop sooner. Shared by both the on-screen FIRE button and B2/RT
+    // (OnJoystickFire), since both call this same method.
+    // 2026-08-20: this only ever updated local UI state (svc.UpdateState) —
+    // never actually sent anything to the FCC. Turned out EthernetServer.cpp's
+    // TCP dispatch (the channel this app actually talks to) had no "fire"
+    // case at all, even though FccController::sendFireRequest() was already
+    // fully implemented and wired into a DIFFERENT, unused-by-this-app UDP
+    // channel (gcsPollLoop). Fixed on both sides — this now actually sends
+    // "fire" over eth, same pattern as SetStandby()/ArmSystem()/Disarm()
+    // below. Cease-fire (toggling back to ARMED) stays local-only: firing is
+    // a momentary ISM-side pulse per request, not a sustained state with its
+    // own "stop" command to send.
+    private async Task Fire()
+    {
+        if (svc.CurrentState == SystemState.FIRING)
+        {
+            svc.UpdateState(SystemState.ARMED, "Operator: CEASE FIRE (manual)");
+            return;
+        }
+        if (targetLocked && svc.CurrentState == SystemState.ARMED)
+        {
+            svc.UpdateState(SystemState.FIRING, "Operator: FIRE authorized");
+            await eth.ConnectAsync();
+            await eth.SendAndReceiveAsync("fire");
+        }
+    }
+
+    // 2026-08-16: Center/Safe/INIT/Drift.cl/IDLE used to call stkDirect straight
+    // from @onclick with no return-value handling at all — user reported INIT
+    // specifically as "no way to tell it did anything" (no feedback on click).
+    // All five buttons share this one handler now: shows the result inline right
+    // under the button row (same page, no navigating to Event Log to check) AND
+    // logs it to svc.Logs (Event Log) for a persistent record. Return value per
+    // stkAPI.c's SendData/STKSendMessage: 0 = UDP send succeeded, -1 = send
+    // failed, -100 = stkDirect not initialized yet (see EnsureInitializedLocked).
+    private string? _lastModeCmd;
+    private void GimbalMode(string label, Func<int> action)
+    {
+        int result = action();
+        _lastModeCmd = result switch {
+            0    => $"{label} — sent",
+            -100 => $"{label} — FAILED (camera link not initialized)",
+            _    => $"{label} — FAILED (err={result})"
+        };
+        svc.UpdateState(svc.CurrentState, _lastModeCmd);
+    }
+
+    private async Task SetStandby() {
+        await eth.ConnectAsync();
+        // ARMED → STANDBY requires DISARM; SAFE → STANDBY uses STANDBY command
+        var cmd = svc.CurrentState == SystemState.ARMED ? "disarm" : "standby";
+        await eth.SendAndReceiveAsync(cmd);
+    }
+
+    private async Task ArmSystem() {
+        await eth.ConnectAsync();
+        await eth.SendAndReceiveAsync("arm");
+    }
+
+    private async Task Disarm() {
+        await eth.ConnectAsync();
+        await eth.SendAndReceiveAsync("disarm");
+    }
+
+    private async Task RecoveryReset()
+    {
+        bool ok = await eth.RecoveryResetAsync();
+        svc.UpdateState(SystemState.SAFE, ok ? "Recovery reset sent to ISM" : "Recovery reset FAILED");
+    }
+
+    private async Task CamOn()
+    {
+        svc.CameraOnCmd();
+        await eth.CameraOnAsync();
+    }
+
+    private async Task CamOff()
+    {
+        svc.CameraOffCmd();
+        await eth.CameraOffAsync();
+    }
+
+    private async Task EthConnect()
+    {
+        await eth.ConnectAsync();
+        await InvokeAsync(StateHasChanged);
+    }
+
+    private void EthDisconnect()
+    {
+        eth.Disconnect();
+        StateHasChanged();
+    }
+
+    private async Task SetPosition()
+    {
+        await eth.SetPositionAsync(setAz, setEl);
+        svc.UpdateState(svc.CurrentState, $"SET_POSITION X:{setAz:F1} Y:{setEl:F1}");
+    }
+
+    private async Task GetPosition()
+    {
+        var pos = await eth.GetPositionAsync();
+        if (pos != null)
+            svc.UpdateState(svc.CurrentState, $"GET_POSITION → X:{pos.X:F1} Y:{pos.Y:F1}");
+        await InvokeAsync(StateHasChanged);
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            // Port confirmed via Wireshark (2026-08-01). Codec (H.264 vs H.265) is
+            // auto-detected server-side per connection — see videoStream.js.
+            await JS.InvokeVoidAsync("startVideoStream", "liveVideo", "liveVideoCanvas", 51000);
+            _liveVideoOn = true;
+
+            // Joystick control — see [[mobilicom-controller-mapping]] memory for
+            // the full confirmed button map. Only S3 (zoom) is wired so far.
+            _joystickRef = DotNetObjectReference.Create(this);
+            await JS.InvokeVoidAsync("startJoystickControl", _joystickRef);
+
+            // Wake up with a live picture instead of making the operator click
+            // manually every time the page loads (user's explicit request,
+            // 2026-08-09). Sensor power ON/OFF was abandoned (2026-08-10) — user
+            // confirmed it doesn't work reliably even in QBee itself — so this
+            // just ensures DTV is the active/primary channel, same as
+            // ToggleActiveCamera, no power cycling. Fire-and-forget the command
+            // (it doesn't block), then a short beat before the first telemetry read.
+            stkDirect.SetPrimaryVideoChannel(2); // enum Camera: DTV
+            _ = Task.Run(async () =>
+            {
+                await Task.Delay(500);
+                await InvokeAsync(async () =>
+                {
+                    await RefreshCamTelemetry();
+                });
+            });
+
+            StateHasChanged();
+        }
+    }
+
+    // S3 (D-pad Up) — zoom in, held. Targets the Day/DTV channel — the one
+    // actually feeding the live video on this screen (see conversation
+    // 2026-08-06: user confirmed Day/DTV over Thermal for this control).
+    //
+    // Uses StkDirectCameraService (PC -> camera control port directly, NOT
+    // through the FCC relay) instead of CameraApiService, per user's request
+    // 2026-08-08 — the FCC-relay zoom (cam.SetDayCameraCommandZoomCommand)
+    // produced no visible effect on the live video at all, and the joystick
+    // is the actual real-world usage path, so that's what needs to prove the
+    // direct path out. If this DOES visibly zoom, switch back to `cam` once
+    // the FCC-side bug is found — this direct path is a diagnostic stand-in,
+    // not necessarily the permanent design (see StkDirectCameraService.cs's
+    // note on real-deployment network topology).
+    [JSInvokable]
+    public Task OnJoystickZoomIn()
+    {
+        _zoomingIn = true;
+        _zoomingOut = false;
+        StateHasChanged();
+        stkDirect.SetDayZoom(2); // ZoomChange.Zoomin
+        return Task.CompletedTask;
+    }
+
+    // S3 (D-pad Down) — zoom out, held.
+    [JSInvokable]
+    public Task OnJoystickZoomOut()
+    {
+        _zoomingOut = true;
+        _zoomingIn = false;
+        StateHasChanged();
+        stkDirect.SetDayZoom(1); // ZoomChange.Zoomout
+        return Task.CompletedTask;
+    }
+
+    // S3 released (either direction) — matches the existing hold-button
+    // pattern's @onmouseup -> Nochange (see SystemConfig.razor CAMERA tab).
+    [JSInvokable]
+    public Task OnJoystickZoomStop()
+    {
+        _zoomingIn = false;
+        _zoomingOut = false;
+        StateHasChanged();
+        stkDirect.SetDayZoom(0); // ZoomChange.Nochange
+        return Task.CompletedTask;
+    }
+
+    // J1 (left stick) — continuous gimbal pan/tilt rate, °/sec. No on-screen
+    // indicator needed for this one — confirmed requirement is discrete
+    // buttons only (T1/B3/B4/S3/T2/B2/B5/B6), not the continuous/analog J1/J2
+    // sticks (see [[mobilicom-controller-mapping]] memory). Throttled on the
+    // JS side (joystickControl.js) — this fires at most ~10/sec, not every
+    // frame, so no need to throttle again here.
+    [JSInvokable]
+    public Task OnJoystickRate(float rateAzDegPerSec, float rateElDegPerSec)
+    {
+       /*Tova 17.8.26 TRY if (targetLocked)
+        {
+            // The camera appears to ignore RateCommand while its own internal
+            // Track mode is engaged (SetTrack was sent at lock time) — use
+            // TrackerAdjustControls instead (pixels, not deg/sec; positive =
+            // right/down per the SDK). Reuses the incoming rate value as a
+            // stick-deflection proxy, rescaled to a small pixel nudge — J2's
+            // smaller max deg/sec naturally stays a finer nudge than J1's.
+            const float degPerSecToPixels = 2.0f;
+            const float maxAdjustPixels = 30f;
+            short moveX = (short)Math.Clamp(rateAzDegPerSec * degPerSecToPixels, -maxAdjustPixels, maxAdjustPixels);
+            short moveY = (short)Math.Clamp(-rateElDegPerSec * degPerSecToPixels, -maxAdjustPixels, maxAdjustPixels);
+            stkDirect.SetTrackerAdjust(moveX != 0 || moveY != 0, moveX, moveY);
+            return Task.CompletedTask;
+        }
+        */
+        stkDirect.SetRateX(rateAzDegPerSec);
+        stkDirect.SetRateY(rateElDegPerSec);
+        return Task.CompletedTask;
+    }
+
+    // T1 — camera lock. Two interaction models, chosen per-device by
+    // joystickControl.js: the Logitech's LB is a real momentary button, so
+    // OnJoystickLock() (below) is a TOGGLE — one press engages, the next
+    // disengages, tracked via liveTracking.IsActive. The real Mobilicom's T1
+    // is a maintained two-way switch reported as a single button whose own
+    // raw value already IS the state (2026-08-19, user confirmed: button #7
+    // reads 1 while engaged, back to 0 when switched off) — so
+    // joystickControl.js calls OnJoystickLockEngage/Disengage DIRECTLY off
+    // that button's rising/falling edge instead, no toggle memory needed
+    // (an earlier design routed the switch's "backward" position through a
+    // separate shared button (#23, also shared with T2) — unnecessary once
+    // the switch's own falling edge already carries this exactly, and
+    // ambiguous since #23 couldn't distinguish which switch moved; removed).
+    //
+    // OnJoystickLockEngage: SetTrack does the initial lock onto the
+    // crosshair (screen center) and we confirm via real telemetry that the
+    // camera acknowledged it, matching the vendor demo's own plain "Track"
+    // button (see [[camera-sdk-command-mapping]] memory) — then
+    // LiveTrackingService takes over with continuous YOLO-based
+    // re-detection + corrective rate commands, since the camera's own
+    // onboard tracker alone was confirmed too primitive to hold a lock
+    // (drops within ~1s even on a high-contrast target — see
+    // [[project-state]], 2026-08-11).
+    [JSInvokable]
+    public Task OnJoystickLockEngage()
+    {
+        // Isolation test (2026-08-12) disproved ConfigureTrackerGate/the 4-packet
+        // burst as the cause of the CONTROL-port freeze — bare SetTrack alone
+        // (matching QBee exactly) still froze it. Real culprit found via
+        // Wireshark: joystickControl.js's J1/J2 heartbeat was flooding the
+        // camera continuously even at rest (fixed there). Gate config is
+        // legitimately needed for the lock to hold, so it's back.
+       //==Tova ==17.8.26 stkDirect.ConfigureTrackerGate();
+        stkDirect.SetTrack(0, 0);
+        // 2026-08-12: was `await Task.Run(...)` — queuing this onto the shared
+        // ThreadPool is unnecessary (it's a bounded ~200ms lock+P/Invoke call,
+        // same as the two direct calls just above) and adds to ThreadPool
+        // pressure that's suspect in today's freeze investigation (see
+        // [[mobilicom-controller-mapping]] memory — an actual ISM COMM_LOSS
+        // was observed mid-session).
+        var (syncErr, status) = stkDirect.SyncTrackerStatus();
+        Console.WriteLine($"[T1] syncErr={syncErr}, status={status} (0=NoTrack,1=TrackerOK,2=Prediction,3=TrackLoss)");
+        if (syncErr == 0)
+        {
+            // TrackerStatus: 0=NoTrack, 1=TrackerOK, 2=Prediction, 3=TrackLoss
+            bool cameraAckedLock = status == 1 || status == 2;
+            if (cameraAckedLock)
+            {
+                targetLocked = true; //== Tova 16/8/26
+                liveTracking.Start();
+            }
+            else
+            {
+                targetLocked = false; //== Tova 16/8/26
+                Console.WriteLine("[T1] camera did not acknowledge lock — not starting LiveTrackingService");
+            }
+        }
+        else
+        {
+            Console.WriteLine("[T1] SyncTrackerStatus failed — not starting LiveTrackingService");
+        }
+        return Task.CompletedTask;
+    }
+
+    [JSInvokable]
+    public Task OnJoystickLockDisengage()
+    {
+        liveTracking.Stop();
+        //==Tova ==17.8.26  stkDirect.DisableTrackerGate();
+        stkDirect.SetTrack(0, 0);  //==Tova ==17.8.26
+        return Task.CompletedTask;
+    }
+
+    // Momentary-button toggle wrapper — used by the Logitech only (see above).
+    [JSInvokable]
+    public Task OnJoystickLock()
+    {
+        return liveTracking.IsActive ? OnJoystickLockDisengage() : OnJoystickLockEngage();
+    }
+
+    // T2 — fire system open/close, STANDBY ⇄ ARMED. Same two-interaction-model
+    // split as T1 above: OnJoystickFireSystemToggle() is the Logitech's
+    // momentary-button toggle; the Mobilicom's T2 (button #15, also a
+    // maintained switch) drives OnJoystickArmEngage/Disengage directly off
+    // its own rising/falling edge. Reuses the exact same EthernetService
+    // commands as the existing ARM/SAF-C buttons in the WEAPON STATUS panel
+    // (2026-08-12, user confirmed this mapping), so this arms/disarms the
+    // real weapon, not a cosmetic toggle.
+    //
+    // 2026-08-20: ARM/LOCK coupling, user's explicit requirement — "if
+    // BUTTON 15 is on, we're in ARMED+LOCK; releasing ARMED also releases
+    // LOCKED". Arming engages the camera lock too (only if not already
+    // locked — if it was already locked before arming, it must STAY locked,
+    // not get re-triggered through the full lock sequence again, which
+    // would needlessly resend SetTrack/ConfigureTrackerGate — see the
+    // CONTROL-port-freeze history in [[mobilicom-controller-mapping]] memory
+    // for why redundant lock commands are worth avoiding, not just
+    // wasteful). Disarming always disengages the lock unconditionally
+    // (DisengageLock-equivalent is safe to call even if not currently
+    // locked). Applies uniformly to both devices, since both ultimately
+    // call these same two methods.
+    [JSInvokable]
+    public async Task OnJoystickArmEngage()
+    {
+        if (!liveTracking.IsActive)
+        {
+            await OnJoystickLockEngage();
+        }
+        await ArmSystem();
+    }
+
+    [JSInvokable]
+    public async Task OnJoystickArmDisengage()
+    {
+        await SetStandby();
+        await OnJoystickLockDisengage();
+    }
+
+    [JSInvokable]
+    public Task OnJoystickFireSystemToggle()
+    {
+        return svc.CurrentState == SystemState.ARMED ? OnJoystickArmDisengage() : OnJoystickArmEngage();
+    }
+
+    // B2 — RT — fire. Reuses the exact same handler as the existing on-screen
+    // FIRE button (WEAPON STATUS panel), so the joystick trigger is not a
+    // separate/parallel path — same guardrails (or lack thereof) as the
+    // button already had.
+    [JSInvokable]
+    public Task OnJoystickFire() => Fire();
+
+    public void Dispose() {
+        svc.OnChange -= OnStateChanged;
+        eth.OnChange -= OnStateChanged;
+        detection.OnTargetDetected -= OnTargetDetected;
+        _timer?.Dispose();
+        _camLinkTimer?.Dispose();
+        liveTracking.Stop();
+        _ = JS.InvokeVoidAsync("stopVideoStream");
+        _ = JS.InvokeVoidAsync("stopJoystickControl");
+        _joystickRef?.Dispose();
+    }
+    private const float CAMERA_HFOV = 25.0f;  // degrees — update when Micro300 spec known
+    private const float CAMERA_VFOV = 19.0f;  // degrees
+
+    private async Task OnVideoClick(MouseEventArgs e)
+    {
+        // OffsetX/Y are CSS pixels relative to the overlay div, which fills the video-feed exactly.
+        // Get the overlay div's rendered size to compute proportion from center.
+        var size = await JS.InvokeAsync<SvgSize>("getSvgSize", "video-overlay");
+        if (size.Width < 1 || size.Height < 1) return;
+
+        // Offset from center of the rendered video area
+        double dx = e.OffsetX - size.Width  / 2.0;
+        double dy = e.OffsetY - size.Height / 2.0;
+
+        // Convert proportion-from-center to angular offset
+        double clickDeltaAz =  (dx / (size.Width  / 2.0)) * (CAMERA_HFOV / 2.0);
+        double clickDeltaEl = -(dy / (size.Height / 2.0)) * (CAMERA_VFOV / 2.0);
+
+        double targetAz = azimuth   + clickDeltaAz;
+        double targetEl = elevation + clickDeltaEl;
+
+        deltaAz        = clickDeltaAz;
+        deltaEl        = clickDeltaEl;
+        lock_azimuth   = targetAz;
+        lock_elevation = targetEl;
+        setAz          = targetAz;
+        setEl          = targetEl;
+        // Deliberately does NOT touch targetLocked — this designates a weapon-aim
+        // point, it isn't the camera's own visual lock. targetLocked now means
+        // exactly one thing: LiveTrackingService is actively tracking (see
+        // OnTargetDetected/OnJoystickLock) — this used to also flip it on, which
+        // made LOCKED light up on a plain click with no real tracking behind it.
+
+        await eth.SetPositionAsync(targetAz, targetEl);
+        svc.UpdateState(svc.CurrentState, $"CLICK→GIMBAL AZ:{targetAz:F1}° EL:{targetEl:F1}°");
+    }
+
+    private record SvgSize(double Width, double Height);
+
+    private async Task SlaveToTarget()
+    {
+        setAz = lock_azimuth;
+        setEl = lock_elevation;
+        await eth.SetPositionAsync(lock_azimuth, lock_elevation);
+        svc.UpdateState(svc.CurrentState, $"SLAVE→TARGET AZ:{lock_azimuth:F1}° EL:{lock_elevation:F1}°");
+        // Deliberately does NOT touch targetLocked — see OnVideoClick's note.
+    }
+
+    private async Task HandleEthClick()
+    {
+        if (eth.Status == EthernetStatus.Connected)
+        {
+            EthDisconnect();    // קורא לפונקציית הניתוק שלך
+        }
+        else
+        {
+            await EthConnect(); // קורא לפונקציית החיבור שלך
+        }
+    }
+
+}

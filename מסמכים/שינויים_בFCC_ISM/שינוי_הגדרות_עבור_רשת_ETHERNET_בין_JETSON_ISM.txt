@@ -1,0 +1,39 @@
+השגיאה נובעת מכך שגרסת ה-nmcli במערכת שלכם מצפה לפרמטרים מעט שונים (היא דורשת את ה-UUID של הגשר או הגדרה כ-bridge ולא כ-ethernet).
+nmcli connection show
+כדי לעקוף את המגבלה הזו ולבצע את החיבור במדויק, הריצו את 3 הפקודות הבאות:
+
+   1. שיוך כרטיס הרשת לגשר (באמצעות שימוש בפרמטר bridge המדויק):
+   
+sudo nmcli connection modify "Wired connection 1" master 64b66a76-f825-4995-81db-9b7a3204780e slave-type bridge
+//OR
+sudo nmcli connection modify "Wired connection 1" master 96c3e064-c4c6-4c98-87a7-1b1c9e2d70fc slave-type bridge
+
+
+
+
+   
+   2. ביטול הגדרת ה-IP העצמאית של כרטיס הרשת:
+   
+   sudo nmcli connection modify "Wired connection 1" ipv4.method disabled ipv6.method ignore
+   
+   3. הפעלה מחדש של החיבור להחלת השינויים:
+   
+   sudo nmcli connection up "Wired connection 1"
+   
+   
+------------------------------
+בצעו את הפקודות הללו וספרו לי אם הן עברו בהצלחה ואם ה-ping ל-192.168.55.3 התחיל לעבוד!
+
+השגיאה מראה שברגע שהגדרתם את החיבור כעבד (Slave) של הגשר, המערכת מסירה ממנו את הגדרות ה-ipv4 העצמאיות ולכן הפקודה השנייה נכשלת.
+זה סימן טוב! המשמעות היא שהפקודה הראשונה כנראה הצליחה והכרטיס כבר משויך לגשר.
+בצעו את הצעד האחרון כדי להפעיל את השינוי:
+
+sudo nmcli connection up "Wired connection 1"
+
+------------------------------
+לאחר הרצת הפקודה, בדקו אם יש תקשורת מול ה-STM32 באמצעות פינג:
+
+ping 192.168.55.3
+
+ספרו לי אם הפקודה עברה בהצלחה ואם הפינג ל-192.168.55.3 מגיב.
+

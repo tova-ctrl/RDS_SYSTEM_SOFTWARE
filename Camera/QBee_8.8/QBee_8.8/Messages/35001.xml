@@ -1,0 +1,6 @@
+<?xml version='1.0' encoding='utf-8'?>
+<Protocol>
+	<Message Key="35001" Name="Thermal Camera Mode #1 Report" NumberOfBytes="16" Protocol="Generic">
+		<Field LogicalId="0" StartByte="0" NumberOfBytes="1" StartBit="0" NumberOfBits="8" Type="UCHAR" Name="Mode" ConvertType="TThermalCameraModes" Description="" />
+	</Message>
+</Protocol>

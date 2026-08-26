@@ -1,0 +1,8 @@
+<?xml version='1.0' encoding='utf-8'?>
+<Protocol>
+	<Message Key="1006" Name="Drift Calibration" NumberOfBytes="0" Protocol="Microcom" Description="Performs calibration to gimbal. This process takes few seconds.">
+	</Message>
+
+	<Message Key="1006" Name="Drift Calibration" NumberOfBytes="0" Protocol="Generic">
+	</Message>
+</Protocol>

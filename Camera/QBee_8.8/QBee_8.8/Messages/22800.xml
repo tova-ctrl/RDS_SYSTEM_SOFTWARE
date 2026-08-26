@@ -1,0 +1,12 @@
+<?xml version='1.0' encoding='utf-8'?>
+<Protocol>
+	<Message Key="22800" Name="Video Channel RunTime Config" NumberOfBytes="6" Protocol="Microcom">
+		<Field LogicalId="0" StartByte="0" NumberOfBytes="1" StartBit="0" NumberOfBits="1" Type="BIT" Name="Stop Channel 0 Stream"  Description="Stop Channel 0 Stream" />	
+		<Field LogicalId="1" StartByte="0" NumberOfBytes="1" StartBit="1" NumberOfBits="1" Type="BIT" Name="Start Channel 0 Stream"  Description="Start Channel 0 Stream" />		
+		<Field LogicalId="2" StartByte="0" NumberOfBytes="1" StartBit="2" NumberOfBits="1" Type="BIT" Name="H264 Channel 0 Stream"  Description="Set Channel 0 Stream to H264 encoding" />	
+		<Field LogicalId="3" StartByte="0" NumberOfBytes="1" StartBit="3" NumberOfBits="1" Type="BIT" Name="H265 Channel 0 Stream"  Description="Set Channel 0 Stream to H265 encoding" />	
+		<Field LogicalId="4" StartByte="1" NumberOfBytes="4" StartBit="0" NumberOfBits="32" Type="LONG" Name="Bandwidth Channel 0 Stream"  Description="Set Channel 0 Bandwidth - leave 0 if no change required" />	
+		<Field LogicalId="5" StartByte="5" NumberOfBytes="1" StartBit="0" NumberOfBits="1" Type="BIT" Name="Stop DTV Stream"  Description="Stop DTV Wide and DTV Narrow pipeline" />	
+		<Field LogicalId="6" StartByte="5" NumberOfBytes="1" StartBit="1" NumberOfBits="1" Type="BIT" Name="Stop TI Stream"  Description="Stop TI pipeline" />	
+	</Message>
+</Protocol>
