@@ -833,21 +833,26 @@
     // fully implemented and wired into a DIFFERENT, unused-by-this-app UDP
     // channel (gcsPollLoop). Fixed on both sides — this now actually sends
     // "fire" over eth, same pattern as SetStandby()/ArmSystem()/Disarm()
-    // below. Cease-fire (toggling back to ARMED) stays local-only: firing is
-    // a momentary ISM-side pulse per request, not a sustained state with its
-    // own "stop" command to send.
+    // below. See the 2026-09-14 note just below the FIRING branch: cease-fire
+    // no longer stays local-only — it now sends a real SAFE/recovery command.
     private async Task Fire()
     {
         if (svc.CurrentState == SystemState.FIRING)
         {
-            svc.UpdateState(SystemState.ARMED, "Operator: CEASE FIRE (manual)");
+            // 2026-09-14: changed from local-only toggle-to-ARMED to a full
+            // STDBY transition WITH a real command sent to the ISM — user's
+
+            await eth.ConnectAsync();
+            await eth.SendAndReceiveAsync("disarm");
+            svc.UpdateState(SystemState.STANDBY, "Operator: CEASE FIRE (manual)");
             return;
         }
         if (targetLocked && svc.CurrentState == SystemState.ARMED)
         {
-            svc.UpdateState(SystemState.FIRING, "Operator: FIRE authorized");
+            
             await eth.ConnectAsync();
             await eth.SendAndReceiveAsync("fire");
+            svc.UpdateState(SystemState.FIRING, "Operator: FIRE authorized");
         }
     }
 
@@ -870,14 +875,33 @@
         };
         svc.UpdateState(svc.CurrentState, _lastModeCmd);
     }
-
+    //  [JSInvokable]
     private async Task SetStandby() {
         await eth.ConnectAsync();
         // ARMED → STANDBY requires DISARM; SAFE → STANDBY uses STANDBY command
         var cmd = svc.CurrentState == SystemState.ARMED ? "disarm" : "standby";
         await eth.SendAndReceiveAsync(cmd);
     }
-
+    [JSInvokable]
+    public async Task onJoystickStndBy()
+    {
+        await eth.ConnectAsync();
+        // ARMED → STANDBY requires DISARM; SAFE → STANDBY uses STANDBY command
+        if (svc.CurrentState != SystemState.STANDBY)
+        {
+            var cmd = svc.CurrentState == SystemState.ARMED ? "disarm" : "standby";
+            await eth.SendAndReceiveAsync(cmd);
+        }
+        else await eth.SendAndReceiveAsync("safe"); 
+    }
+    [JSInvokable]
+    public async Task onJoystickArm()
+    {
+        await eth.ConnectAsync();
+        var cmd = svc.CurrentState == SystemState.ARMED ? "disarm" : "arm";
+        await eth.SendAndReceiveAsync(cmd);
+        
+    }
     private async Task ArmSystem() {
         await eth.ConnectAsync();
         await eth.SendAndReceiveAsync("arm");

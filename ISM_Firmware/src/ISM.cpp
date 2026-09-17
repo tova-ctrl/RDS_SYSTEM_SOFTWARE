@@ -96,6 +96,13 @@ bool ISM::processMessage(const FccMessage& msg) {
                 return false;
             }
             state_ = SystemState::STANDBY;
+            // 2026-09-14: dual-channel FIRE interlock (SWR-SAFE-004) — channel A
+            // is tied to reaching STANDBY, channel B to reaching ARMED (below),
+            // set automatically by the state machine itself, not by separate
+            // operator-triggered messages (superseded the 2026-09-09 CAN_ID_
+            // SAFETY_CHANNEL_A/B design — see [[mobilicom-controller-mapping]]
+            // memory for that history).
+            interlock_.setChannelA(true);
             log("State → STANDBY. System ready, torque still off.\n");
             return true;
 
@@ -106,14 +113,26 @@ bool ISM::processMessage(const FccMessage& msg) {
             }
             state_ = SystemState::ARMED;
             torque_enabled_ = true;
+            // 2026-09-09: interlock_.arm() was missing entirely — without it,
+            // isFirePermitted() (armed_ && channel_a_ && channel_b_) could never
+            // return true no matter what the channels were set to, since
+            // interlock_'s own armed_ flag never left its default false.
+            // 2026-09-14: channel B set here too, automatically — see the
+            // STANDBY case above for the paired channel A / full design note.
+            interlock_.arm();
+            interlock_.setChannelB(true);
             log("State → ARMED. Torque enabled. (SWR-SAFE-002)\n");
             return true;
 
         case FccCommandType::DISARM:
-            if (state_ == SystemState::ARMED) {
+            if (state_ == SystemState::ARMED||state_ == SystemState::FIRING) {
                 state_ = SystemState::STANDBY;
                 torque_enabled_ = false;
                 interlock_.disarm();
+                // 2026-09-14: re-set channel A since we land back in STANDBY —
+                // keeps "state STANDBY ⇒ channel A set" true regardless of path
+                // (power-up STANDBY vs. DISARM-from-ARMED), per user confirmation.
+                interlock_.setChannelA(true);
                 log("State → STANDBY (DISARM from ARMED). Torque disabled.\n");
                 return true;
             }

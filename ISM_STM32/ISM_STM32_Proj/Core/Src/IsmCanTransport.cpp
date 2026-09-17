@@ -1,6 +1,8 @@
 // FDCAN1 CAN transport for ISM on STM32H7.
 // PB8 = FDCAN1_RX (AF9) — CN7 pin 2. PB9 = FDCAN1_TX (AF9) — CN7 pin 4.
-// 500 kbps @ 8 MHz HSE kernel clock (Prescaler=1, TS1=13, TS2=2).
+// 500 kbps @ 75 MHz PLL1Q kernel clock (Prescaler=10, TS1=12, TS2=2) — see
+// 2026-09-08 comment at MX_FDCAN1_Init() for why (silicon default FDCANSEL
+// is PLL1Q, not HSE — the old "8MHz HSE" assumption here was never real).
 //
 // CAN ID space matches IsmProtocol.h on the FCC (Jetson) side.
 // The FCC uses Linux SocketCAN (can0), which sends standard 11-bit CAN frames.
@@ -18,6 +20,8 @@ static constexpr uint32_t CAN_ID_STANDBY         = 0x103;
 static constexpr uint32_t CAN_ID_MOTION          = 0x110;
 static constexpr uint32_t CAN_ID_FIRE_REQUEST    = 0x120;
 static constexpr uint32_t CAN_ID_RECOVERY_RESET  = 0x130;
+static constexpr uint32_t CAN_ID_SAFETY_CHANNEL_A = 0x140;  // B5/B6 dual-channel FIRE interlock, SWR-SAFE-004
+static constexpr uint32_t CAN_ID_SAFETY_CHANNEL_B = 0x141;  // sent as two separate messages, see FCC_App's IsmProtocol.h
 static constexpr uint32_t CAN_ID_INJECT_RESET    = 0x1FE;
 static constexpr uint32_t CAN_ID_INJECT_INTERNAL = 0x1FD;
 static constexpr uint32_t CAN_ID_STATE_ACK       = 0x200;
@@ -161,6 +165,23 @@ static void dispatch(uint32_t id, const uint8_t* data, uint8_t len) {
             send_state_ack(s_ism->getState());
             break;
         }
+        case CAN_ID_SAFETY_CHANNEL_A: {
+            // Direct interlock update, not a state-machine message — no
+            // FccCommandType/processMessage() involved, matches FireInterlock's
+            // own API shape (setChannelA is independent of state_ transitions).
+            bool open = (len >= 1) && (data[0] != 0);
+            s_ism->interlock().setChannelA(open);
+            printf("[CAN] safety channel A -> %s\r\n", open ? "OPEN" : "CLOSED");
+            send_state_ack(s_ism->getState());
+            break;
+        }
+        case CAN_ID_SAFETY_CHANNEL_B: {
+            bool open = (len >= 1) && (data[0] != 0);
+            s_ism->interlock().setChannelB(open);
+            printf("[CAN] safety channel B -> %s\r\n", open ? "OPEN" : "CLOSED");
+            send_state_ack(s_ism->getState());
+            break;
+        }
         case CAN_ID_INJECT_RESET: {
             s_ism->enterSafe("SYSTEM RESET (injected)");
             s_ism->clearLastFaultCode();
@@ -214,17 +235,29 @@ extern "C" void MX_FDCAN1_Init(void) {
 
     __HAL_RCC_FDCAN_CLK_ENABLE();
 
-    // 500 kbps @ 8 MHz HSE kernel clock
-    // Prescaler=1, TS1=13, TS2=2, SJW=1 → 8e6/(1*(1+13+2)) = 500 000 bps
+    // 2026-09-08: CORRECTED — this project's SystemClock_Config() uses HSI+PLL
+    // (PLLM=4,PLLN=9,PLLFRACN=3072,PLLQ=2 → PLL1Q=75MHz), NOT "8MHz HSE" as the
+    // old comment below claimed — HSE is never even enabled (OscillatorType is
+    // HSI-only). Neither this project nor the working reference project
+    // ("RDS Jetson STM CAN chat", confirmed via real bidirectional ACKed CAN
+    // traffic against a Jetson can0 set to bitrate 500000) explicitly selects
+    // RCC_FDCANCLKSOURCE — meaning the silicon default for FDCANSEL is PLL1Q,
+    // not HSE. With the old Prescaler=1/TS1=13/TS2=2 math (written assuming an
+    // 8MHz clock that was never real), the ACTUAL bitrate on a 75MHz PLL1Q
+    // clock was 75e6/(1*16) = 4,687,500 bps — nearly 10x too fast — explaining
+    // every CAN symptom chased across multiple sessions (Stuff Error, Error
+    // Passive, TX HAL failures, ENOBUFS) independent of wiring/GPIO/pinmux.
+    // Fixed to the reference project's own proven-working values (same 75MHz
+    // clock): 75e6/(10*(1+12+2)) = 500 000 bps, matches Jetson can0 exactly.
     hfdcan1.Instance                  = FDCAN1;
     hfdcan1.Init.FrameFormat          = FDCAN_FRAME_CLASSIC;
     hfdcan1.Init.Mode                 = FDCAN_MODE_NORMAL;  //===TOVA 19.7.26 ==FDCAN_MODE_NORMAL;
     hfdcan1.Init.AutoRetransmission   = DISABLE;
     hfdcan1.Init.TransmitPause        = DISABLE;
     hfdcan1.Init.ProtocolException    = DISABLE;
-    hfdcan1.Init.NominalPrescaler     = 1;
+    hfdcan1.Init.NominalPrescaler     = 10;
     hfdcan1.Init.NominalSyncJumpWidth = 1;
-    hfdcan1.Init.NominalTimeSeg1      = 13;
+    hfdcan1.Init.NominalTimeSeg1      = 12;
     hfdcan1.Init.NominalTimeSeg2      = 2;
     hfdcan1.Init.MessageRAMOffset     = 0;
     hfdcan1.Init.StdFiltersNbr        = 1;

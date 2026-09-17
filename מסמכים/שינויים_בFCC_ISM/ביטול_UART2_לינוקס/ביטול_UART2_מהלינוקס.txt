@@ -1,0 +1,4 @@
+sudo systemctl stop serial-getty@ttyTHS2.service
+sudo systemctl disable serial-getty@ttyTHS2.service
+sudo systemctl stop serial-getty@ttyTHS2.service
+sudo systemctl mask serial-getty@ttyTHS2.service

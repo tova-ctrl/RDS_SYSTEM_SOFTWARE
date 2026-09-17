@@ -6,11 +6,13 @@
 // ISM → FCC : fcc_port    (5301), learned from first received packet
 #include "IsmEthTransport.h"
 #include "FaultCode.h"
+#include <cstdio>
 
 extern "C" {
 #include "lwip/udp.h"
 #include "lwip/pbuf.h"
 #include "lwip/ip_addr.h"
+#include "stm32h7xx_hal.h"
 }
 
 #include <cstring>
@@ -23,6 +25,8 @@ static constexpr uint32_t CAN_ID_STANDBY         = 0x103;
 static constexpr uint32_t CAN_ID_MOTION          = 0x110;
 static constexpr uint32_t CAN_ID_FIRE_REQUEST    = 0x120;
 static constexpr uint32_t CAN_ID_RECOVERY_RESET  = 0x130;
+static constexpr uint32_t CAN_ID_SAFETY_CHANNEL_A = 0x140;  // B5/B6 dual-channel FIRE interlock, SWR-SAFE-004
+static constexpr uint32_t CAN_ID_SAFETY_CHANNEL_B = 0x141;  // sent as two separate messages, see FCC_App's IsmProtocol.h
 static constexpr uint32_t CAN_ID_INJECT_RESET    = 0x1FE;
 static constexpr uint32_t CAN_ID_INJECT_INTERNAL = 0x1FD;
 static constexpr uint32_t CAN_ID_STATE_ACK       = 0x200;
@@ -36,6 +40,7 @@ static ip_addr_t       s_fcc_addr{};
 static uint16_t        s_fcc_port   = 5301;
 static bool            s_fcc_known  = false;
 static uint32_t        s_hb_count   = 0;
+static uint32_t        s_rx_count   = 0;
 
 // ── Send helpers ──────────────────────────────────────────────────────────────
 
@@ -51,7 +56,7 @@ static void send_frame(uint32_t id, const uint8_t* data, uint8_t len) {
         return;
     }
     memcpy(p->payload, buf, WIRE_BYTES);
-    err_t e = udp_sendto(s_send_pcb, p, &s_fcc_addr, s_fcc_port);
+	err_t e = udp_sendto(s_send_pcb, p, &s_fcc_addr, s_fcc_port);
     if (e != ERR_OK)
         printf("[ETH] udp_sendto err=%d id=0x%03lX\r\n", (int)e, (unsigned long)id);
     pbuf_free(p);
@@ -158,6 +163,20 @@ static void dispatch(uint32_t id, const uint8_t* data, uint8_t len) {
             send_state_ack(s_ism->getState());
             break;
         }
+        case CAN_ID_SAFETY_CHANNEL_A: {
+            bool open = (len >= 1) && (data[0] != 0);
+            s_ism->interlock().setChannelA(open);
+            printf("[ETH-CAN] safety channel A -> %s\r\n", open ? "OPEN" : "CLOSED");
+            send_state_ack(s_ism->getState());
+            break;
+        }
+        case CAN_ID_SAFETY_CHANNEL_B: {
+            bool open = (len >= 1) && (data[0] != 0);
+            s_ism->interlock().setChannelB(open);
+            printf("[ETH-CAN] safety channel B -> %s\r\n", open ? "OPEN" : "CLOSED");
+            send_state_ack(s_ism->getState());
+            break;
+        }
         case CAN_ID_INJECT_RESET: {
             s_ism->enterSafe("SYSTEM RESET (injected)");
             s_ism->clearLastFaultCode();
@@ -198,12 +217,15 @@ static void dispatch(uint32_t id, const uint8_t* data, uint8_t len) {
 static void udp_recv_cb(void* /*arg*/, struct udp_pcb* /*pcb*/, struct pbuf* p,
                         const ip_addr_t* addr, u16_t /*port*/) {
     if (!p) return;
+    s_rx_count++;
 
     if (!s_fcc_known) {
         s_fcc_addr  = *addr;
         s_fcc_known = true;
+        printf("[ETH-CAN] first packet from FCC — learned peer address\r\n");
     }
 
+    printf("[ETH-CAN] udp_recv_cb FIRED, tot_len=%u\r\n", p->tot_len);
     if (p->tot_len >= WIRE_BYTES) {
         uint8_t buf[WIRE_BYTES];
         pbuf_copy_partial(p, buf, WIRE_BYTES, 0);
@@ -224,8 +246,59 @@ void ism_eth_transport_init(ISM& ism, uint16_t listen_port, uint16_t fcc_port) {
     s_fcc_port = fcc_port;
 
     struct udp_pcb* listen_pcb = udp_new();
-    udp_bind(listen_pcb, IP_ADDR_ANY, listen_port);
+    if (!listen_pcb) {
+        printf("[ETH-CAN] udp_new() FAILED for listen_pcb — PCB pool exhausted?\r\n");
+        return;
+    }
+    err_t berr = udp_bind(listen_pcb, IP_ADDR_ANY, listen_port);
+    if (berr != ERR_OK) {
+        printf("[ETH-CAN] udp_bind FAILED on port %u, err=%d\r\n", listen_port, (int)berr);
+    } else {
+        printf("[ETH-CAN] listening on UDP port %u (FCC->ISM)\r\n", listen_port);
+    }
     udp_recv(listen_pcb, udp_recv_cb, nullptr);
 
     s_send_pcb = udp_new();
+    if (!s_send_pcb)
+        printf("[ETH-CAN] udp_new() FAILED for s_send_pcb\r\n");
+    printf("[ETH-CAN] init done, fcc_port=%u\r\n", fcc_port);
+}
+
+// ── Periodic ETH diagnostic/heartbeat tick ────────────────────────────────────
+// Call from main loop (every ms via HAL_GetTick comparison) — mirrors
+// ism_can_tick()'s unconditional health-check pattern. Unlike CAN (a shared
+// bus, no destination needed), UDP needs a known peer address to send to, so
+// this can only actually transmit once s_fcc_known is true (i.e. at least one
+// packet has ever arrived from the FCC) — but it ALWAYS prints a diagnostic
+// line every second regardless, so "is anything arriving at all" doesn't
+// depend on 10 real heartbeats lining up first (dispatch()'s CAN_ID_HEARTBEAT
+// case only sends an ACK every 10th received heartbeat).
+extern "C" uint32_t ism_eth_get_rx_count(void) { return s_rx_count; }
+
+extern "C" void ism_eth_tick(void) {
+    if (!s_ism) return;
+    static uint32_t s_last_tick_ms = 0;
+    uint32_t now = HAL_GetTick();
+    if (now - s_last_tick_ms < 1000U) return;
+    s_last_tick_ms = now;
+
+    if (s_fcc_known) send_heartbeat_ack(s_hb_count);
+
+    printf("[ETH-CAN] tick: fcc_known=%d rx_total=%lu hb_rx=%lu\r\n",
+           (int)s_fcc_known, (unsigned long)s_rx_count, (unsigned long)s_hb_count);
+
+    // Dump lwIP's global UDP PCB list EVERY tick (not just once) — confirms
+    // whether our listen_pcb (port 5300) is STILL registered at each point in
+    // time, not just at startup. If it ever disappears or changes, something
+    // later is corrupting/removing it.
+    {
+        printf("[ETH-CAN] udp_pcbs dump:\r\n");
+        int n = 0;
+        for (struct udp_pcb* p = udp_pcbs; p != nullptr; p = p->next) {
+            printf("  [%d] local_port=%u remote_port=%u recv_cb=%p local_ip=0x%08lX\r\n",
+                   n++, p->local_port, p->remote_port, (void*)p->recv,
+                   (unsigned long)ip_2_ip4(&p->local_ip)->addr);
+        }
+        if (n == 0) printf("  (empty — no PCBs registered at all!)\r\n");
+    }
 }

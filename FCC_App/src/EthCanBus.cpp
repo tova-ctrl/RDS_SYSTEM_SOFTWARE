@@ -19,7 +19,7 @@ bool EthCanBus::open() {
     if (tx_fd_ < 0) { setError("tx socket: " + std::string(strerror(errno))); return false; }
 
     // RX socket — ISM → FCC
-    rx_fd_ = ::socket(AF_INET, SOCK_DGRAM, 0);
+    rx_fd_ = ::socket(AF_INET, SOCK_DGRAM, 0); 
     if (rx_fd_ < 0) {
         setError("rx socket: " + std::string(strerror(errno)));
         ::close(tx_fd_); tx_fd_ = -1; return false;

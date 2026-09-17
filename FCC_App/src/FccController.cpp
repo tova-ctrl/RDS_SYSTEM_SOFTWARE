@@ -168,6 +168,24 @@ bool FccController::sendRecoveryReset() {
     return ok;
 }
 
+bool FccController::sendSafetyChannelA(bool open) {
+    std::lock_guard<std::mutex> lock(state_mutex_);
+    auto frame = buildSafetyChannelA(open);
+    bool ok = can_.send(frame);
+    log(ok ? (std::string("SAFETY CHANNEL A ") + (open ? "OPEN" : "CLOSED") + " sent to ISM")
+           : "SAFETY CHANNEL A send FAILED");
+    return ok;
+}
+
+bool FccController::sendSafetyChannelB(bool open) {
+    std::lock_guard<std::mutex> lock(state_mutex_);
+    auto frame = buildSafetyChannelB(open);
+    bool ok = can_.send(frame);
+    log(ok ? (std::string("SAFETY CHANNEL B ") + (open ? "OPEN" : "CLOSED") + " sent to ISM")
+           : "SAFETY CHANNEL B send FAILED");
+    return ok;
+}
+
 bool FccController::injectFault(const std::string& type) {
     if (type == "INVALID_CMD") {
         std::lock_guard<std::mutex> lock(state_mutex_);

@@ -6,8 +6,11 @@
 // Works on any Jetson carrier board that exposes a CAN controller as can0/can1
 // (Auvidea J20, Connect Tech Quasar, Seeed A203, etc.)
 //
-// To bring up the interface before running FCC:
-//   sudo ip link set can0 type can bitrate 1000000
+// open() brings the interface up itself (down/set bitrate/up via `ip link`,
+// same as running these manually) — no separate setup step needed before
+// launching FCC:
+//   sudo ip link set can0 down
+//   sudo ip link set can0 type can bitrate 500000
 //   sudo ip link set can0 up
 // =============================================================================
 
@@ -16,7 +19,7 @@
 
 class CanBus : public ICanBus {
 public:
-    explicit CanBus(const std::string& iface = "can0");
+    explicit CanBus(const std::string& iface = "can0", int bitrate = 500000);
     ~CanBus() override;
 
     bool open();
@@ -32,8 +35,10 @@ public:
 
 private:
     std::string iface_;
+    int         bitrate_;
     int         fd_ = -1;
     std::string last_error_;
 
     void setError(const std::string& msg);
+    bool bringUp();
 };

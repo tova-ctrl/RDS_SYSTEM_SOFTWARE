@@ -226,7 +226,14 @@ namespace RDS_WebApp.Services
             // default for this stream's bursty HEVC traffic; overrun_nonfatal
             // means a transient overrun drops the oldest buffered packets instead
             // of failing the whole read (same log line's second suggestion).
-            ffmpeg.av_dict_set(&options, "fifo_size", "1000000", 0);
+            // 2026-09-14: bumped 1,000,000 -> 4,000,000 — "PES packet size
+            // mismatch"/"Packet corrupt" (the same failure pattern this fifo_size
+            // fix was originally for) still recurring on the ISHLAT operator
+            // console, observed correlating with a LiveTrackingService
+            // auto-unlock event (max missed cycles) — consistent with the
+            // console being under more CPU pressure than the original dev
+            // machine, needing more buffer margin to absorb a stall.
+            ffmpeg.av_dict_set(&options, "fifo_size", "4000000", 0);
             ffmpeg.av_dict_set(&options, "overrun_nonfatal", "1", 0);
 
             // הגדרות לצמצום שיהוי (Latency) בזמן הפתיחה

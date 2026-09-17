@@ -104,6 +104,11 @@ public:
     // Send recovery reset to ISM.
     bool sendRecoveryReset();
 
+    // Send dual-channel FIRE interlock safety-catch state to ISM (B5/B6 on the
+    // operator controller — SWR-SAFE-004). Two independent calls, not combined.
+    bool sendSafetyChannelA(bool open);
+    bool sendSafetyChannelB(bool open);
+
     // Dispatch a Micro300 SDK command from the PC (see CameraApi.h). Returns
     // false only if func isn't a recognized stkAPI function name.
     bool dispatchCameraCommand(const std::string& func, const std::string& data_json) {

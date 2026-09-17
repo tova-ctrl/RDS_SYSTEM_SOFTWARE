@@ -52,6 +52,10 @@
 
 /* Private variables ---------------------------------------------------------*/
 
+// extern, not a definition: the one real `hfdcan1` lives in IsmCanTransport.cpp
+// (owns FDCAN1 init/start) — CubeMX regeneration keeps re-adding a conflicting
+// second definition here since FDCAN1 is "Activated" in the .ioc; keep this
+// as extern after every regenerate.
 extern FDCAN_HandleTypeDef hfdcan1;
 
 TIM_HandleTypeDef htim6;
@@ -78,6 +82,8 @@ static void MX_USART2_UART_Init(void);
 extern void ism_init(void);
 extern void ism_tick(void);
 extern void ism_can_tick(void);
+extern void ism_eth_tick(void);
+extern uint32_t ism_eth_get_rx_count(void);
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -139,7 +145,7 @@ static void ping_send_to_pc(void)
   const size_t data_len = 32;
   const size_t ping_size = sizeof(struct icmp_echo_hdr) + data_len;
   ip_addr_t target;
-  IP4_ADDR(ip_2_ip4(&target), 192, 168, 55, 5);
+  IP4_ADDR(ip_2_ip4(&target), 192, 168, 55, 1);
 
   if (s_ping_pcb == NULL) {
     s_ping_pcb = raw_new(IP_PROTO_ICMP);
@@ -163,7 +169,7 @@ static void ping_send_to_pc(void)
   }
   iecho->chksum = inet_chksum(iecho, (u16_t)ping_size);
 
-  printf("[PING] -> 192.168.55.5 seq=%u\r\n", s_ping_seq);
+  printf("[PING] -> 192.168.55.1 seq=%u\r\n", s_ping_seq);
   raw_sendto(s_ping_pcb, p, &target);
   pbuf_free(p);
 }
@@ -208,22 +214,40 @@ int main(void)
   MX_TIM6_Init();
   MX_USART3_UART_Init();
   MX_LWIP_Init();
-  MX_FDCAN1_Init();
+  // 2026-09-03: this call to the local static MX_FDCAN1_Init() (below,
+  // CubeMX-generated, stale bit-timing, no printfs, no HAL_FDCAN_Start())
+  // keeps getting silently re-added by CubeMX regeneration since FDCAN1 is
+  // "Activated" in the .ioc — remove it again after every Generate Code.
+  // ism_init() below calls the REAL MX_FDCAN1_Init() (IsmCanTransport.cpp,
+  // correct PB8/PB9 500kbps + diagnostics) — that must stay the sole
+  // FDCAN1 initializer.
   MX_USART2_UART_Init();
   /* USER CODE BEGIN 2 */
   //HAL_GPIO_WritePin(GPIOG, GPIO_PIN_11, GPIO_PIN_SET); // הדלקת ה-PHY של הרשת (חובה בלוח Nucleo H7)
   //HAL_Delay(100); // המתנה קצרה להתעוררות הצ'יפ
+
+  ism_init();
   /* USER CODE END 2 */
 
   /* Infinite loop */
-	ism_uart_rx_start();
+  ism_uart_rx_start();  // 2026-09-03: CubeMX regeneration silently dropped this
+                         // (it sat outside any USER CODE markers) — restored.
   /* USER CODE BEGIN WHILE */
   while (1)
   {
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-    //ism_can_tick();
+    // 2026-09-03: `ism_can_tick()` is a real, correctly-declared function
+    // (defined in IsmCanTransport.cpp, prototyped above) — polls FDCAN1's RX
+    // FIFO0, dispatches any received frame, sends an unconditional
+    // CAN_ID_HEARTBEAT_ACK every 1000ms, and prints [CAN DIAG] PSR/LEC/EP/BO
+    // every 5s. Commented back out for now to isolate a flash/erase failure
+    // seen right after enabling it — re-enable once that's confirmed unrelated.
+   // ism_tick();
+   ism_can_tick();  // 2026-09-08: re-enabled to test the CAN bitrate fix (see IsmCanTransport.cpp)
+   //ism_eth_tick();  // 2026-09-03: unconditional periodic ETH diagnostic + HB-ack, mirrors ism_can_tick()
+   printf("[MAIN] eth_rx_count=%lu\r\n", (unsigned long)ism_eth_get_rx_count());  // 2026-09-03: printed directly from main.c, not routed through another file
 //	HAL_UART_Transmit(&huart2, (uint8_t*)my_data1, strlen(my_data1), 100); //===Tova 19.7.26
 	//  HAL_UART_RxCpltCallback(&huart2);  //===Tova 19.7.26
   //    char tx_msg[] = "ID_HEARTBEAT_ACK 0x211\n";
@@ -238,10 +262,11 @@ int main(void)
 	   [[stm32-eth-gpio]]) — that GPIO bug was real too, but this is what
 	   made RX (and therefore ANY two-way traffic) totally silent. */
 	MX_LWIP_Process();
+
 	HAL_Delay(1000);
     /* Ping the PC every 2s so we can watch, from the STM32's own UART log,
-       whether the TX path actually works (see ping_send_to_pc above). */
-   /* {
+       whether the TX path actually works (see ping_send_to_pc above).
+   {
       static uint32_t s_ping_t = 0;
       if (HAL_GetTick() - s_ping_t >= 2000U) {
         s_ping_t = HAL_GetTick();
@@ -273,9 +298,6 @@ int main(void)
   /* USER CODE END 3 */
   }
 }
-/* HAL_UART_RxCpltCallback moved to IsmUartTransport.c */
-
-
 
 /**
   * @brief System Clock Configuration
@@ -443,7 +465,7 @@ static void MX_USART2_UART_Init(void)
 
   /* USER CODE END USART2_Init 1 */
   huart2.Instance = USART2;
-  huart2.Init.BaudRate =9600;  //115200;   //==Tova TST ==27.7.26 ==9600;  //==20.7.26==
+  huart2.Init.BaudRate = 115200;
   huart2.Init.WordLength = UART_WORDLENGTH_8B;
   huart2.Init.StopBits = UART_STOPBITS_1;
   huart2.Init.Parity = UART_PARITY_NONE;
@@ -491,7 +513,7 @@ static void MX_USART3_UART_Init(void)
 
   /* USER CODE END USART3_Init 1 */
   huart3.Instance = USART3;
-  huart3.Init.BaudRate = 115200;  //9600;  //==Tova 25/8/26 == 115200;
+  huart3.Init.BaudRate = 115200;
   huart3.Init.WordLength = UART_WORDLENGTH_8B;
   huart3.Init.StopBits = UART_STOPBITS_1;
   huart3.Init.Parity = UART_PARITY_NONE;

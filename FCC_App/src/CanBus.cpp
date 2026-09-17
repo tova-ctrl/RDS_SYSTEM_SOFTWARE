@@ -8,18 +8,48 @@
 #include <unistd.h>
 #include <fcntl.h>
 #include <cstring>
+#include <cstdlib>
 #include <cerrno>
 #include <poll.h>
 #include <string>
 
-CanBus::CanBus(const std::string& interface)
-    : iface_(interface) {}
+CanBus::CanBus(const std::string& interface, int bitrate)
+    : iface_(interface), bitrate_(bitrate) {}
 
 CanBus::~CanBus() {
     close();
 }
 
+bool CanBus::bringUp() {
+    // Best-effort — down first (ignore failure, e.g. if already down), then
+    // set bitrate and bring up. Requires passwordless sudo for `ip link` (the
+    // FCC service already assumes this for the hint message below anyway).
+    std::string down_cmd = "sudo ip link set " + iface_ + " down >/dev/null 2>&1";
+    std::system(down_cmd.c_str());
+
+    std::string cfg_cmd = "sudo ip link set " + iface_ + " type can bitrate " +
+                           std::to_string(bitrate_) + " >/dev/null 2>&1";
+    if (std::system(cfg_cmd.c_str()) != 0) {
+        setError("auto bring-up: 'ip link set " + iface_ + " type can bitrate " +
+                  std::to_string(bitrate_) + "' failed");
+        return false;
+    }
+
+    std::string up_cmd = "sudo ip link set " + iface_ + " up >/dev/null 2>&1";
+    if (std::system(up_cmd.c_str()) != 0) {
+        setError("auto bring-up: 'ip link set " + iface_ + " up' failed");
+        return false;
+    }
+    return true;
+}
+
 bool CanBus::open() {
+    // Bring the interface up ourselves first — no manual `ip link` step needed
+    // before launching FCC. Best-effort: if this fails (e.g. no sudo, or the
+    // interface is already correctly configured by something else), fall
+    // through to the normal open attempt anyway rather than giving up here.
+    bringUp();
+
     // Create raw CAN socket
     fd_ = socket(PF_CAN, SOCK_RAW, CAN_RAW);
     if (fd_ < 0) {
@@ -34,7 +64,8 @@ bool CanBus::open() {
         setError("ioctl(SIOCGIFINDEX) failed for '" + iface_ +
                  "': " + strerror(errno) +
                  " — run: sudo ip link set " + iface_ +
-                 " type can bitrate 1000000 && sudo ip link set " + iface_ + " up");
+                 " type can bitrate " + std::to_string(bitrate_) +
+                 " && sudo ip link set " + iface_ + " up");
         ::close(fd_);
         fd_ = -1;
         return false;

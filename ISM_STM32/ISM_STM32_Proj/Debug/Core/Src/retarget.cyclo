@@ -1,2 +1,0 @@
-../Core/Src/retarget.c:8:5:__io_putchar	1
-../Core/Src/retarget.c:15:5:_write	1

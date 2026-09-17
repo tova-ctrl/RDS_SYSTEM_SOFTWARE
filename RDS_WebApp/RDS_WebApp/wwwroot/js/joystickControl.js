@@ -92,35 +92,20 @@ const MOBILICOM_PROFILE = {
     // human-readable fallback in case the hex ever shows up differently.
     idMatch: /068e|0144|apem/i,
     buttons: {
-        S3_UP:      { type: 'axis-digital', index: 5, direction: +1 },
-        S3_DOWN:    { type: 'axis-digital', index: 5, direction: -1 },
-        // T1/T2 are each maintained two-way switches — confirmed 2026-08-19:
-        // the switch's OWN raw button value already IS the state (1 =
-        // engaged, back to 0 when switched off), not a momentary press to
-        // toggle in software.
-        //
-        // T1 turned out (2026-08-20, real ISM testing) to be a genuine
-        // 3-POSITION switch — forward (#7 pressed), CENTER/neutral (neither
-        // #7 nor #23 pressed), backward (#23 pressed). User confirmed the
-        // actual desired behavior explicitly: LOCK only in backward; UNLOCK
-        // covers BOTH forward AND center — i.e. "locked" is true precisely
-        // when #23 is pressed, "unlocked" is everything else. That collapses
-        // to the exact same single-button `mode:'maintained'` pattern as T2
-        // below, keyed off #23 ALONE — #7 doesn't need to be read at all for
-        // the trigger logic, since "#23 not pressed" already covers both
-        // forward and center in one condition. (Two earlier designs this
-        // same day — a 2-position `invert` flip, then two independent
-        // momentary triggers on #7/#23 — are both superseded by this
-        // simpler, explicitly-confirmed model.)
-        T1_LOCK:    { type: 'button', index: 23, mode: 'maintained' }, // backward = locked; forward/center = unlocked
-        // T2 tested as a genuine 2-position maintained switch (#15 pressed
-        // == ARMED, confirmed correct, no inversion needed).
-        T2:         { type: 'button', index: 15, mode: 'maintained' },
-        B2_FIRE:    { type: 'button', index: 14 },
-        B3:         { type: 'button', index: 0 },
+        S3_UP:      { type: 'axis-digital', index: 4, direction: +1 },
+        S3_DOWN: { type: 'axis-digital', index: 4, direction: -1 },
+        S4_UP: { type: 'axis-digital', index: 5, direction: +1 },
+        S4_DOWN: { type: 'axis-digital', index: 5, direction: -1 },
+        // T1 is System_Power Enable - its role is to open/close all switches and buttons,
+        T1:         { type: 'button', index: 7, mode: 'maintained' },
+        T2: { type: 'button', index: 15, mode: 'maintained' },
+        B0_CAM:     { type: 'button', index: 0 },
+        B14_FIRE:    { type: 'button', index: 14 },
+        B2_STDBY:   { type: 'button', index: 2 },
+        B3_ARM:     { type: 'button', index: 3 },
         B4:         { type: 'button', index: 1 },
         B5:         { type: 'button', index: 2 },
-        B6:         { type: 'button', index: 3 },
+        B6_LOCK:    { type: 'button', index: 6 },      
     },
     axes: {
         J1_X: { index: 3, invert: false },
@@ -146,12 +131,11 @@ let _dotNetRef = null;
 let _rafId = null;
 let _prevDpadUp = false;
 let _prevDpadDown = false;
-let _prevLB = false;
-let _prevT1Lock = false;
-let _prevRB = false;
-let _prevY = false;
-let _prevRT = false;
-
+let _prevCam = false;
+let _prevB_Lock = false;
+let _prevb2Stdby = false;
+let _prevb3Arm = false;
+let _prevb14Fire = false;
 // J1 — continuous gimbal pan/tilt rate (SetRateCommandAngularVelocities_X/Y,
 // °/sec). Unlike S3's edge-triggered buttons, this is an analog value that
 // needs repeated updates while held, but sending on every
@@ -186,11 +170,11 @@ window.startJoystickControl = function (dotNetRef) {
     _dotNetRef = dotNetRef;
     _prevDpadUp = false;
     _prevDpadDown = false;
-    _prevLB = false;
-    _prevT1Lock = false;
-    _prevRB = false;
-    _prevY = false;
-    _prevRT = false;
+    _prevB_Lock = false;
+    _prevb2Stdby = false;
+    _prevb3Arm = false;
+    _prevb14Fire = false;
+    _prevCam = false;
     _lastRateSendTime = 0;
     _lastSentRateAz = 0;
     _lastSentRateEl = 0;
@@ -202,13 +186,22 @@ window.startJoystickControl = function (dotNetRef) {
     tick();
 };
 
+/* T1 — camera lock. Logitech's LB (btn.T1 set): single momentary
+// button, edge-triggered software toggle (OnJoystickLock decides
+// Engage/Disengage via liveTracking.IsActive) — unchanged.
+//
+// Mobilicom's T1 (btn.T1_LOCK set instead): a maintained switch keyed
+// off #23 alone (backward=locked; forward/center=unlocked, confirmed
+// by the user 2026-08-20 — see the long comment on T1_LOCK's
+// descriptor above for how this superseded two earlier same-day
+// designs) — same maintained-switch pattern as T2 below.*/
 function tick() {
     const pads = navigator.getGamepads ? navigator.getGamepads() : [];
     let gp = null;
     for (let i = 0; i < pads.length; i++) {
         if (pads[i]) { gp = pads[i]; break; }
     }
-
+  
     if (gp && _dotNetRef) {
         if (_loggedProfileForId !== gp.id) {
             _activeProfile = selectProfile(gp);
@@ -217,158 +210,141 @@ function tick() {
         }
         const btn = _activeProfile.buttons;
         const axis = _activeProfile.axes;
+        //T1_POWER is System_Power Enable - its role is to open / close all switches and buttons
+        let T1_POWER = isControlActive(gp, btn.T1); 
+        if (T1_POWER) {
+            // S3 — zoom — Up/Down = zoom in/out. Edge-triggered (only fires on
+            // press/release), matching the same hold-to-zoom semantics as the
+            // existing on-screen buttons in SystemConfig.razor (@onmousedown/
+            // @onmouseup -> Zoomin/Zoomout/Nochange).
+            const up = isControlActive(gp, btn.S4_UP) || isControlActive(gp, btn.S3_UP);
+            const down = isControlActive(gp, btn.S4_DOWN) || isControlActive(gp, btn.S3_DOWN);
 
-        // S3 — zoom — Up/Down = zoom in/out. Edge-triggered (only fires on
-        // press/release), matching the same hold-to-zoom semantics as the
-        // existing on-screen buttons in SystemConfig.razor (@onmousedown/
-        // @onmouseup -> Zoomin/Zoomout/Nochange).
-        const up = isControlActive(gp, btn.S3_UP);
-        const down = isControlActive(gp, btn.S3_DOWN);
-
-        if (up && !_prevDpadUp) {
-            _dotNetRef.invokeMethodAsync('OnJoystickZoomIn');
-        } else if (!up && _prevDpadUp) {
-            _dotNetRef.invokeMethodAsync('OnJoystickZoomStop');
-        }
-
-        if (down && !_prevDpadDown) {
-            _dotNetRef.invokeMethodAsync('OnJoystickZoomOut');
-        } else if (!down && _prevDpadDown) {
-            _dotNetRef.invokeMethodAsync('OnJoystickZoomStop');
-        }
-
-        _prevDpadUp = up;
-        _prevDpadDown = down;
-
-        // T1 — camera lock. Logitech's LB (btn.T1 set): single momentary
-        // button, edge-triggered software toggle (OnJoystickLock decides
-        // Engage/Disengage via liveTracking.IsActive) — unchanged.
-        //
-        // Mobilicom's T1 (btn.T1_LOCK set instead): a maintained switch keyed
-        // off #23 alone (backward=locked; forward/center=unlocked, confirmed
-        // by the user 2026-08-20 — see the long comment on T1_LOCK's
-        // descriptor above for how this superseded two earlier same-day
-        // designs) — same maintained-switch pattern as T2 below.
-        if (btn.T1) {
-            const t1Active = isControlActive(gp, btn.T1);
-            if (t1Active && !_prevLB && !t2Active) _dotNetRef.invokeMethodAsync('OnJoystickLock');
-            _prevLB = t1Active;
-        } else {
-            const t1Locked = isControlActive(gp, btn.T1_LOCK);
-            if (t1Locked && !_prevT1Lock) _dotNetRef.invokeMethodAsync('OnJoystickLockEngage');
-           // else if (!t1Locked ) _dotNetRef.invokeMethodAsync('OnJoystickLockDisengage');
-            else if (!t1Locked && _prevT1Lock) _dotNetRef.invokeMethodAsync('OnJoystickLockDisengage');
-            _prevT1Lock = t1Locked;
-        }
-
-        // T2 — fire system open/close, STANDBY ⇄ ARMED. Same momentary-toggle
-        // vs maintained-switch split as T1 above — this arms/disarms the
-        // actual weapon (via EthernetService), so getting this distinction
-        // right matters: a maintained switch left "on" must not require a
-        // second press to actually arm/disarm.
-        const t2Active = isControlActive(gp, btn.T2);
-        if (btn.T2 && btn.T2.mode === 'maintained') {
-            if (t2Active && !_prevRB) _dotNetRef.invokeMethodAsync('OnJoystickArmEngage');
-            else if (!t2Active && _prevRB) _dotNetRef.invokeMethodAsync('OnJoystickArmDisengage');
-        } else if (t2Active && !_prevRB) {
-            _dotNetRef.invokeMethodAsync('OnJoystickFireSystemToggle');
-        }
-        _prevRB = t2Active;
-
-        // B3 — activate thermal camera. Edge-triggered, one-shot — an
-        // explicit switch TO thermal (not a toggle), matching the SDK's own
-        // Camera enum (TI=1). Reuses the same SetPrimaryVideoChannel command
-        // as the existing manual "TOGGLE ACTIVE CAMERA" button — see
-        // Home.razor's OnJoystickThermalActivate.
-        const y = isControlActive(gp, btn.B3);
-        if (y && !_prevY) {
-          //  _dotNetRef.invokeMethodAsync('OnJoystickThermalActivate');
-            _dotNetRef.invokeMethodAsync('ToggleActiveCamera');
-        } //else if (!y && _prevY) {
-        //    _dotNetRef.invokeMethodAsync('ToggleActiveCamera');
-     //   }
-        _prevY = y;
-
-        // B2 — fire. Edge-triggered, one-shot on press only — matches the
-        // existing on-screen FIRE button (Home.razor's @onclick="Fire"),
-        // which is a single discrete action, not something to repeat-fire
-        // while held.
-        const rt = isControlActive(gp, btn.B2_FIRE);
-        if (rt && !_prevRT) {
-          //  const t1Active = isControlActive(gp, btn.T1);
-            if (t2Active)
-            _dotNetRef.invokeMethodAsync('OnJoystickFire');
-        }
-        _prevRT = rt;
-
-        // B4/B5/B6 — index slots reserved in each profile above, but no
-        // dispatch here yet: their backend commands aren't scoped (laser
-        // rangefinder / weapon safety catch / engine safety catch — see
-        // [[mobilicom-controller-mapping]] memory). Add an edge-triggered
-        // block here, same pattern as B3 above, once each has a real
-        // Home.razor handler to call.
-
-        // J1 — logical convention: positive X = right, positive Y = up
-        // (readAxis() already applies each profile's own invert flag so the
-        // dispatch code below never needs to know which raw polarity a given
-        // device actually reports).
-        const j1x = readAxis(gp, axis.J1_X);
-        const j1y = readAxis(gp, axis.J1_Y);
-        if (j1x !== null && j1y !== null) {
-            const x = Math.abs(j1x) < RATE_DEADZONE ? 0 : j1x;
-            const y = Math.abs(j1y) < RATE_DEADZONE ? 0 : j1y;
-            const rateAz = x * RATE_MAX_DEG_PER_SEC;
-            const rateEl = y * RATE_MAX_DEG_PER_SEC;
-
-            const now = performance.now();
-            const changed =
-                Math.abs(rateAz - _lastSentRateAz) > RATE_CHANGE_THRESHOLD ||
-                Math.abs(rateEl - _lastSentRateEl) > RATE_CHANGE_THRESHOLD;
-            const dueForHeartbeat = (now - _lastRateSendTime) >= RATE_SEND_INTERVAL_MS;
-            // 2026-08-12: the heartbeat used to fire forever, even at rest — a
-            // Wireshark capture (sticks confirmed untouched) showed a
-            // continuous, uninterrupted flood of RateCommand UDP packets to
-            // the camera's CONTROL port, implicated in wedging that port over
-            // time (see [[mobilicom-controller-mapping]] memory). Once both
-            // the current and last-sent rate are already (0,0), there's
-            // nothing left to protect against a dropped packet for — stop
-            // heartbeating; `changed` alone still catches the stick moving
-            // away from center immediately.
-            const atRest = rateAz === 0 && rateEl === 0 && _lastSentRateAz === 0 && _lastSentRateEl === 0;
-
-            if (changed || (dueForHeartbeat && !atRest)) {
-                _dotNetRef.invokeMethodAsync('OnJoystickRate', rateAz, rateEl);
-                _lastSentRateAz = rateAz;
-                _lastSentRateEl = rateEl;
-                _lastRateSendTime = now;
+            if (up && !_prevDpadUp) {
+                _dotNetRef.invokeMethodAsync('OnJoystickZoomIn');
+            } else if (!up && _prevDpadUp) {
+                _dotNetRef.invokeMethodAsync('OnJoystickZoomStop');
             }
-        }
 
-        // J2 — same deadzone/throttle pattern as J1, just a finer max rate.
-        const j2x = readAxis(gp, axis.J2_X);
-        const j2y = readAxis(gp, axis.J2_Y);
-        if (j2x !== null && j2y !== null) {
-            const x = Math.abs(j2x) < RATE_DEADZONE ? 0 : j2x;
-            const y = Math.abs(j2y) < RATE_DEADZONE ? 0 : j2y;
-            const rateAz = x * RATE_FINE_MAX_DEG_PER_SEC;
-            const rateEl = y * RATE_FINE_MAX_DEG_PER_SEC;
+            if (down && !_prevDpadDown) {
+                _dotNetRef.invokeMethodAsync('OnJoystickZoomOut');
+            } else if (!down && _prevDpadDown) {
+                _dotNetRef.invokeMethodAsync('OnJoystickZoomStop');
+            }
 
-            const now = performance.now();
-            const changed =
-                Math.abs(rateAz - _lastSentFineRateAz) > RATE_CHANGE_THRESHOLD ||
-                Math.abs(rateEl - _lastSentFineRateEl) > RATE_CHANGE_THRESHOLD;
-            const dueForHeartbeat = (now - _lastFineRateSendTime) >= RATE_SEND_INTERVAL_MS;
-            const atRest = rateAz === 0 && rateEl === 0 && _lastSentFineRateAz === 0 && _lastSentFineRateEl === 0;
+            _prevDpadUp = up;
+            _prevDpadDown = down;
+            // ===  LOCK On Target Button 6 
+            const B_Lock = isControlActive(gp, btn.B6_LOCK);
+            if ((B_Lock && !_prevB_Lock) ){
+                _dotNetRef.invokeMethodAsync('OnJoystickLock');
+            }
+            _prevB_Lock = B_Lock;
+            
 
-            if (changed || (dueForHeartbeat && !atRest)) {
-                _dotNetRef.invokeMethodAsync('OnJoystickRate', rateAz, rateEl);
-                _lastSentFineRateAz = rateAz;
-                _lastSentFineRateEl = rateEl;
-                _lastFineRateSendTime = now;
+            // B0 — activate thermal camera. Edge-triggered, one-shot — an
+            // explicit switch TO thermal (not a toggle), matching the SDK's own
+            // Camera enum (TI=1). Reuses the same SetPrimaryVideoChannel command
+            // as the existing manual "TOGGLE ACTIVE CAMERA" button — see
+            // Home.razor's OnJoystickThermalActivate.
+            const camToggle = isControlActive(gp, btn.B0_CAM);
+            if (camToggle && !_prevCam) {
+                _dotNetRef.invokeMethodAsync('ToggleActiveCamera');
+            }
+            _prevCam = camToggle;
+            //STAND BY
+            const b2Stdby = isControlActive(gp, btn.B2_STDBY);
+            if (b2Stdby && !_prevb2Stdby) {
+                _dotNetRef.invokeMethodAsync('onJoystickStndBy');
+            }
+            _prevb2Stdby = b2Stdby;
+
+            //ARM
+            const b3Arm = isControlActive(gp, btn.B3_ARM);
+            if (b3Arm && !_prevb3Arm) {
+                _dotNetRef.invokeMethodAsync('onJoystickArm');
+            }
+            _prevb3Arm = b3Arm;
+            // B14 — fire. Edge-triggered, one-shot on press only — matches the
+            // existing on-screen FIRE button (Home.razor's @onclick="Fire"),
+            // which is a single discrete action, not something to repeat-fire
+            // while held.
+            const b14Fire = isControlActive(gp, btn.B14_FIRE);
+            if (b14Fire && !_prevb14Fire) {
+                const B_Lock = isControlActive(gp, btn.B6_LOCK);
+             //   if (B_Lock)
+                    _dotNetRef.invokeMethodAsync('OnJoystickFire');
+            }
+            _prevb14Fire = b14Fire;
+            
+            // B4/B5/B6 — index slots reserved in each profile above, but no
+            // dispatch here yet: their backend commands aren't scoped (laser
+            // rangefinder / weapon safety catch / engine safety catch — see
+            // [[mobilicom-controller-mapping]] memory). Add an edge-triggered
+            // block here, same pattern as B3 above, once each has a real
+            // Home.razor handler to call.
+
+            // J1 — logical convention: positive X = right, positive Y = up
+            // (readAxis() already applies each profile's own invert flag so the
+            // dispatch code below never needs to know which raw polarity a given
+            // device actually reports).
+            const j1x = readAxis(gp, axis.J1_X);
+            const j1y = readAxis(gp, axis.J1_Y);
+            if (j1x !== null && j1y !== null) {
+                const x = Math.abs(j1x) < RATE_DEADZONE ? 0 : j1x;
+                const y = Math.abs(j1y) < RATE_DEADZONE ? 0 : j1y;
+                const rateAz = x * RATE_MAX_DEG_PER_SEC;
+                const rateEl = y * RATE_MAX_DEG_PER_SEC;
+
+                const now = performance.now();
+                const changed =
+                    Math.abs(rateAz - _lastSentRateAz) > RATE_CHANGE_THRESHOLD ||
+                    Math.abs(rateEl - _lastSentRateEl) > RATE_CHANGE_THRESHOLD;
+                const dueForHeartbeat = (now - _lastRateSendTime) >= RATE_SEND_INTERVAL_MS;
+                // 2026-08-12: the heartbeat used to fire forever, even at rest — a
+                // Wireshark capture (sticks confirmed untouched) showed a
+                // continuous, uninterrupted flood of RateCommand UDP packets to
+                // the camera's CONTROL port, implicated in wedging that port over
+                // time (see [[mobilicom-controller-mapping]] memory). Once both
+                // the current and last-sent rate are already (0,0), there's
+                // nothing left to protect against a dropped packet for — stop
+                // heartbeating; `changed` alone still catches the stick moving
+                // away from center immediately.
+                const atRest = rateAz === 0 && rateEl === 0 && _lastSentRateAz === 0 && _lastSentRateEl === 0;
+
+                if (changed || (dueForHeartbeat && !atRest)) {
+                    _dotNetRef.invokeMethodAsync('OnJoystickRate', rateAz, rateEl);
+                    _lastSentRateAz = rateAz;
+                    _lastSentRateEl = rateEl;
+                    _lastRateSendTime = now;
+                }
+            }
+
+            // J2 — same deadzone/throttle pattern as J1, just a finer max rate.
+            const j2x = readAxis(gp, axis.J2_X);
+            const j2y = readAxis(gp, axis.J2_Y);
+            if (j2x !== null && j2y !== null) {
+                const x = Math.abs(j2x) < RATE_DEADZONE ? 0 : j2x;
+                const y = Math.abs(j2y) < RATE_DEADZONE ? 0 : j2y;
+                const rateAz = x * RATE_FINE_MAX_DEG_PER_SEC;
+                const rateEl = y * RATE_FINE_MAX_DEG_PER_SEC;
+
+                const now = performance.now();
+                const changed =
+                    Math.abs(rateAz - _lastSentFineRateAz) > RATE_CHANGE_THRESHOLD ||
+                    Math.abs(rateEl - _lastSentFineRateEl) > RATE_CHANGE_THRESHOLD;
+                const dueForHeartbeat = (now - _lastFineRateSendTime) >= RATE_SEND_INTERVAL_MS;
+                const atRest = rateAz === 0 && rateEl === 0 && _lastSentFineRateAz === 0 && _lastSentFineRateEl === 0;
+
+                if (changed || (dueForHeartbeat && !atRest)) {
+                    _dotNetRef.invokeMethodAsync('OnJoystickRate', rateAz, rateEl);
+                    _lastSentFineRateAz = rateAz;
+                    _lastSentFineRateEl = rateEl;
+                    _lastFineRateSendTime = now;
+                }
             }
         }
     }
-
     _rafId = requestAnimationFrame(tick);
 }
 

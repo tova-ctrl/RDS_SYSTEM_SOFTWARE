@@ -18,6 +18,14 @@ constexpr uint32_t CAN_ID_STANDBY        = 0x103;
 constexpr uint32_t CAN_ID_MOTION         = 0x110;
 constexpr uint32_t CAN_ID_FIRE_REQUEST   = 0x120;
 constexpr uint32_t CAN_ID_RECOVERY_RESET  = 0x130;
+// Dual-channel FIRE interlock (SWR-SAFE-004, MIL-STD-882E) — two independent
+// safety-catch signals (B5/B6 on the operator controller), sent as two SEPARATE
+// messages by design, not combined into one on the PC — a single corrupted/lost
+// message must only ever affect ONE channel, never both, or the whole point of
+// having two independent channels is defeated. Each carries a 1-byte payload:
+// 1 = channel open/authorized, 0 = channel closed/deauthorized.
+constexpr uint32_t CAN_ID_SAFETY_CHANNEL_A = 0x140;
+constexpr uint32_t CAN_ID_SAFETY_CHANNEL_B = 0x141;
 constexpr uint32_t CAN_ID_INJECT_INVALID   = 0x1FF;  // fault injection: INVALID_COMMAND
 constexpr uint32_t CAN_ID_INJECT_RESET     = 0x1FE;  // fault injection: system reset → SAFE
 constexpr uint32_t CAN_ID_INJECT_INTERNAL  = 0x1FD;  // fault injection: internal fault → FAULT
@@ -117,6 +125,22 @@ inline CanFrame buildInjectReset(uint32_t seq) {
 inline CanFrame buildInjectInternal(uint32_t seq) {
     CanFrame f{}; f.id = CAN_ID_INJECT_INTERNAL; f.len = 4;
     memcpy(f.data, &seq, 4); return f;
+}
+
+inline CanFrame buildSafetyChannelA(bool open) {
+    CanFrame f{};
+    f.id  = CAN_ID_SAFETY_CHANNEL_A;
+    f.len = 1;
+    f.data[0] = open ? 1 : 0;
+    return f;
+}
+
+inline CanFrame buildSafetyChannelB(bool open) {
+    CanFrame f{};
+    f.id  = CAN_ID_SAFETY_CHANNEL_B;
+    f.len = 1;
+    f.data[0] = open ? 1 : 0;
+    return f;
 }
 
 inline CanFrame buildRecoveryReset(uint32_t seq) {

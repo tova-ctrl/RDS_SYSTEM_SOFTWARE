@@ -267,6 +267,21 @@ void EthernetServer::dispatch(const std::string& json, int client_fd) {
         return;
     }
 
+    // ── FIRE dual-channel safety-catch interlock (B5/B6, SWR-SAFE-004) ──────
+    // Two independent commands per channel (open/close) — deliberately NOT one
+    // combined "both open" command, so a single lost/corrupted message can only
+    // ever affect one channel, preserving genuine dual-channel semantics.
+    if (cmd == "safety_a_open" || cmd == "safety_a_close") {
+        bool ok = fcc_.sendSafetyChannelA(cmd == "safety_a_open");
+        sendResponse(client_fd, ok ? R"({"ok":true})" : R"({"ok":false,"error":"safety channel A failed"})");
+        return;
+    }
+    if (cmd == "safety_b_open" || cmd == "safety_b_close") {
+        bool ok = fcc_.sendSafetyChannelB(cmd == "safety_b_open");
+        sendResponse(client_fd, ok ? R"({"ok":true})" : R"({"ok":false,"error":"safety channel B failed"})");
+        return;
+    }
+
     // ── RECOVERY_RESET ───────────────────────────────────────────────────────
     if (cmd == "recovery") {
         bool ok = fcc_.sendRecoveryReset();

@@ -5,9 +5,11 @@
 //   ./fcc_app [can_interface] [gcs_ip] [gcs_port]
 //   ./fcc_app can0 192.168.1.100 5200
 //
-// Before running:
-//   sudo ip link set can0 type can bitrate 1000000
-//   sudo ip link set can0 up
+// 2026-09-09: CanBus::open() now brings the interface up itself (bitrate
+// 500000 — confirmed correct on real hardware, see IsmCanTransport.cpp's
+// FDCAN bit-timing fix; the STM32's actual FDCAN kernel clock is 75MHz
+// PLL1Q, not the 8MHz that would justify a 1Mbit "round number" guess), so
+// no manual `ip link` step is required before running this anymore.
 // =============================================================================
 
 #include "ICanBus.h"
@@ -28,6 +30,7 @@
 #include <chrono>
 #include <string>
 #include <cstdint>
+#include <cstdlib>
 #include <iomanip>
 #include <mutex>
 //====Tova 19.7.26======
@@ -141,7 +144,7 @@ int main(int argc, char* argv[]) {
             std::cerr << msg << "\n";
             g_log.push(msg);
             std::cerr << "[FCC] Hint:  sudo ip link set " << can_if
-                      << " type can bitrate 1000000 && sudo ip link set "
+                      << " type can bitrate 500000 && sudo ip link set "
                       << can_if << " up\n";
             return 1;
         }
@@ -182,17 +185,41 @@ int main(int argc, char* argv[]) {
         std::cout << "[FCC] Ethernet TCP server on port " << EthernetServer::DEFAULT_PORT << "\n";
     }
     // ── USART init ──────────────────────19.7.26 Tova
-    uart_fd = open(SERIAL_PORT, O_RDWR | O_NOCTTY | O_SYNC);
-    if (uart_fd < 0) {
-        std::cerr << "Error opening UART port! Try running with sudo.\n";
-       // return -1;
-    }
+    // 2026-09-03: every command sender in FccController (sendStandby/sendArm/
+    // sendDisarm/sendFireRequest/sendRecoveryReset/heartbeatLoop) checks
+    // `if (uart_fd > 0)` FIRST and only falls through to the CAN/ETH transport
+    // chosen on the command line if that check fails — this is intentional
+    // and correct on the original Jetson (real UART wired straight to that
+    // ISM, carries the safety-critical HB/ARM/DISARM/FIRE protocol regardless
+    // of what CAN/ETH carries). But it means /dev/ttyTHS1 merely EXISTING and
+    // opening successfully silently overrides an explicit `can0`/`eth:`
+    // choice on ANY OTHER Jetson too — confirmed: a second Jetson wired to a
+    // different ISM over CAN kept showing COMM_LOSS because its own
+    // /dev/ttyTHS1 also opens fine (same SoC/carrier board family) but isn't
+    // wired to anything, so heartbeats were silently going out over UART into
+    // nothing instead of the CAN bus that was actually explicitly requested.
+    // FCC_NO_UART=1 is a new, purely additive opt-out — unset by default, so
+    // every existing deployment (including the original UART-wired Jetson)
+    // behaves identically to before; only a machine that explicitly sets this
+    // env var skips the UART open entirely and lets the CLI-selected
+    // transport (can0/eth:) actually be used for every command.
+    bool skip_uart = std::getenv("FCC_NO_UART") != nullptr;
+    if (skip_uart) {
+        std::cout << "[FCC] FCC_NO_UART set — skipping UART, using CLI-selected transport only.\n";
+        uart_fd = -1;
+    } else {
+        uart_fd = open(SERIAL_PORT, O_RDWR | O_NOCTTY | O_SYNC);
+        if (uart_fd < 0) {
+            std::cerr << "Error opening UART port! Try running with sudo.\n";
+           // return -1;
+        }
 
-    if (configure_uart(uart_fd) < 0) {
-        std::cerr << "Error configuring UART port!\n";
-        close(uart_fd);
-        //return -1;
-    }else std::cout << "\nSucess on configuring UART port!\n";
+        if (configure_uart(uart_fd) < 0) {
+            std::cerr << "Error configuring UART port!\n";
+            close(uart_fd);
+            //return -1;
+        }else std::cout << "\nSucess on configuring UART port!\n";
+    }
 
     // ── Main loop — print status every 2 seconds ──────────────────────────
     uint64_t statusCount = 0;
